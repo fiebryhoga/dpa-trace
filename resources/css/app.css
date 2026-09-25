@@ -1,0 +1,61 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    :root {
+        --background: 210 40% 98%;
+        --foreground: 224 71% 4%;
+        --card: 0 0% 100%;
+        --card-foreground: 224 71% 4%;
+        --popover: 0 0% 100%;
+        --popover-foreground: 224 71% 4%;
+        --primary: 79 86% 57%;
+        --primary-foreground: 224 71% 4%;
+        --secondary: 79 45% 94%;
+        --secondary-foreground: 85 90% 22%;
+        --muted: 220 14% 94%;
+        --muted-foreground: 220 9% 46%;
+        --accent: 79 55% 94%;
+        --accent-foreground: 85 90% 22%;
+        --destructive: 0 84% 60%;
+        --destructive-foreground: 0 0% 98%;
+        --border: 220 13% 90%;
+        --input: 220 13% 90%;
+        --ring: 79 86% 57%;
+        --radius: 0.5rem;
+    }
+
+    .dark {
+        --background: 225 40% 6%;
+        --foreground: 210 40% 98%;
+        --card: 224 38% 10%;
+        --card-foreground: 210 40% 98%;
+        --popover: 224 38% 10%;
+        --popover-foreground: 210 40% 98%;
+        --primary: 79 86% 57%;
+        --primary-foreground: 224 71% 4%;
+        --secondary: 79 30% 12%;
+        --secondary-foreground: 79 86% 65%;
+        --muted: 224 30% 14%;
+        --muted-foreground: 215 20% 65%;
+        --accent: 79 35% 15%;
+        --accent-foreground: 79 86% 65%;
+        --destructive: 0 63% 31%;
+        --destructive-foreground: 0 0% 98%;
+        --border: 226 28% 18%;
+        --input: 226 28% 18%;
+        --ring: 79 86% 57%;
+    }
+
+    * {
+        @apply border-border;
+    }
+
+    body {
+        @apply bg-[#F8FAFC] text-slate-900 antialiased selection:bg-[#b4f031] selection:text-black dark:bg-[#070B12] dark:text-slate-100 dark:selection:bg-[#b4f031] dark:selection:text-black;
+        font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+    }
+}
