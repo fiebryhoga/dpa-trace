@@ -238,7 +238,7 @@ export default function AthleteIndex({
                                                     <ChevronRight className="h-3.5 w-3.5" />
                                                 </Button>
                                             </Link>
-                                            <Link href={route('dpa.create', { athlete_id: ath.id })}>
+                                            <Link href={route('dpa.athletes.show', ath.id)}>
                                                 <Button size="sm" className="h-8 px-2.5 text-xs font-bold bg-[#b4f031] text-slate-950 hover:bg-[#a2dd26] shadow-sm" title="New DPA Assessment">
                                                     + Test
                                                 </Button>

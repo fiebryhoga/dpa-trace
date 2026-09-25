@@ -69,4 +69,9 @@ class Athlete extends Model
     {
         return $this->hasMany(DpaAssessment::class)->orderBy('assessment_date', 'desc');
     }
+
+    public function galleries()
+    {
+        return $this->hasMany(AthleteGallery::class)->latest();
+    }
 }

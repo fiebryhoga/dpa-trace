@@ -6,6 +6,7 @@ use App\Models\Athlete;
 use App\Models\DpaAssessment;
 use App\Models\DpaAssessmentDetail;
 use App\Models\DpaCompensation;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
@@ -13,191 +14,231 @@ use Inertia\Inertia;
 class DpaAssessmentController extends Controller
 {
     /**
-     * Display a listing of assessments.
+     * Display a listing of athletes for DPA evaluation.
      */
     public function index(Request $request)
     {
         $search = $request->query('search');
+        $sport = $request->query('sport');
+        $sortBy = $request->query('sort', 'name_asc');
 
-        $query = DpaAssessment::query()
-            ->with(['athlete', 'assessor', 'details.compensation'])
-            ->withCount('details');
+        $query = Athlete::query()
+            ->withCount('dpaAssessments as total_records')
+            ->with(['dpaAssessments' => function ($q) {
+                $q->latest('assessment_date')->limit(1);
+            }]);
 
         if ($search) {
-            $query->whereHas('athlete', function ($q) use ($search) {
+            $query->where(function ($q) use ($search) {
                 $q->where('full_name', 'like', "%{$search}%")
                   ->orWhere('athlete_code', 'like', "%{$search}%")
-                  ->orWhere('sport_category', 'like', "%{$search}%");
+                  ->orWhere('nickname', 'like', "%{$search}%")
+                  ->orWhere('sport_category', 'like', "%{$search}%")
+                  ->orWhere('position_specialty', 'like', "%{$search}%");
             });
         }
 
-        $assessments = $query->orderBy('assessment_date', 'desc')
-            ->orderBy('id', 'desc')
-            ->paginate(10)
-            ->withQueryString();
+        if ($sport && $sport !== 'all') {
+            $query->where('sport_category', $sport);
+        }
+
+        if ($sortBy === 'name_desc') {
+            $query->orderBy('full_name', 'desc');
+        } elseif ($sortBy === 'records_desc') {
+            $query->orderBy('total_records', 'desc');
+        } else {
+            $query->orderBy('full_name', 'asc');
+        }
+
+        $athletes = $query->get();
+        $sportsList = Athlete::select('sport_category')->distinct()->pluck('sport_category')->filter()->values();
 
         return Inertia::render('Dpa/Index', [
-            'assessments' => $assessments,
+            'athletes' => $athletes,
+            'sportsList' => $sportsList,
             'filters' => [
                 'search' => $search ?? '',
+                'sport' => $sport ?? 'all',
+                'sort' => $sortBy,
             ],
-            'totalCount' => DpaAssessment::count(),
+            'totalCount' => Athlete::count(),
+            'testedCount' => Athlete::has('dpaAssessments')->count(),
         ]);
     }
 
     /**
-     * Show the form for creating a new DPA assessment.
+     * Display the specified athlete's DPA dashboard & assessments.
      */
-    public function create(Request $request)
+    public function showAthlete(Athlete $athlete)
     {
-        $athleteId = $request->query('athlete_id');
-        $selectedAthlete = null;
-
-        if ($athleteId) {
-            $selectedAthlete = Athlete::find($athleteId);
-        }
-
-        $athletes = Athlete::where('is_active', true)
-            ->select('id', 'athlete_code', 'full_name', 'sport_category', 'gender', 'height_cm', 'weight_kg')
-            ->orderBy('full_name')
+        $assessments = $athlete->dpaAssessments()
+            ->with(['details.compensation', 'assessor'])
+            ->orderBy('assessment_date', 'desc')
+            ->orderBy('id', 'desc')
             ->get();
 
-        $compensations = DpaCompensation::all()->groupBy('category');
+        $compensations = DpaCompensation::orderBy('category')->orderBy('name')->get();
+        $galleries = $athlete->galleries()->latest()->get();
 
-        return Inertia::render('Dpa/Create', [
-            'athletes' => $athletes,
-            'selectedAthlete' => $selectedAthlete,
-            'compensationsGrouped' => $compensations,
+        return Inertia::render('Dpa/Show', [
+            'athlete' => $athlete,
+            'assessments' => $assessments,
+            'compensations' => $compensations,
+            'galleries' => $galleries,
         ]);
     }
 
     /**
      * Store a newly created DPA assessment.
      */
-    public function store(Request $request)
+    public function store(Request $request, Athlete $athlete)
     {
         $validated = $request->validate([
-            'athlete_id' => 'required|exists:athletes,id',
             'assessment_date' => 'required|date',
+            'notes' => 'nullable|string',
             'current_height_cm' => 'nullable|numeric|min:50|max:250',
             'current_weight_kg' => 'nullable|numeric|min:20|max:200',
-            'notes' => 'nullable|string',
-            'selected_compensations' => 'required|array',
-            'selected_compensations.*.id' => 'required|exists:dpa_compensations,id',
-            'selected_compensations.*.severity' => 'required|in:Mild,Moderate,Severe',
-            'selected_compensations.*.side' => 'required|in:Left,Right,Bilateral',
-            'selected_compensations.*.specific_note' => 'nullable|string',
+            'compensations' => 'array',
+            'compensations.*' => 'exists:dpa_compensations,id',
         ]);
 
-        $assessment = DB::transaction(function () use ($validated, $request) {
-            $assessment = DpaAssessment::create([
-                'athlete_id' => $validated['athlete_id'],
-                'assessor_id' => $request->user() ? $request->user()->id : null,
+        DB::transaction(function () use ($validated, $athlete, $request) {
+            $assessment = $athlete->dpaAssessments()->create([
+                'assessor_id' => $request->user()?->id,
                 'assessment_date' => $validated['assessment_date'],
-                'current_height_cm' => $validated['current_height_cm'] ?? null,
-                'current_weight_kg' => $validated['current_weight_kg'] ?? null,
+                'current_height_cm' => $validated['current_height_cm'] ?? $athlete->height_cm,
+                'current_weight_kg' => $validated['current_weight_kg'] ?? $athlete->weight_kg,
                 'notes' => $validated['notes'] ?? null,
             ]);
 
-            foreach ($validated['selected_compensations'] as $comp) {
-                DpaAssessmentDetail::create([
-                    'dpa_assessment_id' => $assessment->id,
-                    'dpa_compensation_id' => $comp['id'],
-                    'severity' => $comp['severity'],
-                    'side' => $comp['side'],
-                    'specific_note' => $comp['specific_note'] ?? null,
-                ]);
+            if (!empty($validated['compensations'])) {
+                foreach ($validated['compensations'] as $compId) {
+                    $assessment->details()->create([
+                        'dpa_compensation_id' => $compId,
+                    ]);
+                }
             }
-
-            return $assessment;
         });
 
-        return redirect()->route('dpa.show', $assessment->id)
-            ->with('success', 'Sesi asesmen DPA berhasil disimpan dan dianalisis.');
+        return redirect()->back()->with('success', 'Data evaluasi DPA berhasil disimpan.');
     }
 
     /**
-     * Display the specified DPA assessment report.
+     * Update the specified DPA assessment.
      */
-    public function show(DpaAssessment $dpa)
+    public function update(Request $request, DpaAssessment $dpaAssessment)
     {
-        $dpa->load([
-            'athlete',
-            'assessor',
-            'details.compensation',
+        $validated = $request->validate([
+            'assessment_date' => 'required|date',
+            'notes' => 'nullable|string',
+            'current_height_cm' => 'nullable|numeric|min:50|max:250',
+            'current_weight_kg' => 'nullable|numeric|min:20|max:200',
+            'compensations' => 'array',
+            'compensations.*' => 'exists:dpa_compensations,id',
         ]);
 
-        // Biomechanical Muscle & Corrective Aggregation Engine
-        $overactiveMuscles = [];
-        $underactiveMuscles = [];
-        $possibleInjuries = [];
-        $exercisesSmr = [];
-        $exercisesStretching = [];
-        $exercisesIsometrics = [];
-        $exercisesIntegrated = [];
+        DB::transaction(function () use ($validated, $dpaAssessment) {
+            $dpaAssessment->update([
+                'assessment_date' => $validated['assessment_date'],
+                'current_height_cm' => $validated['current_height_cm'] ?? $dpaAssessment->current_height_cm,
+                'current_weight_kg' => $validated['current_weight_kg'] ?? $dpaAssessment->current_weight_kg,
+                'notes' => $validated['notes'] ?? null,
+            ]);
 
-        foreach ($dpa->details as $detail) {
-            $comp = $detail->compensation;
-            if (!$comp) continue;
+            // Sync details
+            $dpaAssessment->details()->delete();
 
-            $this->parseAndMerge($comp->overactive_muscles, $overactiveMuscles);
-            $this->parseAndMerge($comp->underactive_muscles, $underactiveMuscles);
-            $this->parseAndMerge($comp->possible_injuries, $possibleInjuries);
-            $this->parseAndMerge($comp->exercises_smr, $exercisesSmr);
-            $this->parseAndMerge($comp->exercises_stretching, $exercisesStretching);
-            $this->parseAndMerge($comp->exercises_isometrics, $exercisesIsometrics);
-            $this->parseAndMerge($comp->exercises_integrated, $exercisesIntegrated);
-        }
+            if (!empty($validated['compensations'])) {
+                foreach ($validated['compensations'] as $compId) {
+                    $dpaAssessment->details()->create([
+                        'dpa_compensation_id' => $compId,
+                    ]);
+                }
+            }
+        });
 
-        $totalDeviations = $dpa->details->count();
-        $severeCount = $dpa->details->where('severity', 'Severe')->count();
-
-        $riskLevel = 'Low';
-        if ($totalDeviations >= 5 || $severeCount >= 2) {
-            $riskLevel = 'High';
-        } elseif ($totalDeviations >= 3 || $severeCount >= 1) {
-            $riskLevel = 'Moderate';
-        }
-
-        return Inertia::render('Dpa/Show', [
-            'assessment' => $dpa,
-            'analytics' => [
-                'totalDeviations' => $totalDeviations,
-                'riskLevel' => $riskLevel,
-                'overactiveMuscles' => array_values(array_unique($overactiveMuscles)),
-                'underactiveMuscles' => array_values(array_unique($underactiveMuscles)),
-                'possibleInjuries' => array_values(array_unique($possibleInjuries)),
-                'correctiveProtocol' => [
-                    'smr' => array_values(array_unique($exercisesSmr)),
-                    'stretching' => array_values(array_unique($exercisesStretching)),
-                    'isometrics' => array_values(array_unique($exercisesIsometrics)),
-                    'integrated' => array_values(array_unique($exercisesIntegrated)),
-                ],
-            ],
-        ]);
+        return redirect()->back()->with('success', 'Data evaluasi DPA berhasil diperbarui.');
     }
 
     /**
      * Remove the specified DPA assessment.
      */
-    public function destroy(DpaAssessment $dpa)
+    public function destroy(DpaAssessment $dpaAssessment)
     {
-        $athleteId = $dpa->athlete_id;
-        $dpa->delete();
-
-        return redirect()->route('athletes.show', $athleteId)
-            ->with('success', 'Sesi asesmen DPA berhasil dihapus.');
+        $dpaAssessment->delete();
+        return redirect()->back()->with('success', 'Data evaluasi DPA berhasil dihapus.');
     }
 
-    private function parseAndMerge(?string $text, array &$targetArray): void
+    /**
+     * Export DPA assessment report to PDF.
+     */
+    public function exportPdf(Request $request, Athlete $athlete)
     {
-        if (!$text) return;
-        $lines = preg_split('/[\r\n,]+/', $text);
-        foreach ($lines as $line) {
-            $trimmed = trim($line);
-            if (!empty($trimmed) && !in_array($trimmed, $targetArray)) {
-                $targetArray[] = $trimmed;
+        ini_set('memory_limit', '512M');
+        ini_set('max_execution_time', '300');
+
+        $exportData = json_decode($request->input('table_data', '[]'), true);
+        $customTitle = trim($request->input('title', ''));
+        $note = $request->input('note');
+
+        $defaultTitle = "DPA ASSESSMENT REPORT - " . strtoupper($athlete->full_name);
+        $title = !empty($customTitle) ? $customTitle : $defaultTitle;
+
+        $latest = $exportData['latest'] ?? null;
+        if (!$latest) {
+            $latestAssessment = $athlete->dpaAssessments()->with(['details.compensation'])->latest('assessment_date')->first();
+            if ($latestAssessment) {
+                $latest = $latestAssessment->toArray();
             }
         }
+
+        $analysis = [
+            'overactive' => [],
+            'underactive' => [],
+            'injuries' => [],
+            'smr' => [],
+            'stretching' => [],
+            'isometrics' => [],
+            'integrated' => [],
+        ];
+
+        if ($latest && isset($latest['details'])) {
+            $addItems = function ($sourceStr, &$targetArray) {
+                if (!$sourceStr) return;
+                $items = array_filter(array_map('trim', preg_split('/[\n,]/', $sourceStr)));
+                foreach ($items as $item) {
+                    $clean = ltrim($item, '- ');
+                    if (!in_array($clean, $targetArray)) {
+                        $targetArray[] = $clean;
+                    }
+                }
+            };
+
+            foreach ($latest['details'] as $detail) {
+                if (isset($detail['compensation'])) {
+                    $c = $detail['compensation'];
+                    $addItems($c['overactive_muscles'] ?? '', $analysis['overactive']);
+                    $addItems($c['underactive_muscles'] ?? '', $analysis['underactive']);
+                    $addItems($c['possible_injuries'] ?? '', $analysis['injuries']);
+                    $addItems($c['exercises_smr'] ?? '', $analysis['smr']);
+                    $addItems($c['exercises_stretching'] ?? '', $analysis['stretching']);
+                    $addItems($c['exercises_isometrics'] ?? '', $analysis['isometrics']);
+                    $addItems($c['exercises_integrated'] ?? '', $analysis['integrated']);
+                }
+            }
+        }
+
+        $pdf = Pdf::loadView('exports.dpa_pdf', [
+            'athlete' => $athlete,
+            'latest' => $latest,
+            'analysis' => $analysis,
+            'title' => $title,
+            'note' => $note,
+        ])->setPaper('a4', 'portrait');
+
+        $cleanName = preg_replace('/[^A-Za-z0-9_\-]/', '_', $athlete->full_name);
+        $filename = 'DPA_Report_' . $cleanName . '_' . date('Ymd') . '.pdf';
+
+        return $pdf->download($filename);
     }
 }

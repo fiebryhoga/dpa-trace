@@ -52,7 +52,7 @@ export default function AthleteEdit({ athlete }: { athlete: Athlete }) {
         <AuthenticatedLayout>
             <Head title={`Edit Athlete - ${athlete.full_name}`} />
 
-            <div className="max-w-3xl mx-auto space-y-6">
+            <div className="w-full space-y-6">
                 <div className="flex items-center gap-3">
                     <Link href={route('athletes.show', athlete.id)}>
                         <Button variant="outline" size="icon" className="h-8 w-8">

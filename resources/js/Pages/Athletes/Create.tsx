@@ -34,7 +34,7 @@ export default function AthleteCreate() {
         <AuthenticatedLayout>
             <Head title="Add New Athlete - DPA Trace" />
 
-            <div className="max-w-3xl mx-auto space-y-6">
+            <div className="w-full space-y-6">
                 <div className="flex items-center gap-3">
                     <Link href={route('athletes.index')}>
                         <Button variant="outline" size="icon" className="h-8 w-8">

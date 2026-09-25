@@ -95,10 +95,10 @@ export default function Dashboard({
                                 <span>Add Athlete</span>
                             </Button>
                         </Link>
-                        <Link href={route('dpa.create')}>
-                            <Button size="sm" className="gap-1.5 text-xs shadow-brand">
+                        <Link href={route('dpa.index')}>
+                            <Button size="sm" className="gap-1.5 text-xs font-bold bg-[#b4f031] text-slate-950 hover:bg-[#a2dd26] shadow-brand">
                                 <PlusCircle className="h-3.5 w-3.5" />
-                                <span>Start DPA Assessment</span>
+                                <span>Analisis DPA</span>
                             </Button>
                         </Link>
                     </div>
@@ -263,7 +263,7 @@ export default function Dashboard({
                                                                 {riskBadge}
                                                             </td>
                                                             <td className="px-4 py-3.5 text-right">
-                                                                <Link href={route('dpa.show', a.id)}>
+                                                                <Link href={route('dpa.athletes.show', a.athlete.id)}>
                                                                     <Button variant="outline" size="sm" className="h-7 px-2.5 text-[11px]">
                                                                         Report
                                                                     </Button>

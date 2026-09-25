@@ -98,10 +98,10 @@ export default function AthleteShow({ athlete }: { athlete: Athlete }) {
                                 <span>Edit Profile</span>
                             </Button>
                         </Link>
-                        <Link href={route('dpa.create', { athlete_id: athlete.id })}>
+                        <Link href={route('dpa.athletes.show', athlete.id)}>
                             <Button size="sm" className="gap-1.5 text-xs font-bold bg-[#b4f031] text-slate-950 hover:bg-[#a2dd26] shadow-brand">
-                                <PlusCircle className="h-3.5 w-3.5" />
-                                <span>New DPA Assessment</span>
+                                <Activity className="h-3.5 w-3.5" />
+                                <span>Buka Analisis DPA</span>
                             </Button>
                         </Link>
                     </div>
@@ -190,10 +190,10 @@ export default function AthleteShow({ athlete }: { athlete: Athlete }) {
                                         Recorded kinetic chain evaluations and corrective exercise regimens
                                     </CardDescription>
                                 </div>
-                                <Link href={route('dpa.create', { athlete_id: athlete.id })}>
+                                <Link href={route('dpa.athletes.show', athlete.id)}>
                                     <Button size="sm" className="h-8 text-xs gap-1.5 font-bold bg-[#b4f031] text-slate-950 hover:bg-[#a2dd26] shadow-brand">
                                         <PlusCircle className="h-3.5 w-3.5" />
-                                        <span>New Assessment</span>
+                                        <span>Buka Evaluasi DPA</span>
                                     </Button>
                                 </Link>
                             </CardHeader>
@@ -203,11 +203,11 @@ export default function AthleteShow({ athlete }: { athlete: Athlete }) {
                                     <div className="text-center py-10 space-y-2 border border-dashed border-[#b4f031]/30 rounded-lg bg-[#b4f031]/5">
                                         <Activity className="h-8 w-8 text-[#84cc16] dark:text-[#b4f031] mx-auto" />
                                         <p className="text-xs text-slate-500">
-                                            No DPA assessment sessions recorded for this athlete yet.
+                                            Belum ada sesi evaluasi DPA yang tercatat untuk atlet ini.
                                         </p>
-                                        <Link href={route('dpa.create', { athlete_id: athlete.id })}>
+                                        <Link href={route('dpa.athletes.show', athlete.id)}>
                                             <Button size="sm" variant="outline" className="text-xs">
-                                                Perform Initial Assessment
+                                                Input Evaluasi Awal
                                             </Button>
                                         </Link>
                                     </div>
@@ -253,9 +253,9 @@ export default function AthleteShow({ athlete }: { athlete: Athlete }) {
 
                                                         <div className="flex items-center gap-2">
                                                             {riskBadge}
-                                                            <Link href={route('dpa.show', session.id)}>
+                                                            <Link href={route('dpa.athletes.show', athlete.id)}>
                                                                 <Button size="sm" variant="outline" className="h-8 text-xs gap-1">
-                                                                    <span>View Report</span>
+                                                                    <span>Lihat Analisis</span>
                                                                     <ChevronRight className="h-3.5 w-3.5" />
                                                                 </Button>
                                                             </Link>
