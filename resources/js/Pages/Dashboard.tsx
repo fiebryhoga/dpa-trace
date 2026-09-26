@@ -1,5 +1,6 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, Link } from '@inertiajs/react';
+import PageHeader from '@/Components/PageHeader';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/Components/ui/Card';
 import { Badge } from '@/Components/ui/Badge';
 import { Button } from '@/Components/ui/Button';
@@ -68,45 +69,34 @@ export default function Dashboard({
             <Head title="Dashboard - Dynamic Posture Assessment" />
 
             <div className="space-y-6">
-                {/* Header Banner */}
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-3 border-b border-slate-200 dark:border-slate-800">
-                    <div>
-                        <div className="flex items-center gap-2 mb-1">
-                            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-[#b4f031]/20 text-slate-900 dark:text-[#b4f031] border border-[#b4f031]/40">
-                                <Sparkles className="h-3 w-3 text-[#84cc16] dark:text-[#b4f031]" />
-                                <span>Sports Science & Biomechanics</span>
-                            </span>
-                        </div>
-                        <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">
-                            Dynamic Posture{' '}
-                            <span className="text-[#84cc16] dark:text-[#b4f031]">
-                                Assessment
-                            </span>
-                        </h1>
-                        <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-                            Kinetic chain deviation monitoring & corrective exercise programming • DPA Trace
-                        </p>
-                    </div>
-
-                    <div className="flex items-center gap-2">
-                        <Link href={route('athletes.create')}>
-                            <Button variant="outline" size="sm" className="gap-1.5 text-xs">
-                                <UserPlus className="h-3.5 w-3.5" />
-                                <span>Add Athlete</span>
-                            </Button>
-                        </Link>
-                        <Link href={route('dpa.index')}>
-                            <Button size="sm" className="gap-1.5 text-xs font-bold bg-[#b4f031] text-slate-950 hover:bg-[#a2dd26] shadow-brand">
-                                <PlusCircle className="h-3.5 w-3.5" />
-                                <span>Analisis DPA</span>
-                            </Button>
-                        </Link>
-                    </div>
-                </div>
+                <PageHeader
+                    title={
+                        <>
+                            Dynamic Posture <span className="text-[#84cc16] dark:text-[#b4f031]">Assessment</span>
+                        </>
+                    }
+                    description="Kinetic chain deviation monitoring & corrective exercise programming • Olympus Training Surabaya X Unesa"
+                    actions={
+                        <>
+                            <Link href={route('athletes.create')}>
+                                <Button variant="outline" size="sm" className="gap-1.5 text-xs rounded-md">
+                                    <UserPlus className="h-3.5 w-3.5" />
+                                    <span>Tambah Atlet</span>
+                                </Button>
+                            </Link>
+                            <Link href={route('dpa.index')}>
+                                <Button size="sm" className="gap-1.5 text-xs font-bold bg-[#b4f031] text-slate-950 hover:bg-[#a2dd26] rounded-md">
+                                    <PlusCircle className="h-3.5 w-3.5" />
+                                    <span>Analisis DPA</span>
+                                </Button>
+                            </Link>
+                        </>
+                    }
+                />
 
                 {/* Metrics Cards with #b4f031 Electric Green Accents */}
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    <Card className="border-slate-200/90 dark:border-slate-800 bg-white dark:bg-[#0E1526] shadow-sm hover:border-[#b4f031]/80 transition-all hover:shadow-brand">
+                    <Card className="border-slate-200/90 dark:border-slate-800 bg-white dark:bg-[#0E1526] shadow-sm hover:border-[#b4f031]/80 transition-all">
                         <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
                             <CardTitle className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                                 Total Registered Athletes
@@ -126,7 +116,7 @@ export default function Dashboard({
                         </CardContent>
                     </Card>
 
-                    <Card className="border-slate-200/90 dark:border-slate-800 bg-white dark:bg-[#0E1526] shadow-sm hover:border-[#b4f031]/80 transition-all hover:shadow-brand">
+                    <Card className="border-slate-200/90 dark:border-slate-800 bg-white dark:bg-[#0E1526] shadow-sm hover:border-[#b4f031]/80 transition-all">
                         <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
                             <CardTitle className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                                 Total DPA Sessions
@@ -146,7 +136,7 @@ export default function Dashboard({
                         </CardContent>
                     </Card>
 
-                    <Card className="border-slate-200/90 dark:border-slate-800 bg-white dark:bg-[#0E1526] shadow-sm hover:border-[#b4f031]/80 transition-all hover:shadow-brand">
+                    <Card className="border-slate-200/90 dark:border-slate-800 bg-white dark:bg-[#0E1526] shadow-sm hover:border-[#b4f031]/80 transition-all">
                         <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
                             <CardTitle className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                                 Tracked Sport Categories

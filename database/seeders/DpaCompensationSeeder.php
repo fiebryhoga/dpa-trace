@@ -239,10 +239,36 @@ class DpaCompensationSeeder extends Seeder
         ];
 
         foreach ($data as $item) {
-            DpaCompensation::updateOrCreate(
+            $compensation = DpaCompensation::updateOrCreate(
                 ['category' => $item['category'], 'name' => $item['name']],
                 $item
             );
+
+            // Link exercises to master exercises table and pivot
+            $phases = [
+                'Inhibit' => array_filter(array_map('trim', explode("\n", $item['exercises_smr'] ?? ''))),
+                'Lengthen' => array_filter(array_map('trim', explode("\n", $item['exercises_stretching'] ?? ''))),
+                'Activate' => array_filter(array_map('trim', explode("\n", $item['exercises_isometrics'] ?? ''))),
+                'Integrate' => array_filter(array_map('trim', explode("\n", $item['exercises_integrated'] ?? ''))),
+            ];
+
+            $syncData = [];
+            foreach ($phases as $phase => $names) {
+                foreach ($names as $idx => $name) {
+                    if (!$name) continue;
+                    $exercise = \App\Models\Exercise::firstOrCreate(
+                        ['name' => $name],
+                        [
+                            'category' => $phase,
+                            'instructions' => "Latihan korektif fase {$phase} untuk deviasi {$item['name']}.",
+                            'is_active' => true,
+                        ]
+                    );
+                    $syncData[$exercise->id] = ['phase' => $phase, 'sort_order' => $idx];
+                }
+            }
+
+            $compensation->exercises()->sync($syncData);
         }
     }
 }

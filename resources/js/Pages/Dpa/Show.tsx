@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, useForm, Link, router } from '@inertiajs/react';
+import PageHeader from '@/Components/PageHeader';
 import {
     ChevronLeft,
     Plus,
@@ -21,6 +22,7 @@ import {
     Ruler,
     Weight,
     Printer,
+    User,
 } from 'lucide-react';
 import {
     Athlete,
@@ -188,80 +190,61 @@ export default function DpaShow({
             <Head title={`Analisis DPA - ${athlete.full_name}`} />
 
             <div className="space-y-5 pb-12">
-                {/* ─── 1. ATHLETE PROFILE BANNER ─── */}
-                <div className="bg-white dark:bg-[#0D1322] border border-slate-200/90 dark:border-slate-800 rounded-2xl p-5 sm:p-6 shadow-xs flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-                    <div className="flex items-center gap-4">
-                        <Link
-                            href={route('dpa.index')}
-                            className="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors shrink-0"
-                            title="Kembali ke Daftar Atlet"
-                        >
-                            <ChevronLeft size={20} />
-                        </Link>
-
-                        <div className="space-y-1">
-                            <div className="flex items-center gap-2 flex-wrap">
-                                <span className="px-2 py-0.5 rounded-full bg-[#b4f031]/20 text-[#84cc16] dark:text-[#b4f031] text-[11px] font-extrabold border border-[#b4f031]/40 uppercase tracking-wider">
-                                    {athlete.sport_category}
-                                </span>
-                                {athlete.athlete_code && (
-                                    <span className="text-xs font-mono font-bold text-slate-400">
-                                        #{athlete.athlete_code}
-                                    </span>
-                                )}
-                            </div>
-                            <h1 className="text-lg sm:text-xl font-black text-slate-900 dark:text-white tracking-tight">
-                                {athlete.full_name}
-                            </h1>
-                            <div className="flex items-center gap-3 text-xs text-slate-500 dark:text-slate-400 flex-wrap">
-                                {athlete.position_specialty && <span>{athlete.position_specialty}</span>}
-                                {athlete.calculated_age && <span>• {athlete.calculated_age} Tahun</span>}
-                                {athlete.height_cm && <span>• {athlete.height_cm} cm</span>}
-                                {athlete.weight_kg && <span>• {athlete.weight_kg} kg</span>}
-                                {athlete.bmi && <span>• BMI {athlete.bmi} ({athlete.bmi_category})</span>}
-                            </div>
+                <PageHeader
+                    icon={User}
+                    backUrl={route('dpa.index')}
+                    backLabel="Daftar Atlet"
+                    title={athlete.full_name}
+                    badge={athlete.athlete_code}
+                    description={
+                        <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400 flex-wrap">
+                            <span className="font-bold text-[#84cc16] dark:text-[#b4f031]">{athlete.gender === 'L' ? 'Laki-laki' : 'Perempuan'}</span>
+                            {athlete.age && <span>• {athlete.age} Tahun</span>}
+                            {athlete.height_cm && <span>• {athlete.height_cm} cm</span>}
+                            {athlete.weight_kg && <span>• {athlete.weight_kg} kg</span>}
+                            {athlete.bmi && <span>• BMI {athlete.bmi} ({athlete.bmi_category})</span>}
                         </div>
-                    </div>
+                    }
+                    actions={
+                        <div className="flex items-center gap-2 flex-wrap">
+                            {latest && (
+                                <button
+                                    type="button"
+                                    onClick={handleExportPdf}
+                                    disabled={isExporting}
+                                    className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 rounded-md text-xs font-semibold transition-all cursor-pointer"
+                                >
+                                    <Printer size={14} className="text-[#84cc16] dark:text-[#b4f031]" />
+                                    <span>{isExporting ? 'Memproses PDF...' : 'Cetak Laporan PDF'}</span>
+                                </button>
+                            )}
 
-                    {/* Action Buttons in Header */}
-                    <div className="flex items-center gap-2 w-full md:w-auto justify-end">
-                        {latest && (
-                            <button
-                                type="button"
-                                onClick={handleExportPdf}
-                                disabled={isExporting}
-                                className="inline-flex items-center gap-1.5 px-3 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 rounded-xl text-xs font-bold transition-all shadow-2xs cursor-pointer"
-                            >
-                                <Printer size={14} className="text-[#84cc16] dark:text-[#b4f031]" />
-                                <span>{isExporting ? 'Memproses PDF...' : 'Cetak Laporan PDF'}</span>
-                            </button>
-                        )}
-
-                        {activeTab !== 'input' ? (
-                            <button
-                                type="button"
-                                onClick={() => {
-                                    setActiveTab('input');
-                                    setIsEditMode(false);
-                                    reset();
-                                }}
-                                className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-[#84cc16] hover:bg-[#65a30d] dark:bg-[#b4f031] dark:hover:bg-[#a3e635] text-slate-950 rounded-xl text-xs font-extrabold transition-all shadow-sm cursor-pointer"
-                            >
-                                <Plus size={14} />
-                                <span>Input Evaluasi Baru</span>
-                            </button>
-                        ) : (
-                            <button
-                                type="button"
-                                onClick={cancelEdit}
-                                className="inline-flex items-center gap-1.5 px-3 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 rounded-xl text-xs font-semibold transition-all shadow-2xs cursor-pointer"
-                            >
-                                <Activity size={14} className="text-[#84cc16]" />
-                                <span>Kembali ke Analisis</span>
-                            </button>
-                        )}
-                    </div>
-                </div>
+                            {activeTab !== 'input' ? (
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        setActiveTab('input');
+                                        setIsEditMode(false);
+                                        reset();
+                                    }}
+                                    className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-[#b4f031] hover:bg-[#a2dd26] text-slate-950 rounded-md text-xs font-bold transition-all cursor-pointer"
+                                >
+                                    <Plus size={14} />
+                                    <span>Input Evaluasi Baru</span>
+                                </button>
+                            ) : (
+                                <button
+                                    type="button"
+                                    onClick={cancelEdit}
+                                    className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 rounded-md text-xs font-semibold transition-all cursor-pointer"
+                                >
+                                    <Activity size={14} className="text-[#84cc16]" />
+                                    <span>Kembali ke Analisis</span>
+                                </button>
+                            )}
+                        </div>
+                    }
+                />
 
                 {/* ─── 2. SUB-NAVIGATION TABS ─── */}
                 <div className="flex items-center gap-2 border-b border-slate-200 dark:border-slate-800 pb-2 overflow-x-auto">

@@ -14,7 +14,6 @@ class AthleteController extends Controller
     public function index(Request $request)
     {
         $search = $request->query('search');
-        $sport = $request->query('sport');
 
         $query = Athlete::query()
             ->withCount('dpaAssessments')
@@ -26,26 +25,17 @@ class AthleteController extends Controller
             $query->where(function ($q) use ($search) {
                 $q->where('full_name', 'like', "%{$search}%")
                   ->orWhere('athlete_code', 'like', "%{$search}%")
-                  ->orWhere('nickname', 'like', "%{$search}%")
-                  ->orWhere('position_specialty', 'like', "%{$search}%");
+                  ->orWhere('nickname', 'like', "%{$search}%");
             });
         }
 
-        if ($sport && $sport !== 'all') {
-            $query->where('sport_category', $sport);
-        }
-
         $athletes = $query->orderBy('created_at', 'desc')->paginate(12)->withQueryString();
-
-        $sportsList = Athlete::select('sport_category')->distinct()->pluck('sport_category')->filter()->values();
 
         return Inertia::render('Athletes/Index', [
             'athletes' => $athletes,
             'filters' => [
                 'search' => $search ?? '',
-                'sport' => $sport ?? 'all',
             ],
-            'sportsList' => $sportsList,
             'totalCount' => Athlete::count(),
             'activeCount' => Athlete::where('is_active', true)->count(),
         ]);
@@ -56,7 +46,7 @@ class AthleteController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Athletes/Create');
+        return redirect()->route('athletes.index');
     }
 
     /**
@@ -69,22 +59,26 @@ class AthleteController extends Controller
             'full_name' => 'required|string|max:255',
             'nickname' => 'nullable|string|max:100',
             'gender' => 'required|in:L,P',
-            'birth_date' => 'nullable|date',
+            'age' => 'required|integer|min:5|max:120',
             'height_cm' => 'nullable|numeric|min:50|max:250',
             'weight_kg' => 'nullable|numeric|min:20|max:200',
-            'sport_category' => 'required|string|max:100',
-            'position_specialty' => 'nullable|string|max:100',
-            'club_institution' => 'nullable|string|max:150',
             'dominant_side' => 'required|in:R,L,Bilateral',
             'injury_history' => 'nullable|string',
             'phone_number' => 'nullable|string|max:30',
             'is_active' => 'boolean',
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg,webp,gif|max:5120',
         ]);
+
+        if ($request->hasFile('photo')) {
+            $validated['photo_path'] = $this->processAndStorePhoto($request->file('photo'));
+        }
+
+        unset($validated['photo']);
 
         $athlete = Athlete::create($validated);
 
-        return redirect()->route('athletes.show', $athlete->id)
-            ->with('success', 'Data atlet berhasil ditambahkan.');
+        return redirect()->route('athletes.index')
+            ->with('success', 'Data atlet "' . $athlete->full_name . '" berhasil ditambahkan.');
     }
 
     /**
@@ -107,9 +101,7 @@ class AthleteController extends Controller
      */
     public function edit(Athlete $athlete)
     {
-        return Inertia::render('Athletes/Edit', [
-            'athlete' => $athlete,
-        ]);
+        return redirect()->route('athletes.index');
     }
 
     /**
@@ -122,22 +114,35 @@ class AthleteController extends Controller
             'full_name' => 'required|string|max:255',
             'nickname' => 'nullable|string|max:100',
             'gender' => 'required|in:L,P',
-            'birth_date' => 'nullable|date',
+            'age' => 'required|integer|min:5|max:120',
             'height_cm' => 'nullable|numeric|min:50|max:250',
             'weight_kg' => 'nullable|numeric|min:20|max:200',
-            'sport_category' => 'required|string|max:100',
-            'position_specialty' => 'nullable|string|max:100',
-            'club_institution' => 'nullable|string|max:150',
             'dominant_side' => 'required|in:R,L,Bilateral',
             'injury_history' => 'nullable|string',
             'phone_number' => 'nullable|string|max:30',
             'is_active' => 'boolean',
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg,webp,gif|max:5120',
+            'remove_photo' => 'nullable|boolean',
         ]);
+
+        if ($request->boolean('remove_photo')) {
+            if ($athlete->photo_path && \Illuminate\Support\Facades\Storage::disk('public')->exists($athlete->photo_path)) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($athlete->photo_path);
+            }
+            $validated['photo_path'] = null;
+        } elseif ($request->hasFile('photo')) {
+            if ($athlete->photo_path && \Illuminate\Support\Facades\Storage::disk('public')->exists($athlete->photo_path)) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($athlete->photo_path);
+            }
+            $validated['photo_path'] = $this->processAndStorePhoto($request->file('photo'));
+        }
+
+        unset($validated['photo'], $validated['remove_photo']);
 
         $athlete->update($validated);
 
-        return redirect()->route('athletes.show', $athlete->id)
-            ->with('success', 'Data biodata atlet berhasil diperbarui.');
+        return redirect()->route('athletes.index')
+            ->with('success', 'Data biodata atlet "' . $athlete->full_name . '" berhasil diperbarui.');
     }
 
     /**
@@ -299,5 +304,54 @@ class AthleteController extends Controller
         $gallery->delete();
 
         return redirect()->back()->with('success', 'Foto berhasil dihapus.');
+    }
+
+    /**
+     * Convert and store uploaded photo as WebP.
+     */
+    private function processAndStorePhoto($file): ?string
+    {
+        if (!$file || !$file->isValid()) {
+            return null;
+        }
+
+        $filename = 'athlete_' . uniqid() . '_' . time() . '.webp';
+        $directory = storage_path('app/public/athletes');
+
+        if (!file_exists($directory)) {
+            mkdir($directory, 0755, true);
+        }
+
+        $destinationPath = $directory . '/' . $filename;
+
+        try {
+            $imageData = file_get_contents($file->getRealPath());
+            $srcImage = @imagecreatefromstring($imageData);
+
+            if ($srcImage !== false) {
+                if (!imageistruecolor($srcImage)) {
+                    $width = imagesx($srcImage);
+                    $height = imagesy($srcImage);
+                    $trueColor = imagecreatetruecolor($width, $height);
+                    imagealphablending($trueColor, false);
+                    imagesavealpha($trueColor, true);
+                    imagecopy($trueColor, $srcImage, 0, 0, 0, 0, $width, $height);
+                    imagedestroy($srcImage);
+                    $srcImage = $trueColor;
+                } else {
+                    imagealphablending($srcImage, false);
+                    imagesavealpha($srcImage, true);
+                }
+
+                imagewebp($srcImage, $destinationPath, 85);
+                imagedestroy($srcImage);
+
+                return 'athletes/' . $filename;
+            }
+        } catch (\Throwable $e) {
+            // Fallback to default storage
+        }
+
+        return $file->store('athletes', 'public');
     }
 }

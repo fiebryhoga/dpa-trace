@@ -15,13 +15,9 @@ class Athlete extends Model
         'full_name',
         'nickname',
         'gender',
-        'birth_date',
         'age',
         'height_cm',
         'weight_kg',
-        'sport_category',
-        'position_specialty',
-        'club_institution',
         'dominant_side',
         'injury_history',
         'phone_number',
@@ -30,19 +26,24 @@ class Athlete extends Model
     ];
 
     protected $casts = [
-        'birth_date' => 'date',
+        'age' => 'integer',
         'is_active' => 'boolean',
         'height_cm' => 'float',
         'weight_kg' => 'float',
     ];
 
-    protected $appends = ['calculated_age', 'bmi', 'bmi_category'];
+    protected $appends = ['calculated_age', 'bmi', 'bmi_category', 'photo_url'];
+
+    public function getPhotoUrlAttribute(): ?string
+    {
+        if ($this->photo_path) {
+            return asset('storage/' . $this->photo_path);
+        }
+        return null;
+    }
 
     public function getCalculatedAgeAttribute(): ?int
     {
-        if ($this->birth_date) {
-            return Carbon::parse($this->birth_date)->age;
-        }
         return $this->age;
     }
 

@@ -1,11 +1,12 @@
 import { FormEventHandler } from 'react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, Link, useForm } from '@inertiajs/react';
+import PageHeader from '@/Components/PageHeader';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/Components/ui/Card';
 import { Button } from '@/Components/ui/Button';
 import { Input } from '@/Components/ui/Input';
 import { Label } from '@/Components/ui/Label';
-import { ArrowLeft, Save } from 'lucide-react';
+import { UserPlus, Save } from 'lucide-react';
 
 export default function AthleteCreate() {
     const { data, setData, post, processing, errors } = useForm({
@@ -32,24 +33,20 @@ export default function AthleteCreate() {
 
     return (
         <AuthenticatedLayout>
-            <Head title="Add New Athlete - DPA Trace" />
+            <Head title="Tambah Atlet Baru - DPA Trace" />
 
             <div className="w-full space-y-6">
-                <div className="flex items-center gap-3">
-                    <Link href={route('athletes.index')}>
-                        <Button variant="outline" size="icon" className="h-8 w-8">
-                            <ArrowLeft className="h-4 w-4" />
-                        </Button>
-                    </Link>
-                    <div>
-                        <h1 className="text-xl font-bold text-slate-900 dark:text-slate-50">
-                            Register New Athlete
-                        </h1>
-                        <p className="text-xs text-slate-500 dark:text-slate-400">
-                            Enter profile details, anthropometric metrics, and sport specialty
-                        </p>
-                    </div>
-                </div>
+                <PageHeader
+                    icon={UserPlus}
+                    backUrl={route('athletes.index')}
+                    backLabel="Kembali ke Daftar Atlet"
+                    title={
+                        <>
+                            Tambah <span className="text-[#84cc16] dark:text-[#b4f031]">Atlet Baru</span>
+                        </>
+                    }
+                    description="Daftarkan profil atlet, data antropometri, dan cabang olahraga untuk penilaian DPA."
+                />
 
                 <form onSubmit={submit}>
                     <Card className="border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0E1526]">
@@ -238,7 +235,7 @@ export default function AthleteCreate() {
                                         Cancel
                                     </Button>
                                 </Link>
-                                <Button type="submit" size="sm" className="gap-1.5 shadow-brand" isLoading={processing}>
+                                <Button type="submit" size="sm" className="gap-1.5" isLoading={processing}>
                                     <Save className="h-4 w-4" />
                                     <span>Save Athlete</span>
                                 </Button>

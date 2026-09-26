@@ -69,11 +69,6 @@ export default {
                     foreground: 'hsl(var(--card-foreground))',
                 },
             },
-            boxShadow: {
-                'brand': '0 4px 20px -2px rgba(180, 240, 49, 0.35)',
-                'brand-lg': '0 10px 25px -3px rgba(180, 240, 49, 0.45)',
-                'brand-glow': '0 0 25px -5px rgba(180, 240, 49, 0.5)',
-            },
         },
     },
 

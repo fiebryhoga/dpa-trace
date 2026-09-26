@@ -1,11 +1,12 @@
 import { FormEventHandler } from 'react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, Link, useForm } from '@inertiajs/react';
+import PageHeader from '@/Components/PageHeader';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/Components/ui/Card';
 import { Button } from '@/Components/ui/Button';
 import { Input } from '@/Components/ui/Input';
 import { Label } from '@/Components/ui/Label';
-import { ArrowLeft, Save } from 'lucide-react';
+import { UserCog, Save } from 'lucide-react';
 
 interface Athlete {
     id: number;
@@ -50,24 +51,20 @@ export default function AthleteEdit({ athlete }: { athlete: Athlete }) {
 
     return (
         <AuthenticatedLayout>
-            <Head title={`Edit Athlete - ${athlete.full_name}`} />
+            <Head title={`Edit Atlet - ${athlete.full_name}`} />
 
             <div className="w-full space-y-6">
-                <div className="flex items-center gap-3">
-                    <Link href={route('athletes.show', athlete.id)}>
-                        <Button variant="outline" size="icon" className="h-8 w-8">
-                            <ArrowLeft className="h-4 w-4" />
-                        </Button>
-                    </Link>
-                    <div>
-                        <h1 className="text-xl font-bold text-slate-900 dark:text-slate-50">
-                            Edit Athlete Profile: {athlete.full_name}
-                        </h1>
-                        <p className="text-xs text-slate-500 dark:text-slate-400">
-                            Update anthropometric metrics, sport discipline, and medical notes
-                        </p>
-                    </div>
-                </div>
+                <PageHeader
+                    icon={UserCog}
+                    backUrl={route('athletes.show', athlete.id)}
+                    backLabel="Kembali ke Detail Atlet"
+                    title={
+                        <>
+                            Edit Profil Atlet: <span className="text-[#84cc16] dark:text-[#b4f031]">{athlete.full_name}</span>
+                        </>
+                    }
+                    description="Perbarui metrik antropometri, cabang olahraga, dan riwayat cedera atlet."
+                />
 
                 <form onSubmit={submit}>
                     <Card className="border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0E1526]">
@@ -248,7 +245,7 @@ export default function AthleteEdit({ athlete }: { athlete: Athlete }) {
                                         Cancel
                                     </Button>
                                 </Link>
-                                <Button type="submit" size="sm" className="gap-1.5 shadow-brand" isLoading={processing}>
+                                <Button type="submit" size="sm" className="gap-1.5" isLoading={processing}>
                                     <Save className="h-4 w-4" />
                                     <span>Save Changes</span>
                                 </Button>

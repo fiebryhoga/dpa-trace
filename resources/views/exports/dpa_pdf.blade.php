@@ -88,12 +88,12 @@
             <div class="athlete-col-val">{{ $athlete->full_name ?? 'N/A' }}</div>
         </div>
         <div class="athlete-col">
-            <div class="athlete-col-label">Kode Atlet / Cabor</div>
-            <div class="athlete-col-val">{{ $athlete->athlete_code ?? '-' }} &bull; {{ $athlete->sport_category ?? '-' }}</div>
+            <div class="athlete-col-label">Kode Atlet</div>
+            <div class="athlete-col-val">{{ $athlete->athlete_code ?? '-' }}</div>
         </div>
         <div class="athlete-col">
-            <div class="athlete-col-label">Posisi / Spesialisasi</div>
-            <div class="athlete-col-val">{{ $athlete->position_specialty ?? '-' }}</div>
+            <div class="athlete-col-label">Jenis Kelamin / Usia</div>
+            <div class="athlete-col-val">{{ $athlete->gender === 'L' ? 'Laki-laki' : 'Perempuan' }} &bull; {{ $athlete->age ? $athlete->age.' Tahun' : '-' }}</div>
         </div>
         <div class="athlete-col">
             <div class="athlete-col-label">Postur / BMI</div>

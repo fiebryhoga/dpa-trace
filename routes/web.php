@@ -4,6 +4,10 @@ use App\Http\Controllers\AthleteController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DpaAssessmentController;
 use App\Http\Controllers\DpaCompensationController;
+use App\Http\Controllers\ExerciseController;
+use App\Http\Controllers\InjuryController;
+use App\Http\Controllers\MuscleController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -29,8 +33,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/dpa/assessments/{dpaAssessment}', [DpaAssessmentController::class, 'destroy'])->name('dpa.destroy');
     Route::post('/dpa/athletes/{athlete}/export-pdf', [DpaAssessmentController::class, 'exportPdf'])->name('dpa.export-pdf');
 
-    // Master Data DPA Compensations
+    // Master Data & Konfigurasi (DPA Compensations, Exercise Library, Muscles, Injuries, Admin Users)
     Route::resource('dpa-compensations', DpaCompensationController::class);
+    Route::resource('exercises', ExerciseController::class);
+    Route::resource('muscles', MuscleController::class);
+    Route::resource('injuries', InjuryController::class);
+    Route::resource('users', UserController::class);
 
     // Profile Management
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

@@ -25,21 +25,15 @@ class DpaAssessmentController extends Controller
         $query = Athlete::query()
             ->withCount('dpaAssessments as total_records')
             ->with(['dpaAssessments' => function ($q) {
-                $q->latest('assessment_date')->limit(1);
+                $q->with('details.compensation')->latest('assessment_date')->limit(1);
             }]);
 
         if ($search) {
             $query->where(function ($q) use ($search) {
                 $q->where('full_name', 'like', "%{$search}%")
                   ->orWhere('athlete_code', 'like', "%{$search}%")
-                  ->orWhere('nickname', 'like', "%{$search}%")
-                  ->orWhere('sport_category', 'like', "%{$search}%")
-                  ->orWhere('position_specialty', 'like', "%{$search}%");
+                  ->orWhere('nickname', 'like', "%{$search}%");
             });
-        }
-
-        if ($sport && $sport !== 'all') {
-            $query->where('sport_category', $sport);
         }
 
         if ($sortBy === 'name_desc') {
@@ -51,14 +45,11 @@ class DpaAssessmentController extends Controller
         }
 
         $athletes = $query->get();
-        $sportsList = Athlete::select('sport_category')->distinct()->pluck('sport_category')->filter()->values();
 
         return Inertia::render('Dpa/Index', [
             'athletes' => $athletes,
-            'sportsList' => $sportsList,
             'filters' => [
                 'search' => $search ?? '',
-                'sport' => $sport ?? 'all',
                 'sort' => $sortBy,
             ],
             'totalCount' => Athlete::count(),

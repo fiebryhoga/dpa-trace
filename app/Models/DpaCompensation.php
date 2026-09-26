@@ -33,4 +33,11 @@ class DpaCompensation extends Model
     {
         return $this->hasMany(DpaAssessmentDetail::class);
     }
+
+    public function exercises()
+    {
+        return $this->belongsToMany(Exercise::class, 'dpa_compensation_exercises')
+                    ->withPivot('phase', 'sort_order')
+                    ->withTimestamps();
+    }
 }

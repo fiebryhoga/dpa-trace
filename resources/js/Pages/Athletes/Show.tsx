@@ -1,5 +1,6 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, Link } from '@inertiajs/react';
+import PageHeader from '@/Components/PageHeader';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/Components/ui/Card';
 import { Button } from '@/Components/ui/Button';
 import { Badge } from '@/Components/ui/Badge';
@@ -11,6 +12,7 @@ import {
     Shield,
     ChevronRight,
     AlertCircle,
+    User,
 } from 'lucide-react';
 
 interface Compensation {
@@ -46,15 +48,12 @@ interface Athlete {
     full_name: string;
     nickname?: string;
     gender: 'L' | 'P';
-    birth_date?: string;
+    age?: number;
     calculated_age?: number;
     height_cm?: number;
     weight_kg?: number;
     bmi?: number;
     bmi_category?: string;
-    sport_category: string;
-    position_specialty?: string;
-    club_institution?: string;
     dominant_side: 'R' | 'L' | 'Bilateral';
     injury_history?: string;
     phone_number?: string;
@@ -68,44 +67,38 @@ export default function AthleteShow({ athlete }: { athlete: Athlete }) {
             <Head title={`Athlete Profile: ${athlete.full_name} - DPA Trace`} />
 
             <div className="space-y-6">
-                {/* Top Actions */}
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-3 border-b border-slate-200 dark:border-slate-800">
-                    <div className="flex items-center gap-3">
-                        <Link href={route('athletes.index')}>
-                            <Button variant="outline" size="icon" className="h-8 w-8">
-                                <ArrowLeft className="h-4 w-4" />
-                            </Button>
-                        </Link>
-                        <div>
-                            <div className="flex items-center gap-2">
-                                <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
-                                    {athlete.full_name}
-                                </h1>
-                                <Badge variant="brand" className="text-xs font-bold">
-                                    {athlete.athlete_code}
-                                </Badge>
-                            </div>
-                            <p className="text-xs text-[#84cc16] dark:text-[#b4f031] font-semibold mt-0.5">
-                                {athlete.sport_category} {athlete.position_specialty && `• ${athlete.position_specialty}`} {athlete.club_institution && <span className="text-slate-500 dark:text-slate-400 font-normal">• {athlete.club_institution}</span>}
-                            </p>
-                        </div>
-                    </div>
-
-                    <div className="flex items-center gap-2">
-                        <Link href={route('athletes.edit', athlete.id)}>
-                            <Button variant="outline" size="sm" className="gap-1.5 text-xs">
-                                <Edit3 className="h-3.5 w-3.5" />
-                                <span>Edit Profile</span>
-                            </Button>
-                        </Link>
-                        <Link href={route('dpa.athletes.show', athlete.id)}>
-                            <Button size="sm" className="gap-1.5 text-xs font-bold bg-[#b4f031] text-slate-950 hover:bg-[#a2dd26] shadow-brand">
-                                <Activity className="h-3.5 w-3.5" />
-                                <span>Buka Analisis DPA</span>
-                            </Button>
-                        </Link>
-                    </div>
-                </div>
+                <PageHeader
+                    icon={User}
+                    backUrl={route('athletes.index')}
+                    backLabel="Daftar Atlet"
+                    title={athlete.full_name}
+                    badge={athlete.athlete_code}
+                    description={
+                        <span>
+                            <strong className="text-[#84cc16] dark:text-[#b4f031] font-semibold">
+                                {athlete.gender === 'L' ? 'Laki-laki' : 'Perempuan'}
+                            </strong>
+                            {athlete.age && ` • ${athlete.age} Tahun`}
+                            {athlete.dominant_side && ` • Dominan: ${athlete.dominant_side === 'R' ? 'Kanan (R)' : athlete.dominant_side === 'L' ? 'Kiri (L)' : 'Bilateral'}`}
+                        </span>
+                    }
+                    actions={
+                        <>
+                            <Link href={route('athletes.edit', athlete.id)}>
+                                <Button variant="outline" size="sm" className="gap-1.5 text-xs rounded-md">
+                                    <Edit3 className="h-3.5 w-3.5" />
+                                    <span>Edit Profil</span>
+                                </Button>
+                            </Link>
+                            <Link href={route('dpa.athletes.show', athlete.id)}>
+                                <Button size="sm" className="gap-1.5 text-xs font-bold bg-[#b4f031] text-slate-950 hover:bg-[#a2dd26] rounded-md">
+                                    <Activity className="h-3.5 w-3.5" />
+                                    <span>Buka Analisis DPA</span>
+                                </Button>
+                            </Link>
+                        </>
+                    }
+                />
 
                 {/* Main Profile Grid */}
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">

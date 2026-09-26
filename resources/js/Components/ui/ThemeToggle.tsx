@@ -28,17 +28,17 @@ export function ThemeToggle({ className }: { className?: string }) {
     return (
         <Button
             type="button"
-            variant="outline"
+            variant="ghost"
             size="icon"
             onClick={toggleTheme}
-            className={className}
+            className={`h-8 w-8 rounded-md text-slate-500 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-slate-100 dark:hover:bg-slate-800/80 transition-colors ${className || ''}`}
             aria-label="Toggle theme"
             title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
         >
             {isDark ? (
-                <Sun className="h-4 w-4 text-amber-400 hover:text-amber-300 transition-colors" />
+                <Sun className="h-4 w-4 text-slate-300 hover:text-white transition-colors" />
             ) : (
-                <Moon className="h-4 w-4 text-slate-700 hover:text-slate-900 transition-colors" />
+                <Moon className="h-4 w-4 text-slate-600 hover:text-slate-900 transition-colors" />
             )}
         </Button>
     );

@@ -1,9 +1,14 @@
 export interface User {
     id: number;
     name: string;
+    username?: string;
     email: string;
+    avatar?: string;
+    avatar_url?: string;
     role?: string;
     email_verified_at?: string;
+    created_at?: string;
+    updated_at?: string;
 }
 
 export interface Athlete {
@@ -12,20 +17,17 @@ export interface Athlete {
     full_name: string;
     nickname?: string;
     gender: 'L' | 'P';
-    birth_date?: string;
     age?: number;
     calculated_age?: number;
     height_cm?: number;
     weight_kg?: number;
     bmi?: number;
     bmi_category?: string;
-    sport_category: string;
-    position_specialty?: string;
-    club_institution?: string;
     dominant_side?: string;
     injury_history?: string;
     phone_number?: string;
     photo_path?: string;
+    photo_url?: string;
     is_active: boolean;
     total_records?: number;
     created_at?: string;
@@ -51,6 +53,24 @@ export interface DpaCompensation {
     image_isometrics?: string;
     exercises_integrated?: string;
     image_integrated?: string;
+    exercises?: Exercise[];
+    created_at?: string;
+    updated_at?: string;
+}
+
+export interface Exercise {
+    id: number;
+    name: string;
+    instructions?: string;
+    image_path?: string;
+    video_url?: string;
+    is_active: boolean;
+    pivot?: {
+        dpa_compensation_id?: number;
+        exercise_id?: number;
+        phase: 'Inhibit' | 'Lengthen' | 'Activate' | 'Integrate';
+        sort_order?: number;
+    };
     created_at?: string;
     updated_at?: string;
 }
@@ -89,6 +109,24 @@ export interface AthleteGallery {
     annotations?: any;
     meta?: any;
     notes?: string;
+    created_at?: string;
+    updated_at?: string;
+}
+
+export interface Muscle {
+    id: number;
+    name: string;
+    slug?: string;
+    description?: string;
+    created_at?: string;
+    updated_at?: string;
+}
+
+export interface Injury {
+    id: number;
+    name: string;
+    body_region?: string;
+    description?: string;
     created_at?: string;
     updated_at?: string;
 }

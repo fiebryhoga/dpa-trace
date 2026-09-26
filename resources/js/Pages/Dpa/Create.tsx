@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, Link, useForm } from '@inertiajs/react';
+import PageHeader from '@/Components/PageHeader';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/Components/ui/Card';
 import { Button } from '@/Components/ui/Button';
 import { Input } from '@/Components/ui/Input';
@@ -13,6 +14,7 @@ import {
     Square,
     User,
     Zap,
+    Activity,
 } from 'lucide-react';
 
 interface Compensation {
@@ -159,29 +161,23 @@ export default function DpaCreate({
             <Head title="New DPA Assessment - DPA Trace" />
 
             <form onSubmit={submit} className="space-y-6">
-                {/* Header */}
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-3 border-b border-slate-200 dark:border-slate-800">
-                    <div className="flex items-center gap-3">
-                        <Link href={route('dpa.index')}>
-                            <Button type="button" variant="outline" size="icon" className="h-8 w-8">
-                                <ArrowLeft className="h-4 w-4" />
-                            </Button>
-                        </Link>
-                        <div>
-                            <h1 className="text-xl sm:text-2xl font-extrabold tracking-tight text-slate-900 dark:text-white">
-                                Dynamic Posture Assessment Worksheet
-                            </h1>
-                            <p className="text-xs text-slate-500 dark:text-slate-400">
-                                DPA Trace Standard Protocol • 4-View Kinetic Checkpoints
-                            </p>
-                        </div>
-                    </div>
-
-                    <Button type="submit" size="sm" className="gap-1.5 shadow-brand" isLoading={processing}>
-                        <Save className="h-4 w-4" />
-                        <span>Save Assessment</span>
-                    </Button>
-                </div>
+                <PageHeader
+                    icon={Activity}
+                    backUrl={route('dpa.index')}
+                    backLabel="Kembali ke Analisis DPA"
+                    title={
+                        <>
+                            Lembar Penilaian <span className="text-[#84cc16] dark:text-[#b4f031]">DPA</span>
+                        </>
+                    }
+                    description="Protokol Standar DPA Trace • 4-View Kinetic Checkpoints & Overactive/Underactive Muscle Mapping."
+                    actions={
+                        <Button type="submit" size="sm" className="gap-1.5 font-bold rounded-md" isLoading={processing}>
+                            <Save className="h-4 w-4" />
+                            <span>Simpan Penilaian</span>
+                        </Button>
+                    }
+                />
 
                 {/* Athlete & Session Metadata */}
                 <Card className="border-slate-200/90 dark:border-slate-800 bg-white dark:bg-[#0E1526] shadow-sm">
@@ -277,9 +273,9 @@ export default function DpaCreate({
                                         key={cat}
                                         type="button"
                                         onClick={() => setActiveTab(cat)}
-                                        className={`px-3.5 py-2 rounded-lg text-xs font-bold flex items-center gap-2 transition-all whitespace-nowrap shadow-sm ${
+                                        className={`px-3.5 py-2 rounded-lg text-xs font-bold flex items-center gap-2 transition-all whitespace-nowrap shadow-xs ${
                                             activeTab === cat
-                                                ? 'bg-[#b4f031] text-slate-950 font-bold shadow-brand'
+                                                ? 'bg-[#b4f031] text-slate-950 font-bold'
                                                 : 'bg-white dark:bg-slate-900/80 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-800 hover:border-[#b4f031]'
                                         }`}
                                     >
@@ -307,7 +303,7 @@ export default function DpaCreate({
                                         key={comp.id}
                                         className={`rounded-lg border p-4 transition-all ${
                                             selected
-                                                ? 'border-[#b4f031] bg-[#b4f031]/10 dark:border-[#b4f031]/70 dark:bg-[#b4f031]/10 shadow-brand ring-1 ring-[#b4f031]/30'
+                                                ? 'border-[#b4f031] bg-[#b4f031]/10 dark:border-[#b4f031]/70 dark:bg-[#b4f031]/10 ring-1 ring-[#b4f031]/30'
                                                 : 'border-slate-200/90 bg-white hover:border-[#b4f031]/60 dark:border-slate-800 dark:bg-[#0E1526]/80'
                                         }`}
                                     >
@@ -427,7 +423,7 @@ export default function DpaCreate({
 
                     {/* Right Live Biomechanical Analytics Sidebar */}
                     <div className="lg:col-span-4 space-y-4">
-                        <Card className="border-slate-200/90 dark:border-slate-800 sticky top-20 shadow-brand bg-white dark:bg-[#0E1526]">
+                        <Card className="border-slate-200/90 dark:border-slate-800 sticky top-20 shadow-xs bg-white dark:bg-[#0E1526]">
                             <CardHeader className="pb-3 border-b border-slate-100 dark:border-slate-800/80">
                                 <div className="flex items-center justify-between">
                                     <CardTitle className="text-xs font-bold text-slate-900 dark:text-[#b4f031] uppercase tracking-wider flex items-center gap-1.5">
@@ -514,7 +510,7 @@ export default function DpaCreate({
                                 <div className="pt-3 border-t border-slate-100 dark:border-slate-800">
                                     <Button
                                         type="submit"
-                                        className="w-full h-9 text-xs gap-1.5 shadow-brand"
+                                        className="w-full h-9 text-xs gap-1.5 rounded-md font-bold"
                                         isLoading={processing}
                                     >
                                         <Save className="h-4 w-4" />
