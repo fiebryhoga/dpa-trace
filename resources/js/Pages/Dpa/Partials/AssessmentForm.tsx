@@ -26,6 +26,7 @@ interface AssessmentFormProps {
         current_height_cm?: string | number;
         current_weight_kg?: string | number;
         compensations: number[];
+        step_photos?: Record<string, File>;
     };
     setData: (key: any, value: any) => void;
     submit: (e: React.FormEvent) => void;
@@ -68,6 +69,10 @@ export default function AssessmentForm({
         setData('compensations', newIds);
     };
 
+    const handleStepPhotosChange = (photos: Record<string, File>) => {
+        setData('step_photos', photos);
+    };
+
     const selectedItems = useMemo(() => {
         return compensations.filter((c) => data.compensations?.includes(c.id));
     }, [compensations, data.compensations]);
@@ -83,6 +88,7 @@ export default function AssessmentForm({
                 galleryPhotos={galleryPhotos}
                 selectedCompensationIds={data.compensations || []}
                 onApplyCompensations={handleApplyScannedCompensations}
+                onStepPhotosChange={handleStepPhotosChange}
             />
 
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">

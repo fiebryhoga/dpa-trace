@@ -256,16 +256,16 @@ export default function AthleteGallery({
     };
 
     return (
-        <div className={`bg-white rounded-lg border border-slate-200/80 shadow-2xs overflow-hidden w-full ${className}`}>
+        <div className={`bg-white dark:bg-[#0D1322] rounded-lg border border-slate-200/80 dark:border-slate-800 shadow-2xs overflow-hidden w-full ${className}`}>
             
             {/* HEADER GALERI */}
-            <div className="px-4 py-3 bg-gradient-to-r from-white via-orange-50/40 to-white border-b border-slate-200/80 flex justify-between items-center gap-3">
+            <div className="px-4 py-3 bg-slate-50/70 dark:bg-slate-900/50 border-b border-slate-200/80 dark:border-slate-800 flex justify-between items-center gap-3">
                 <div className="min-w-0">
-                    <h3 className="font-bold text-slate-900 text-xs sm:text-sm tracking-tight flex items-center gap-2">
+                    <h3 className="font-bold text-slate-900 dark:text-white text-xs sm:text-sm tracking-tight flex items-center gap-2">
                         <span>{title}</span>
                         {galleries.length > 0 && (
-                            <span className="text-[10px] font-extrabold bg-orange-100 text-orange-700 px-2 py-0.5 rounded-lg border border-orange-200">
-                                {galleries.length} Foto
+                            <span className="text-[10px] font-bold bg-[#84cc16]/15 dark:bg-[#b4f031]/15 text-[#84cc16] dark:text-[#b4f031] px-2 py-0.5 rounded border border-[#84cc16]/30">
+                                {galleries.length} Foto Tes
                             </span>
                         )}
                     </h3>
@@ -273,50 +273,30 @@ export default function AthleteGallery({
                         {subtitle}
                     </p>
                 </div>
-                {canManage && (
-                    <button 
-                        type="button"
-                        onClick={() => setIsUploadModalOpen(true)} 
-                        className="bg-orange-600 hover:bg-orange-700 text-white px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 shadow-2xs hover:shadow-xs transition-all touch-manipulation whitespace-nowrap cursor-pointer shrink-0"
-                    >
-                        <ImagePlus className="w-3.5 h-3.5" /> 
-                        <span>Tambah Foto</span>
-                    </button>
-                )}
             </div>
 
             {/* GRID GALERI */}
-            <div className="p-4 bg-white">
+            <div className="p-4 bg-white dark:bg-[#0D1322]">
                 {galleries.length === 0 ? (
-                    <div className="py-10 flex flex-col items-center justify-center text-center border border-dashed border-slate-200 rounded-lg bg-gradient-to-br from-white via-white to-orange-50/30 p-4">
-                        <div className="w-12 h-12 rounded-lg bg-orange-50 border border-orange-200 text-orange-500 flex items-center justify-center mb-2.5 shadow-2xs">
+                    <div className="py-10 flex flex-col items-center justify-center text-center border border-dashed border-slate-200 dark:border-slate-800 rounded-lg bg-slate-50/50 dark:bg-slate-950/20 p-6 space-y-2">
+                        <div className="w-12 h-12 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 flex items-center justify-center shadow-2xs">
                             <Camera className="w-6 h-6" />
                         </div>
-                        <h4 className="text-slate-800 font-bold text-xs sm:text-sm">Belum Ada Dokumentasi Postur</h4>
-                        <p className="text-[11px] text-slate-400 mt-1 max-w-sm">
-                            Unggah foto evaluasi Dynamic Posture Assessment (Overhead Squat, Single Leg Squat, dll) beserta analisis sudut dan catatan klinis di sini.
+                        <h4 className="text-slate-800 dark:text-slate-200 font-bold text-xs sm:text-sm">Belum Ada Riwayat Foto Hasil Tes</h4>
+                        <p className="text-[11px] text-slate-400 max-w-sm leading-relaxed">
+                            Foto hasil asesmen (Anterior, Lateral, Posterior, Single Leg) akan otomatis tercatat dan tersimpan di sini saat Anda mengunggah foto pada <strong>Smart Posture Scanner</strong> di tab <strong>Input Evaluasi</strong>.
                         </p>
-                        {canManage && (
-                            <button
-                                type="button"
-                                onClick={() => setIsUploadModalOpen(true)}
-                                className="mt-3.5 inline-flex items-center gap-1.5 px-3 py-1.5 bg-orange-500 hover:bg-orange-600 text-white rounded-lg text-xs font-bold transition-all shadow-2xs cursor-pointer"
-                            >
-                                <Plus size={13} />
-                                <span>Upload Foto Pertama</span>
-                            </button>
-                        )}
                     </div>
                 ) : (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-3 gap-3.5">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3.5">
                         {galleries.map((item) => (
                             <div 
                                 key={item.id} 
-                                className="flex flex-col bg-white border border-slate-200/90 rounded-lg overflow-hidden shadow-2xs hover:border-orange-300 hover:shadow-xs transition-all group"
+                                className="flex flex-col bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 rounded-lg overflow-hidden shadow-2xs hover:border-[#84cc16] dark:hover:border-[#b4f031] hover:shadow-xs transition-all group"
                             >
                                 {/* Area Gambar */}
                                 <div 
-                                    className="aspect-square bg-slate-100 relative overflow-hidden cursor-pointer" 
+                                    className="aspect-square bg-slate-100 dark:bg-slate-950 relative overflow-hidden cursor-pointer" 
                                     onClick={() => setViewer({ isOpen: true, photo: item })}
                                 >
                                     <img 
@@ -327,9 +307,16 @@ export default function AthleteGallery({
                                     />
                                     
                                     {/* Overlay Tanggal Singkat (Pojok Kiri Atas) */}
-                                    <div className="absolute top-2 left-2 bg-black/75 backdrop-blur-xs text-white text-[9px] font-bold px-2 py-0.5 rounded-lg shadow-xs tracking-wide">
+                                    <div className="absolute top-2 left-2 bg-black/75 backdrop-blur-xs text-white text-[9px] font-bold px-2 py-0.5 rounded shadow-xs tracking-wide">
                                         {formatDateShort(item.created_at)}
                                     </div>
+
+                                    {/* Overlay View Category Badge (Pojok Kanan Atas) */}
+                                    {item.meta?.view_category && (
+                                        <div className="absolute top-2 right-2 bg-[#84cc16] text-slate-950 text-[9px] font-extrabold px-1.5 py-0.5 rounded shadow-xs">
+                                            {item.meta.view_category.replace(' View', '')}
+                                        </div>
+                                    )}
                                     
                                     {/* Hover Indicator Icon */}
                                     <div className="absolute inset-0 bg-slate-900/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">

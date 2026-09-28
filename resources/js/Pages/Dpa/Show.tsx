@@ -59,12 +59,14 @@ export default function DpaShow({
         current_height_cm?: string | number;
         current_weight_kg?: string | number;
         compensations: number[];
+        step_photos?: Record<string, File>;
     }>({
         assessment_date: new Date().toISOString().split('T')[0],
         notes: '',
         current_height_cm: athlete.height_cm || '',
         current_weight_kg: athlete.weight_kg || '',
         compensations: [],
+        step_photos: {},
     });
 
     const handleEdit = (item: DpaAssessment) => {

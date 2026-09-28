@@ -138,7 +138,30 @@ EXACT NASM BIOMECHANICAL VISUAL CLUES & MARKERS:
 CONSERVATIVE CLINICAL EVALUATION:
 - If the subject has clean, normal, aligned posture in this image, return detected_compensations: [].
 - Never hallucinate deviations not clearly visible in the image.
-- Estimate percentage coordinates (0-100%) for visible joints (Head, Shoulders, ASIS/PSIS, Knees, Ankles, Feet, Wrists) for drawing goniometer lines.
+
+LANDMARK LOCALIZATION RULES (CRITICAL):
+- You MUST locate the EXACT (x, y) percentage coordinates (0.0 to 100.0) where each body joint is actually located in THIS photo:
+  * For Lateral View:
+    - "Ear": where the subject's ear/tragus is in the photo
+    - "Shoulder": glenohumeral joint / acromion
+    - "Wrist": where the hands/wrists are extended
+    - "Hip": greater trochanter / hip pivot
+    - "Knee": lateral knee joint line
+    - "Ankle": lateral malleolus
+  * For Anterior View:
+    - "Left ASIS", "Right ASIS" (pelvis)
+    - "Left Knee", "Right Knee" (patellae center)
+    - "Left Ankle", "Right Ankle" (malleoli)
+    - "Left Toe", "Right Toe" (2nd/3rd toe tip)
+  * For Posterior View:
+    - "C7": upper spine
+    - "Left PSIS", "Right PSIS": posterior pelvis dimples
+    - "Left Knee", "Right Knee": popliteal crease
+    - "Left Calcaneus", "Right Calcaneus": heel base
+  * For Single Leg:
+    - "Stance ASIS", "Floating ASIS"
+    - "Stance Knee", "Stance Ankle"
+    - "Left Shoulder", "Right Shoulder"
 
 Return ONLY a valid JSON object matching this schema with NO markdown syntax, NO backticks:
 {
@@ -156,15 +179,7 @@ Return ONLY a valid JSON object matching this schema with NO markdown syntax, NO
     }
   ],
   "landmarks": [
-    { "name": "Head", "x": 50.0, "y": 15.0, "status": "Normal" },
-    { "name": "Left Shoulder", "x": 42.0, "y": 28.0, "status": "Normal" },
-    { "name": "Right Shoulder", "x": 58.0, "y": 28.0, "status": "Normal" },
-    { "name": "Left Hip (ASIS)", "x": 44.0, "y": 50.0, "status": "Normal" },
-    { "name": "Right Hip (ASIS)", "x": 56.0, "y": 50.0, "status": "Normal" },
-    { "name": "Left Knee", "x": 46.0, "y": 68.0, "status": "Deviation" },
-    { "name": "Right Knee", "x": 54.0, "y": 68.0, "status": "Deviation" },
-    { "name": "Left Ankle", "x": 43.0, "y": 88.0, "status": "Normal" },
-    { "name": "Right Ankle", "x": 57.0, "y": 88.0, "status": "Normal" }
+    { "name": "<Joint Name matching view angle>", "x": <actual float 0.0-100.0>, "y": <actual float 0.0-100.0>, "status": "Normal" | "Deviation" }
   ]
 }
 PROMPT;
@@ -244,12 +259,13 @@ PROMPT;
             ];
         } elseif ($viewCategory === 'Lateral View') {
             return [
-                'summary' => 'Sistem goniometer lateral aktif. Titik pin landmark (Tragus, Acromion, Greater Trochanter, Knee, Lateral Malleolus, Wrist) telah disiapkan untuk menghitung paralelisme Torso-Tibia dan elevasi lengan.',
+                'summary' => 'Sistem goniometer lateral aktif. Titik pin landmark (Tragus, Acromion, Lumbar Spine, Greater Trochanter, Knee, Lateral Malleolus, Wrist) telah disiapkan untuk menghitung paralelisme Torso-Tibia, kelengkungan Lumbal, dan elevasi lengan.',
                 'detected_compensations' => [],
                 'landmarks' => [
                     ['name' => 'Tragus / Ear', 'x' => 50.0, 'y' => 15.0, 'status' => 'Normal'],
                     ['name' => 'Shoulder (Acromion)', 'x' => 48.0, 'y' => 26.0, 'status' => 'Normal'],
                     ['name' => 'Wrist (Overhead)', 'x' => 47.0, 'y' => 8.0, 'status' => 'Normal'],
+                    ['name' => 'Lumbar Spine (L3-L5)', 'x' => 46.5, 'y' => 41.5, 'status' => 'Normal'],
                     ['name' => 'Hip (Greater Trochanter)', 'x' => 45.0, 'y' => 52.0, 'status' => 'Normal'],
                     ['name' => 'Knee Joint Axis', 'x' => 55.0, 'y' => 69.0, 'status' => 'Normal'],
                     ['name' => 'Lateral Malleolus', 'x' => 50.0, 'y' => 88.0, 'status' => 'Normal'],

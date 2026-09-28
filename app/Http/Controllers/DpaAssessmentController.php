@@ -91,6 +91,8 @@ class DpaAssessmentController extends Controller
             'current_weight_kg' => 'nullable|numeric|min:20|max:200',
             'compensations' => 'array',
             'compensations.*' => 'exists:dpa_compensations,id',
+            'step_photos' => 'nullable|array',
+            'step_photos.*' => 'nullable|image|max:10240',
         ]);
 
         DB::transaction(function () use ($validated, $athlete, $request) {
@@ -109,9 +111,27 @@ class DpaAssessmentController extends Controller
                     ]);
                 }
             }
+
+            // Save test photos to AthleteGallery
+            if ($request->hasFile('step_photos')) {
+                foreach ($request->file('step_photos') as $viewKey => $file) {
+                    if ($file && $file->isValid()) {
+                        $path = $file->store('athletes/' . $athlete->id . '/postures', 'public');
+                        \App\Models\AthleteGallery::create([
+                            'athlete_id' => $athlete->id,
+                            'image_path' => $path,
+                            'notes' => "Hasil Tes Postur DPA ({$viewKey}) - " . \Carbon\Carbon::parse($assessment->assessment_date)->isoFormat('D MMMM Y'),
+                            'meta' => [
+                                'view_category' => $viewKey,
+                                'assessment_id' => $assessment->id,
+                            ],
+                        ]);
+                    }
+                }
+            }
         });
 
-        return redirect()->back()->with('success', 'Data evaluasi DPA berhasil disimpan.');
+        return redirect()->back()->with('success', 'Data evaluasi DPA dan foto hasil tes berhasil disimpan ke galeri.');
     }
 
     /**
@@ -126,9 +146,11 @@ class DpaAssessmentController extends Controller
             'current_weight_kg' => 'nullable|numeric|min:20|max:200',
             'compensations' => 'array',
             'compensations.*' => 'exists:dpa_compensations,id',
+            'step_photos' => 'nullable|array',
+            'step_photos.*' => 'nullable|image|max:10240',
         ]);
 
-        DB::transaction(function () use ($validated, $dpaAssessment) {
+        DB::transaction(function () use ($validated, $dpaAssessment, $request) {
             $dpaAssessment->update([
                 'assessment_date' => $validated['assessment_date'],
                 'current_height_cm' => $validated['current_height_cm'] ?? $dpaAssessment->current_height_cm,
@@ -144,6 +166,25 @@ class DpaAssessmentController extends Controller
                     $dpaAssessment->details()->create([
                         'dpa_compensation_id' => $compId,
                     ]);
+                }
+            }
+
+            // Save any newly uploaded test photos to AthleteGallery
+            if ($request->hasFile('step_photos')) {
+                $athlete = $dpaAssessment->athlete;
+                foreach ($request->file('step_photos') as $viewKey => $file) {
+                    if ($file && $file->isValid()) {
+                        $path = $file->store('athletes/' . $athlete->id . '/postures', 'public');
+                        \App\Models\AthleteGallery::create([
+                            'athlete_id' => $athlete->id,
+                            'image_path' => $path,
+                            'notes' => "Hasil Tes Postur DPA ({$viewKey}) - " . \Carbon\Carbon::parse($dpaAssessment->assessment_date)->isoFormat('D MMMM Y'),
+                            'meta' => [
+                                'view_category' => $viewKey,
+                                'assessment_id' => $dpaAssessment->id,
+                            ],
+                        ]);
+                    }
                 }
             }
         });
