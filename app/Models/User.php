@@ -19,6 +19,18 @@ class User extends Authenticatable
 
     protected $appends = ['avatar_url'];
 
+    public function getRouteKeyName(): string
+    {
+        return 'username';
+    }
+
+    public function resolveRouteBinding($value, $field = null)
+    {
+        return $this->where('username', $value)
+            ->orWhere('id', $value)
+            ->firstOrFail();
+    }
+
     /**
      * Get the attributes that should be cast.
      *

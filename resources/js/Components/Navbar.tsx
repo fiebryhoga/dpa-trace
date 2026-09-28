@@ -57,6 +57,8 @@ export default function Navbar() {
         route().current('athletes.*') ||
         route().current('dpa-compensations.*') ||
         route().current('exercises.*') ||
+        route().current('muscles.*') ||
+        route().current('injuries.*') ||
         route().current('users.*');
 
     return (
@@ -69,7 +71,7 @@ export default function Navbar() {
                             <ApplicationLogo className="h-9 w-9 transition-transform group-hover:scale-105" />
                             <div className="flex flex-col">
                                 <span className="text-base font-extrabold tracking-tight text-slate-900 dark:text-white leading-tight">
-                                    DPA <span className="text-[#84cc16] dark:text-[#b4f031]">Trace</span>
+                                    Athlete <span className="text-[#84cc16] dark:text-[#b4f031]">DPA</span>
                                 </span>
                                 <span className="text-[11px] text-slate-500 dark:text-slate-400 leading-none">
                                     Dynamic Posture Assessment
@@ -100,7 +102,7 @@ export default function Navbar() {
                                 Analisis DPA
                             </Link>
 
-                            {/* Dropdown Konfigurasi (Kelola Atlet, Master Kompensasi, Master Latihan, Kelola Admin) */}
+                            {/* Dropdown Konfigurasi (Kelola Atlet, Master Kompensasi, Master Latihan, Master Otot, Master Cedera, Kelola Admin) */}
                             <div
                                 ref={configDropdownRef}
                                 className="relative"
@@ -119,7 +121,7 @@ export default function Navbar() {
                                     <span>Konfigurasi</span>
                                     <ChevronDown
                                         size={13}
-                                        className={`transition-transform duration-150 ${isConfigOpen ? 'rotate-180 text-[#84cc16] dark:text-[#b4f031]' : 'opacity-70'}`}
+                                        className={`transition-transform duration-150 ${isConfigOpen ? 'rotate-180' : ''} ${isConfigActive || isConfigOpen ? 'text-[#84cc16] dark:text-[#b4f031]' : 'opacity-70'}`}
                                     />
                                 </button>
 

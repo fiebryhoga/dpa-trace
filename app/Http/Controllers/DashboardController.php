@@ -17,6 +17,8 @@ class DashboardController extends Controller
         $totalAthletes = Athlete::count();
         $activeAthletes = Athlete::where('is_active', true)->count();
         $totalAssessments = DpaAssessment::count();
+        $totalCompensations = DpaCompensation::count();
+        $totalExercises = \App\Models\Exercise::count();
 
         $recentAssessments = DpaAssessment::with(['athlete', 'assessor', 'details'])
             ->withCount('details')
@@ -33,10 +35,9 @@ class DashboardController extends Controller
             ->with('compensation')
             ->get();
 
-        // Sport Distribution
-        $sportsDistribution = Athlete::select('sport_category', DB::raw('count(*) as count'))
-            ->groupBy('sport_category')
-            ->orderBy('count', 'desc')
+        // Gender Distribution
+        $genderDistribution = Athlete::select('gender', DB::raw('count(*) as count'))
+            ->groupBy('gender')
             ->get();
 
         return Inertia::render('Dashboard', [
@@ -44,10 +45,12 @@ class DashboardController extends Controller
                 'totalAthletes' => $totalAthletes,
                 'activeAthletes' => $activeAthletes,
                 'totalAssessments' => $totalAssessments,
+                'totalCompensations' => $totalCompensations,
+                'totalExercises' => $totalExercises,
             ],
             'recentAssessments' => $recentAssessments,
             'topCompensations' => $topCompensations,
-            'sportsDistribution' => $sportsDistribution,
+            'genderDistribution' => $genderDistribution,
         ]);
     }
 }

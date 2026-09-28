@@ -808,7 +808,9 @@ export default function DpaShow({
                 {activeTab === 'input' && (
                     <div className="space-y-4">
                         <AssessmentForm
+                            athleteId={athlete.id}
                             compensations={compensations}
+                            galleryPhotos={galleries}
                             data={data}
                             setData={setData}
                             submit={submit}

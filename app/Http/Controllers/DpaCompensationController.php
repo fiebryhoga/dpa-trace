@@ -26,14 +26,9 @@ class DpaCompensationController extends Controller
             ->orderBy('name')
             ->get();
 
-        $muscles = Muscle::where('is_active', true)
-            ->orderBy('body_region')
-            ->orderBy('name')
-            ->get();
+        $muscles = Muscle::orderBy('name')->get();
 
-        $injuries = Injury::where('is_active', true)
-            ->orderBy('name')
-            ->get();
+        $injuries = Injury::orderBy('name')->get();
 
         return Inertia::render('Dpa/Compensations/Index', [
             'compensations' => $compensations,
@@ -52,14 +47,9 @@ class DpaCompensationController extends Controller
             ->orderBy('name')
             ->get();
 
-        $muscles = Muscle::where('is_active', true)
-            ->orderBy('body_region')
-            ->orderBy('name')
-            ->get();
+        $muscles = Muscle::orderBy('name')->get();
 
-        $injuries = Injury::where('is_active', true)
-            ->orderBy('name')
-            ->get();
+        $injuries = Injury::orderBy('name')->get();
 
         return Inertia::render('Dpa/Compensations/Form', [
             'compensation' => null,
@@ -144,14 +134,9 @@ class DpaCompensationController extends Controller
             ->orderBy('name')
             ->get();
 
-        $muscles = Muscle::where('is_active', true)
-            ->orderBy('body_region')
-            ->orderBy('name')
-            ->get();
+        $muscles = Muscle::orderBy('name')->get();
 
-        $injuries = Injury::where('is_active', true)
-            ->orderBy('name')
-            ->get();
+        $injuries = Injury::orderBy('name')->get();
 
         return Inertia::render('Dpa/Compensations/Form', [
             'compensation' => $dpaCompensation,

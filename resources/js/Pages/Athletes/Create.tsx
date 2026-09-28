@@ -33,7 +33,7 @@ export default function AthleteCreate() {
 
     return (
         <AuthenticatedLayout>
-            <Head title="Tambah Atlet Baru - DPA Trace" />
+            <Head title="Tambah Atlet Baru - Athlete DPA" />
 
             <div className="w-full space-y-6">
                 <PageHeader

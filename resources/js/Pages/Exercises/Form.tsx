@@ -62,7 +62,7 @@ export default function ExerciseForm({
     const submit = (e: React.FormEvent) => {
         e.preventDefault();
         const targetUrl = isEdit && exercise
-            ? route('exercises.update', exercise.id)
+            ? route('exercises.update', exercise.slug || exercise.id)
             : route('exercises.store');
 
         post(targetUrl, {

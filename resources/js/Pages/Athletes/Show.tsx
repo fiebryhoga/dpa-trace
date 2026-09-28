@@ -64,7 +64,7 @@ interface Athlete {
 export default function AthleteShow({ athlete }: { athlete: Athlete }) {
     return (
         <AuthenticatedLayout>
-            <Head title={`Athlete Profile: ${athlete.full_name} - DPA Trace`} />
+            <Head title={`Athlete Profile: ${athlete.full_name} - Athlete DPA`} />
 
             <div className="space-y-6">
                 <PageHeader
@@ -84,13 +84,13 @@ export default function AthleteShow({ athlete }: { athlete: Athlete }) {
                     }
                     actions={
                         <>
-                            <Link href={route('athletes.edit', athlete.id)}>
+                            <Link href={route('athletes.edit', athlete.athlete_code || athlete.id)}>
                                 <Button variant="outline" size="sm" className="gap-1.5 text-xs rounded-md">
                                     <Edit3 className="h-3.5 w-3.5" />
                                     <span>Edit Profil</span>
                                 </Button>
                             </Link>
-                            <Link href={route('dpa.athletes.show', athlete.id)}>
+                            <Link href={route('dpa.athletes.show', athlete.athlete_code || athlete.id)}>
                                 <Button size="sm" className="gap-1.5 text-xs font-bold bg-[#b4f031] text-slate-950 hover:bg-[#a2dd26] rounded-md">
                                     <Activity className="h-3.5 w-3.5" />
                                     <span>Buka Analisis DPA</span>
@@ -183,7 +183,7 @@ export default function AthleteShow({ athlete }: { athlete: Athlete }) {
                                         Recorded kinetic chain evaluations and corrective exercise regimens
                                     </CardDescription>
                                 </div>
-                                <Link href={route('dpa.athletes.show', athlete.id)}>
+                                <Link href={route('dpa.athletes.show', athlete.athlete_code || athlete.id)}>
                                     <Button size="sm" className="h-8 text-xs gap-1.5 font-bold bg-[#b4f031] text-slate-950 hover:bg-[#a2dd26] shadow-brand">
                                         <PlusCircle className="h-3.5 w-3.5" />
                                         <span>Buka Evaluasi DPA</span>
@@ -198,7 +198,7 @@ export default function AthleteShow({ athlete }: { athlete: Athlete }) {
                                         <p className="text-xs text-slate-500">
                                             Belum ada sesi evaluasi DPA yang tercatat untuk atlet ini.
                                         </p>
-                                        <Link href={route('dpa.athletes.show', athlete.id)}>
+                                        <Link href={route('dpa.athletes.show', athlete.athlete_code || athlete.id)}>
                                             <Button size="sm" variant="outline" className="text-xs">
                                                 Input Evaluasi Awal
                                             </Button>
@@ -246,7 +246,7 @@ export default function AthleteShow({ athlete }: { athlete: Athlete }) {
 
                                                         <div className="flex items-center gap-2">
                                                             {riskBadge}
-                                                            <Link href={route('dpa.athletes.show', athlete.id)}>
+                                                            <Link href={route('dpa.athletes.show', athlete.athlete_code || athlete.id)}>
                                                                 <Button size="sm" variant="outline" className="h-8 text-xs gap-1">
                                                                     <span>Lihat Analisis</span>
                                                                     <ChevronRight className="h-3.5 w-3.5" />

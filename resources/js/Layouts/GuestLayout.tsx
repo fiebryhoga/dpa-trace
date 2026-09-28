@@ -21,7 +21,7 @@ export default function GuestLayout({ children }: PropsWithChildren) {
 
             {/* Minimal Subdued Footer */}
             <footer className="w-full px-4 py-5 text-center text-xs text-zinc-400 dark:text-zinc-600 relative z-10">
-                <p>© {new Date().getFullYear()} DPA Trace • Dynamic Posture Assessment</p>
+                <p>© {new Date().getFullYear()} Athlete DPA • Dynamic Posture Assessment</p>
             </footer>
         </div>
     );

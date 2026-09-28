@@ -163,7 +163,7 @@ export default function AthleteIndex({
     const handleFormSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         if (editingAthlete) {
-            router.post(route('athletes.update', editingAthlete.id), {
+            router.post(route('athletes.update', editingAthlete.athlete_code || editingAthlete.id), {
                 _method: 'put',
                 ...data,
             }, {
@@ -219,7 +219,7 @@ export default function AthleteIndex({
 
     return (
         <AuthenticatedLayout>
-            <Head title="Kelola Atlet - DPA Trace" />
+            <Head title="Kelola Atlet - Athlete DPA" />
 
             <div className="space-y-5 pb-12 w-full">
                 <PageHeader
@@ -583,7 +583,7 @@ export default function AthleteIndex({
 
                                                     <div className="min-w-0">
                                                         <Link
-                                                            href={route('athletes.show', ath.id)}
+                                                            href={route('athletes.show', ath.athlete_code || ath.id)}
                                                             className="text-xs font-bold text-slate-900 dark:text-white hover:text-[#84cc16] dark:hover:text-[#b4f031] transition-colors truncate block"
                                                         >
                                                             {ath.full_name}
@@ -658,13 +658,13 @@ export default function AthleteIndex({
 
                                                 <div className="flex items-center gap-1.5">
                                                     <Link
-                                                        href={route('athletes.show', ath.id)}
+                                                        href={route('athletes.show', ath.athlete_code || ath.id)}
                                                         className="px-2.5 py-1 rounded text-[10.5px] font-semibold text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700/80 transition-colors"
                                                     >
                                                         Detail
                                                     </Link>
                                                     <Link
-                                                        href={route('dpa.athletes.show', ath.id)}
+                                                        href={route('dpa.athletes.show', ath.athlete_code || ath.id)}
                                                         className="px-2.5 py-1 rounded text-[10.5px] font-bold text-white dark:text-slate-950 bg-[#84cc16] hover:bg-[#65a30d] dark:bg-[#b4f031] dark:hover:bg-[#a2dd26] transition-colors shadow-2xs"
                                                     >
                                                         + Uji DPA

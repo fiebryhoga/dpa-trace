@@ -19,7 +19,7 @@ import {
     ChevronDown,
     Trash2,
     Check,
-    ListFilter,
+    RotateCcw,
     BookOpen,
 } from 'lucide-react';
 import { DpaCompensation, Exercise, Muscle, Injury, PageProps } from '@/types';
@@ -80,34 +80,34 @@ function SearchableExerciseDropdown({
             <button
                 type="button"
                 onClick={() => setIsOpen(!isOpen)}
-                className={`w-full flex items-center justify-between gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-semibold transition-all cursor-pointer truncate ${
+                className={`w-full flex items-center justify-between gap-1.5 px-2.5 py-1 rounded-md border text-[11px] font-semibold transition-all cursor-pointer truncate ${
                     isOpen
                         ? 'border-[#84cc16] dark:border-[#b4f031] ring-1 ring-[#84cc16]/30 dark:ring-[#b4f031]/30 bg-white dark:bg-slate-900 text-slate-900 dark:text-white'
-                        : 'border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-950/50 text-slate-600 dark:text-slate-400 hover:border-slate-300 dark:hover:border-slate-700 hover:text-slate-900 dark:hover:text-slate-200'
+                        : 'border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-950 text-slate-600 dark:text-slate-400 hover:border-slate-300 dark:hover:border-slate-600 hover:text-slate-900 dark:hover:text-slate-200'
                 }`}
             >
                 <span className="truncate flex items-center gap-1.5">
-                    <Plus size={13} className="text-[#84cc16] dark:text-[#b4f031] shrink-0" />
+                    <Plus size={11} className="text-[#84cc16] dark:text-[#b4f031] shrink-0" />
                     <span className="truncate">Hubungkan latihan...</span>
                 </span>
                 <ChevronDown
-                    size={13}
+                    size={11}
                     className={`text-slate-400 shrink-0 transition-transform duration-150 ${isOpen ? 'rotate-180' : ''}`}
                 />
             </button>
 
             {isOpen && (
-                <div className="absolute left-0 right-0 top-full mt-1.5 z-50 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-xl overflow-hidden animate-in fade-in-50 zoom-in-95 duration-100 min-w-[260px]">
-                    <div className="p-2 border-b border-slate-100 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-950/80 sticky top-0 z-10">
+                <div className="absolute left-0 right-0 top-full mt-1.5 z-50 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-md shadow-lg overflow-hidden animate-in fade-in-50 zoom-in-95 duration-100 min-w-[240px]">
+                    <div className="p-1.5 border-b border-slate-100 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-950/80 sticky top-0 z-10">
                         <div className="relative">
-                            <Search size={13} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400" />
+                            <Search size={12} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400" />
                             <input
                                 ref={searchInputRef}
                                 type="text"
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
                                 placeholder="Cari nama latihan..."
-                                className="w-full pl-8 pr-7 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-950 text-xs text-slate-900 dark:text-slate-100 placeholder:text-slate-400 outline-none focus:border-[#84cc16] dark:focus:border-[#b4f031]"
+                                className="w-full pl-7 pr-6 py-1 rounded border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-950 text-xs text-slate-900 dark:text-slate-100 placeholder:text-slate-400 outline-none focus:border-[#84cc16] dark:focus:border-[#b4f031]"
                             />
                             {searchQuery && (
                                 <button
@@ -115,7 +115,7 @@ function SearchableExerciseDropdown({
                                     onClick={() => setSearchQuery('')}
                                     className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 cursor-pointer"
                                 >
-                                    <X size={12} />
+                                    <X size={11} />
                                 </button>
                             )}
                         </div>
@@ -123,18 +123,8 @@ function SearchableExerciseDropdown({
 
                     <div className="max-h-48 overflow-y-auto p-1 space-y-0.5">
                         {filtered.length === 0 ? (
-                            <div className="py-5 px-3 text-center space-y-1.5">
-                                <p className="text-xs text-slate-400">
-                                    Tidak ada latihan yang cocok.
-                                </p>
-                                <Link
-                                    href={route('exercises.create')}
-                                    target="_blank"
-                                    className="inline-flex items-center gap-1 text-xs font-semibold text-[#84cc16] dark:text-[#b4f031] hover:underline"
-                                >
-                                    <Plus size={12} />
-                                    <span>Buat latihan baru</span>
-                                </Link>
+                            <div className="py-3 px-2 text-center text-[11px] text-slate-400">
+                                {searchQuery ? 'Latihan tidak ditemukan' : 'Semua latihan telah terhubung'}
                             </div>
                         ) : (
                             filtered.map((ex) => (
@@ -145,23 +135,23 @@ function SearchableExerciseDropdown({
                                         onSelect(ex.id);
                                         setIsOpen(false);
                                     }}
-                                    className="w-full flex items-center justify-between gap-2 p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800/80 text-left text-xs transition-colors cursor-pointer group"
+                                    className="w-full flex items-center justify-between p-1.5 rounded text-left text-xs hover:bg-[#84cc16]/10 dark:hover:bg-[#b4f031]/10 transition-colors group cursor-pointer"
                                 >
-                                    <div className="min-w-0 flex items-center gap-2">
-                                        <div className="w-6 h-6 rounded-md bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700/60 flex items-center justify-center shrink-0">
-                                            <Dumbbell size={11} className="text-slate-500 group-hover:text-[#84cc16] dark:group-hover:text-[#b4f031]" />
+                                    <div className="min-w-0 flex items-center gap-1.5">
+                                        <div className="w-5 h-5 rounded bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700/60 flex items-center justify-center shrink-0">
+                                            <Dumbbell size={10} className="text-slate-500 group-hover:text-[#84cc16] dark:group-hover:text-[#b4f031]" />
                                         </div>
-                                        <span className="font-semibold text-slate-800 dark:text-slate-200 truncate group-hover:text-slate-950 dark:group-hover:text-white">
+                                        <span className="font-semibold text-slate-800 dark:text-slate-200 truncate group-hover:text-slate-950 dark:group-hover:text-white text-[11.5px]">
                                             {ex.name}
                                         </span>
                                     </div>
-                                    <Plus size={12} className="text-slate-400 group-hover:text-[#84cc16] dark:group-hover:text-[#b4f031] shrink-0" />
+                                    <Plus size={11} className="text-slate-400 group-hover:text-[#84cc16] dark:group-hover:text-[#b4f031] shrink-0" />
                                 </button>
                             ))
                         )}
                     </div>
 
-                    <div className="p-2 border-t border-slate-100 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-950/60 flex items-center justify-between text-[11px]">
+                    <div className="p-1.5 border-t border-slate-100 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-950/60 flex items-center justify-between text-[10px]">
                         <span className="text-slate-400">
                             {availableExercises.length} tersedia
                         </span>
@@ -170,7 +160,7 @@ function SearchableExerciseDropdown({
                             target="_blank"
                             className="font-bold text-[#84cc16] dark:text-[#b4f031] hover:underline flex items-center gap-1"
                         >
-                            <Plus size={11} />
+                            <Plus size={10} />
                             <span>Buat Baru</span>
                         </Link>
                     </div>
@@ -188,7 +178,7 @@ interface TagInputProps {
     placeholder?: string;
     icon: React.ReactNode;
     colorVariant: 'rose' | 'emerald' | 'amber';
-    masterItems?: Array<{ id: number; name: string; body_region?: string }>;
+    masterItems?: Array<{ id: number; name: string; slug?: string; description?: string }>;
     manageUrl?: string;
     manageLabel?: string;
 }
@@ -197,12 +187,12 @@ function TagInput({
     value,
     onChange,
     label,
-    placeholder = 'Ketik atau pilih dari master...',
+    placeholder = 'Ketik atau pilih dari katalog...',
     icon,
     colorVariant,
     masterItems = [],
     manageUrl,
-    manageLabel = 'Kelola Master',
+    manageLabel = 'Master Data',
 }: TagInputProps) {
     const [inputValue, setInputValue] = useState('');
     const [isPickerOpen, setIsPickerOpen] = useState(false);
@@ -261,7 +251,6 @@ function TagInput({
         }
     };
 
-    // Close picker on outside click
     useEffect(() => {
         function handleClickOutside(event: MouseEvent) {
             if (pickerRef.current && !pickerRef.current.contains(event.target as Node)) {
@@ -274,24 +263,24 @@ function TagInput({
 
     const colorStyles = {
         rose: {
-            container: 'border-slate-200 dark:border-slate-800 focus-within:border-rose-500/80 focus-within:ring-1 focus-within:ring-rose-500/20',
-            tag: 'bg-rose-500/10 text-rose-700 dark:text-rose-300 border-rose-500/20 hover:border-rose-400/40',
+            container: 'border-slate-200 dark:border-slate-700 focus-within:border-rose-500/80 focus-within:ring-1 focus-within:ring-rose-500/20',
+            tag: 'bg-rose-50/90 dark:bg-rose-950/40 text-rose-700 dark:text-rose-300 border-rose-200/80 dark:border-rose-900/60',
             tagRemove: 'text-rose-400 hover:text-rose-700 dark:hover:text-rose-200 hover:bg-rose-500/20',
             pill: 'hover:bg-rose-500/10 hover:text-rose-700 dark:hover:text-rose-300 hover:border-rose-300 dark:hover:border-rose-800',
             countBadge: 'bg-rose-500/15 text-rose-700 dark:text-rose-300',
             btnAccent: 'text-rose-600 dark:text-rose-400 hover:bg-rose-500/10',
         },
         emerald: {
-            container: 'border-slate-200 dark:border-slate-800 focus-within:border-emerald-500/80 focus-within:ring-1 focus-within:ring-emerald-500/20',
-            tag: 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border-emerald-500/20 hover:border-emerald-400/40',
+            container: 'border-slate-200 dark:border-slate-700 focus-within:border-emerald-500/80 focus-within:ring-1 focus-within:ring-emerald-500/20',
+            tag: 'bg-emerald-50/90 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border-emerald-200/80 dark:border-emerald-900/60',
             tagRemove: 'text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-200 hover:bg-emerald-500/20',
             pill: 'hover:bg-emerald-500/10 hover:text-emerald-700 dark:hover:text-emerald-300 hover:border-emerald-300 dark:hover:border-emerald-800',
             countBadge: 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-300',
             btnAccent: 'text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/10',
         },
         amber: {
-            container: 'border-slate-200 dark:border-slate-800 focus-within:border-amber-500/80 focus-within:ring-1 focus-within:ring-amber-500/20',
-            tag: 'bg-amber-500/10 text-amber-700 dark:text-amber-300 border-amber-500/20 hover:border-amber-400/40',
+            container: 'border-slate-200 dark:border-slate-700 focus-within:border-amber-500/80 focus-within:ring-1 focus-within:ring-amber-500/20',
+            tag: 'bg-amber-50/90 dark:bg-amber-950/40 text-amber-700 dark:text-amber-300 border-amber-200/80 dark:border-amber-900/60',
             tagRemove: 'text-amber-400 hover:text-amber-700 dark:hover:text-amber-200 hover:bg-amber-500/20',
             pill: 'hover:bg-amber-500/10 hover:text-amber-700 dark:hover:text-amber-300 hover:border-amber-300 dark:hover:border-amber-800',
             countBadge: 'bg-amber-500/15 text-amber-700 dark:text-amber-300',
@@ -299,21 +288,21 @@ function TagInput({
         },
     }[colorVariant];
 
-    // Filter available master items
     const availableMaster = masterItems.filter((item) => !tags.includes(item.name));
     const filteredMaster = availableMaster.filter((item) => {
         if (!pickerSearch.trim()) return true;
         const q = pickerSearch.toLowerCase();
         return (
             item.name.toLowerCase().includes(q) ||
-            item.body_region?.toLowerCase().includes(q)
+            item.slug?.toLowerCase().includes(q) ||
+            item.description?.toLowerCase().includes(q)
         );
     });
 
     return (
-        <div className="space-y-1.5 relative" ref={pickerRef}>
-            <div className="flex items-center justify-between">
-                <label className="text-xs font-semibold text-slate-800 dark:text-slate-200 flex items-center gap-1.5">
+        <div className="space-y-1 relative" ref={pickerRef}>
+            <div className="flex items-center justify-between text-[11px]">
+                <label className="font-semibold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
                     {icon}
                     <span>{label}</span>
                 </label>
@@ -323,14 +312,14 @@ function TagInput({
                         <Link
                             href={manageUrl}
                             target="_blank"
-                            className="text-[11px] font-semibold text-slate-400 hover:text-[#84cc16] dark:hover:text-[#b4f031] transition-colors flex items-center gap-0.5"
+                            className="font-medium text-slate-400 hover:text-[#84cc16] dark:hover:text-[#b4f031] transition-colors flex items-center gap-0.5 text-[10px]"
                             title={`Buka ${manageLabel} di tab baru`}
                         >
                             <span>{manageLabel}</span>
-                            <ExternalLink size={10} />
+                            <ExternalLink size={9} />
                         </Link>
                     )}
-                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${colorStyles.countBadge}`}>
+                    <span className={`text-[9.5px] font-bold px-1.5 py-0.2 rounded ${colorStyles.countBadge}`}>
                         {tags.length} terpetakan
                     </span>
                 </div>
@@ -339,12 +328,12 @@ function TagInput({
             {/* Input & Tags Area */}
             <div
                 onClick={() => inputRef.current?.focus()}
-                className={`min-h-[48px] p-2 rounded-lg bg-slate-50/60 dark:bg-slate-950/40 border transition-all flex flex-wrap items-center gap-1.5 cursor-text ${colorStyles.container}`}
+                className={`min-h-[38px] p-1.5 rounded-md bg-white dark:bg-slate-950 border transition-all flex flex-wrap items-center gap-1 cursor-text ${colorStyles.container}`}
             >
                 {tags.map((tag, idx) => (
                     <span
                         key={idx}
-                        className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md text-xs font-medium border transition-all ${colorStyles.tag}`}
+                        className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10.5px] font-medium border transition-all ${colorStyles.tag}`}
                     >
                         <span>{tag}</span>
                         <button
@@ -353,10 +342,9 @@ function TagInput({
                                 e.stopPropagation();
                                 removeTag(idx);
                             }}
-                            className={`p-0.5 rounded-xs transition-colors cursor-pointer ${colorStyles.tagRemove}`}
-                            title="Hapus"
+                            className={`rounded-full p-0.5 transition-colors cursor-pointer ${colorStyles.tagRemove}`}
                         >
-                            <X size={11} />
+                            <X size={9} />
                         </button>
                     </span>
                 ))}
@@ -368,16 +356,10 @@ function TagInput({
                     onChange={(e) => setInputValue(e.target.value)}
                     onKeyDown={handleKeyDown}
                     onPaste={handlePaste}
-                    onBlur={() => {
-                        if (inputValue.trim()) {
-                            addTag(inputValue);
-                        }
-                    }}
                     placeholder={tags.length === 0 ? placeholder : '+ ketik...'}
-                    className="flex-1 min-w-[110px] bg-transparent border-none outline-none text-xs font-medium text-slate-800 dark:text-slate-100 placeholder:text-slate-400 py-1 px-1 focus:ring-0"
+                    className="flex-1 min-w-[100px] border-0 bg-transparent p-0.5 text-xs text-slate-900 dark:text-slate-100 placeholder:text-slate-400 outline-none"
                 />
 
-                {/* Quick Catalog Button */}
                 {masterItems.length > 0 && (
                     <button
                         type="button"
@@ -385,44 +367,42 @@ function TagInput({
                             e.stopPropagation();
                             setIsPickerOpen(!isPickerOpen);
                         }}
-                        className={`px-2 py-1 rounded-md text-[11px] font-bold border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 transition-colors cursor-pointer flex items-center gap-1 shrink-0 ${colorStyles.btnAccent}`}
-                        title="Pilih dari Master Katalog"
+                        className={`text-[10px] font-bold px-1.5 py-0.5 rounded border border-dashed border-slate-300 dark:border-slate-700 hover:border-slate-400 dark:hover:border-slate-500 transition-colors ml-auto cursor-pointer flex items-center gap-1 ${colorStyles.btnAccent}`}
                     >
-                        <ListFilter size={11} />
+                        <BookOpen size={10} />
                         <span>Katalog ({availableMaster.length})</span>
                     </button>
                 )}
             </div>
 
-            {/* Interactive Catalog Popover */}
+            {/* Popover Catalog Picker */}
             {isPickerOpen && (
-                <div className="absolute left-0 right-0 top-full mt-1.5 z-50 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-xl overflow-hidden animate-in fade-in-50 zoom-in-95 duration-100">
-                    <div className="p-2 border-b border-slate-100 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-950/80 flex items-center justify-between gap-2">
+                <div className="absolute left-0 right-0 top-full mt-1 z-50 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-md shadow-xl overflow-hidden animate-in fade-in-50 zoom-in-95 duration-100">
+                    <div className="p-1.5 border-b border-slate-100 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-950/80 flex items-center justify-between gap-2">
                         <div className="relative flex-1">
-                            <Search size={12} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400" />
+                            <Search size={11} className="absolute left-2 top-1/2 -translate-y-1/2 text-slate-400" />
                             <input
                                 type="text"
                                 value={pickerSearch}
                                 onChange={(e) => setPickerSearch(e.target.value)}
-                                placeholder="Cari di katalog master..."
-                                className="w-full pl-8 pr-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-950 text-xs outline-none focus:border-[#84cc16] dark:focus:border-[#b4f031]"
+                                placeholder="Cari dalam katalog..."
+                                autoFocus
+                                className="w-full pl-6 pr-5 py-1 rounded border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-950 text-xs text-slate-900 dark:text-slate-100 placeholder:text-slate-400 outline-none focus:border-[#84cc16] dark:focus:border-[#b4f031]"
                             />
                         </div>
-                        {manageUrl && (
-                            <Link
-                                href={manageUrl}
-                                target="_blank"
-                                className="text-[11px] font-bold text-[#84cc16] dark:text-[#b4f031] hover:underline shrink-0"
-                            >
-                                + Tambah ke Master
-                            </Link>
-                        )}
+                        <button
+                            type="button"
+                            onClick={() => setIsPickerOpen(false)}
+                            className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-1"
+                        >
+                            <X size={12} />
+                        </button>
                     </div>
 
-                    <div className="max-h-52 overflow-y-auto p-1.5 grid grid-cols-1 sm:grid-cols-2 gap-1">
+                    <div className="max-h-44 overflow-y-auto p-1.5 flex flex-wrap gap-1">
                         {filteredMaster.length === 0 ? (
-                            <div className="col-span-2 py-4 text-center text-xs text-slate-400">
-                                Tidak ada item yang cocok.
+                            <div className="py-3 px-2 w-full text-center text-[11px] text-slate-400">
+                                {pickerSearch ? 'Tidak ada item yang cocok' : 'Semua item master sudah terpilih'}
                             </div>
                         ) : (
                             filteredMaster.map((item) => (
@@ -432,19 +412,10 @@ function TagInput({
                                     onClick={() => {
                                         addTag(item.name);
                                     }}
-                                    className="flex items-center justify-between p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-left text-xs transition-colors cursor-pointer group"
+                                    className={`inline-flex items-center gap-1 px-2 py-0.5 rounded border border-slate-200 dark:border-slate-700 bg-slate-50/60 dark:bg-slate-800/60 text-xs text-slate-700 dark:text-slate-300 font-medium transition-colors cursor-pointer ${colorStyles.pill}`}
                                 >
-                                    <div className="min-w-0 pr-2">
-                                        <p className="font-semibold text-slate-800 dark:text-slate-200 truncate group-hover:text-[#84cc16] dark:group-hover:text-[#b4f031]">
-                                            {item.name}
-                                        </p>
-                                        {item.body_region && (
-                                            <p className="text-[10px] text-slate-400 truncate">
-                                                {item.body_region}
-                                            </p>
-                                        )}
-                                    </div>
-                                    <Plus size={12} className="text-slate-400 group-hover:text-[#84cc16] dark:group-hover:text-[#b4f031] shrink-0" />
+                                    <Plus size={10} className="text-slate-400" />
+                                    <span>{item.name}</span>
                                 </button>
                             ))
                         )}
@@ -455,7 +426,6 @@ function TagInput({
     );
 }
 
-// ─── MAIN COMPENSATION FORM COMPONENT ───
 export default function CompensationForm({
     compensation,
     allExercises = [],
@@ -518,7 +488,7 @@ export default function CompensationForm({
     const submit = (e: React.FormEvent) => {
         e.preventDefault();
         const targetUrl = isEdit && compensation
-            ? route('dpa-compensations.update', compensation.id)
+            ? route('dpa-compensations.update', compensation.slug || compensation.id)
             : route('dpa-compensations.store');
 
         post(targetUrl, {
@@ -560,33 +530,33 @@ export default function CompensationForm({
         const availableExercises = allExercises.filter(ex => !selectedIds.includes(ex.id));
 
         return (
-            <div className={`bg-slate-50/60 dark:bg-slate-950/40 rounded-xl p-3.5 border border-slate-200/80 dark:border-slate-800 ${theme.borderTop} flex flex-col justify-between min-w-0 w-full`}>
-                <div className="space-y-2.5">
+            <div className={`bg-slate-50/70 dark:bg-slate-950/40 rounded-md p-2.5 border border-slate-200/90 dark:border-slate-800 ${theme.borderTop} flex flex-col justify-between min-w-0 w-full`}>
+                <div className="space-y-2">
                     {/* Header */}
-                    <div className="flex items-center justify-between gap-1.5 pb-2 border-b border-slate-200/60 dark:border-slate-800/80">
-                        <div className="flex items-center gap-2 min-w-0">
-                            <span className={`w-5 h-5 rounded-md flex items-center justify-center font-bold text-xs shrink-0 ${theme.badgeBg} ${theme.badgeText}`}>
+                    <div className="flex items-center justify-between gap-1.5 pb-1.5 border-b border-slate-200/60 dark:border-slate-800/80">
+                        <div className="flex items-center gap-1.5 min-w-0">
+                            <span className={`w-4 h-4 rounded flex items-center justify-center font-bold text-[10px] shrink-0 ${theme.badgeBg} ${theme.badgeText}`}>
                                 {phaseNum}
                             </span>
                             <div className="min-w-0">
-                                <h4 className={`text-xs font-bold uppercase tracking-wider truncate ${theme.titleColor}`}>
+                                <h4 className={`text-xs font-bold truncate ${theme.titleColor}`}>
                                     {title}
                                 </h4>
-                                <p className="text-[10px] text-slate-400 truncate">
+                                <p className="text-[9.5px] text-slate-400 truncate leading-none">
                                     {subtitle}
                                 </p>
                             </div>
                         </div>
-                        <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 shrink-0">
-                            {selectedExercises.length} dipilih
+                        <span className="text-[9.5px] font-bold px-1.5 py-0.2 rounded bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 shrink-0">
+                            {selectedExercises.length}
                         </span>
                     </div>
 
                     {/* Exercise Items List */}
-                    <div className="space-y-1.5 min-h-[50px] max-h-52 overflow-y-auto pr-0.5">
+                    <div className="space-y-1 min-h-[44px] max-h-36 overflow-y-auto pr-0.5">
                         {selectedExercises.length === 0 ? (
-                            <div className="py-3 px-2 rounded-lg bg-white/50 dark:bg-slate-900/30 border border-dashed border-slate-200 dark:border-slate-800 text-center">
-                                <p className="text-[11px] text-slate-400">
+                            <div className="py-2.5 px-2 rounded bg-white/60 dark:bg-slate-900/40 border border-dashed border-slate-200 dark:border-slate-800 text-center">
+                                <p className="text-[10px] text-slate-400">
                                     Belum ada latihan dihubungkan.
                                 </p>
                             </div>
@@ -601,61 +571,53 @@ export default function CompensationForm({
                                 return (
                                     <div
                                         key={ex.id}
-                                        className="flex items-center justify-between p-2 rounded-lg bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 gap-2 min-w-0 hover:border-slate-300 dark:hover:border-slate-700 transition-all group shadow-2xs"
+                                        className="flex items-center justify-between p-1 rounded bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 gap-1.5 min-w-0 hover:border-slate-300 dark:hover:border-slate-700 transition-all group shadow-2xs"
                                     >
                                         <Link
                                             href={route('exercises.edit', ex.id)}
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className="flex items-center gap-2 min-w-0 flex-1 group/item"
-                                            title={`Buka detail latihan ${ex.name}`}
+                                            className="flex items-center gap-1.5 min-w-0 flex-1 hover:text-[#84cc16] dark:hover:text-[#b4f031] transition-colors"
+                                            title="Buka detail latihan di tab baru"
                                         >
-                                            <div className="w-6 h-6 rounded-md border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 flex items-center justify-center overflow-hidden shrink-0">
-                                                {img ? (
-                                                    <img src={img} className="w-full h-full object-contain" alt={ex.name} />
-                                                ) : (
-                                                    <Dumbbell size={11} className="text-slate-400 group-hover/item:text-[#84cc16] dark:group-hover/item:text-[#b4f031]" />
-                                                )}
-                                            </div>
-                                            <div className="min-w-0 flex-1 flex items-center gap-1.5">
-                                                <p className="text-xs font-semibold text-slate-800 dark:text-slate-200 truncate group-hover/item:text-[#84cc16] dark:group-hover/item:text-[#b4f031] transition-colors">
-                                                    {ex.name}
-                                                </p>
-                                                <ExternalLink size={10} className="text-slate-400 opacity-0 group-hover/item:opacity-100 transition-opacity shrink-0" />
-                                            </div>
+                                            {img ? (
+                                                <img
+                                                    src={img}
+                                                    alt={ex.name}
+                                                    className="w-5 h-5 rounded object-cover border border-slate-200 dark:border-slate-700 shrink-0"
+                                                />
+                                            ) : (
+                                                <div className="w-5 h-5 rounded bg-slate-100 dark:bg-slate-800 flex items-center justify-center shrink-0 text-slate-400">
+                                                    <Dumbbell size={9} />
+                                                </div>
+                                            )}
+                                            <span className="text-[11px] font-semibold text-slate-800 dark:text-slate-200 truncate group-hover:text-slate-950 dark:group-hover:text-white">
+                                                {ex.name}
+                                            </span>
+                                            <ExternalLink size={9} className="opacity-0 group-hover:opacity-100 text-slate-400 shrink-0" />
                                         </Link>
 
                                         <button
                                             type="button"
                                             onClick={() => removeExercise(field, ex.id)}
-                                            className="p-1 rounded-md text-slate-400 hover:text-rose-600 hover:bg-rose-500/10 dark:hover:bg-rose-500/20 transition-colors shrink-0 cursor-pointer"
-                                            title="Lepaskan latihan"
+                                            className="p-1 rounded text-slate-400 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors cursor-pointer shrink-0"
+                                            title="Lepas latihan ini"
                                         >
-                                            <X size={12} />
+                                            <X size={10} />
                                         </button>
                                     </div>
                                 );
                             })
                         )}
                     </div>
-                </div>
 
-                {/* Dropdown Selector */}
-                <div className="pt-2 mt-2 border-t border-slate-200/60 dark:border-slate-800/80 flex items-center gap-1.5 w-full min-w-0">
-                    <SearchableExerciseDropdown
-                        availableExercises={availableExercises}
-                        onSelect={(id) => toggleExercise(field, id)}
-                    />
-
-                    <Link
-                        href={route('exercises.create')}
-                        target="_blank"
-                        className="p-1.5 px-2 rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs font-semibold transition-colors shrink-0 flex items-center gap-1"
-                        title="Buat latihan baru di Master Latihan"
-                    >
-                        <Plus size={12} />
-                        <span className="hidden sm:inline text-[11px]">Baru</span>
-                    </Link>
+                    {/* Exercise Dropdown Selector */}
+                    <div className="pt-1">
+                        <SearchableExerciseDropdown
+                            availableExercises={availableExercises}
+                            onSelect={(exId) => toggleExercise(field, exId)}
+                        />
+                    </div>
                 </div>
             </div>
         );
@@ -663,9 +625,9 @@ export default function CompensationForm({
 
     return (
         <AuthenticatedLayout>
-            <Head title={isEdit ? `Edit Kompensasi - ${data.name}` : 'Tambah Kompensasi DPA'} />
+            <Head title={isEdit ? `Edit Kompensasi - ${data.name} - Athlete DPA` : 'Tambah Kompensasi DPA - Athlete DPA'} />
 
-            <div className="space-y-6 pb-16 max-w-7xl mx-auto">
+            <div className="space-y-4 pb-12 w-full">
                 {/* ─── PAGE HEADER ─── */}
                 <PageHeader
                     icon={Activity}
@@ -683,253 +645,247 @@ export default function CompensationForm({
                         )
                     }
                     description="Konfigurasikan biomekanika deviasi gerakan, ketidakseimbangan otot dari master data, dan hubungkan dengan 4 fase latihan korektif NASM."
-                    actions={
-                        <div className="flex items-center gap-2">
-                            <Link
-                                href={route('dpa-compensations.index')}
-                                className="px-3.5 py-2 rounded-lg text-xs font-semibold text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
-                            >
-                                Batal
-                            </Link>
-                            <button
-                                type="button"
-                                onClick={submit}
-                                disabled={processing}
-                                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-[#84cc16] hover:bg-[#65a30d] dark:bg-[#b4f031] dark:hover:bg-[#a2dd26] text-white dark:text-slate-950 text-xs font-bold transition-all cursor-pointer disabled:opacity-50 shadow-xs"
-                            >
-                                <Save size={14} />
-                                <span>{isEdit ? 'Perbarui Data' : 'Simpan Data'}</span>
-                            </button>
-                        </div>
-                    }
                 />
 
-                {/* ─── MAIN WORKSPACE GRID ─── */}
-                <form onSubmit={submit} className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                {/* ─── MAIN 2-COLUMN WORKSPACE (KIRI: FORM COMPACT, KANAN: LIVE VISUALIZER & PROTOKOL) ─── */}
+                <form onSubmit={submit} className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start w-full">
                     {/* ═══════════════════════════════════════════
-                        KOLOM KIRI (7 Cols): FORMULIR DATA LENGKAP
+                        KOLOM KIRI (lg:col-span-5 xl:col-span-4): FORMULIR DATA TERPADU (COMPACT CARD)
                        ═══════════════════════════════════════════ */}
-                    <div className="lg:col-span-7 space-y-6">
-                        {/* KARTU 1: IDENTITAS POLA GERAK */}
-                        <div className="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-xl p-5 shadow-xs space-y-4">
-                            <div className="flex items-center gap-2.5 border-b border-slate-100 dark:border-slate-800 pb-3">
-                                <div className="w-7 h-7 rounded-lg bg-[#84cc16]/10 dark:bg-[#b4f031]/10 flex items-center justify-center">
-                                    <Layers size={15} className="text-[#84cc16] dark:text-[#b4f031]" />
-                                </div>
-                                <div>
-                                    <h3 className="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider">
-                                        Identitas Pola Gerak
-                                    </h3>
-                                    <p className="text-[11px] text-slate-400">
-                                        Klasifikasi bidang pandang, checkpoint sendi, dan ilustrasi kompensasi
-                                    </p>
-                                </div>
+                    <div className="lg:col-span-5 xl:col-span-4 bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-md p-3.5 shadow-xs space-y-3.5 sticky top-4 max-h-[calc(100vh-2rem)] overflow-y-auto">
+                        <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2.5">
+                            <div>
+                                <h3 className="text-xs font-bold text-slate-900 dark:text-white">
+                                    {isEdit ? 'Edit Data Kompensasi' : 'Tambah Kompensasi Baru'}
+                                </h3>
+                                <p className="text-[10px] text-slate-400">
+                                    {isEdit
+                                        ? `Mengubah deviasi ${data.name || 'kompensasi'}`
+                                        : 'Registrasi deviasi postur dan pola gerak'}
+                                </p>
                             </div>
 
-                            <div className="space-y-4">
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-                                    <div className="space-y-1">
-                                        <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">
-                                            Sudut Pandang (Category) <span className="text-rose-500">*</span>
-                                        </label>
-                                        <select
-                                            value={data.category}
-                                            onChange={(e) => setData('category', e.target.value)}
-                                            className="w-full rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50/70 dark:bg-slate-950 px-3 py-2 text-xs font-medium text-slate-900 dark:text-slate-100 outline-none focus:border-[#84cc16] dark:focus:border-[#b4f031] transition-all cursor-pointer"
-                                        >
-                                            <option value="Posterior View">Posterior View</option>
-                                            <option value="Lateral View">Lateral View</option>
-                                            <option value="Anterior View">Anterior View</option>
-                                            <option value="Single Leg">Single Leg</option>
-                                        </select>
-                                        {errors.category && <p className="text-xs text-rose-500">{errors.category}</p>}
-                                    </div>
+                            {isEdit && (
+                                <Link
+                                    href={route('dpa-compensations.index')}
+                                    className="text-[10.5px] font-semibold text-slate-500 hover:text-slate-900 dark:hover:text-white flex items-center gap-1 cursor-pointer"
+                                >
+                                    <RotateCcw size={10} />
+                                    <span>Batal</span>
+                                </Link>
+                            )}
+                        </div>
 
-                                    <div className="space-y-1">
-                                        <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">
-                                            Checkpoint Anatomi (Sendi)
-                                        </label>
-                                        <input
-                                            type="text"
-                                            placeholder="Contoh: Foot & Ankle, Knee, LPHC..."
-                                            value={data.checkpoint}
-                                            onChange={(e) => setData('checkpoint', e.target.value)}
-                                            className="w-full rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50/70 dark:bg-slate-950 px-3 py-2 text-xs font-medium text-slate-900 dark:text-slate-100 outline-none focus:border-[#84cc16] dark:focus:border-[#b4f031] placeholder:text-slate-400 transition-all"
-                                        />
-                                    </div>
+                        {/* SECTION 1: POLA GERAK & IDENTITAS */}
+                        <div className="space-y-2.5">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                <div className="space-y-1">
+                                    <label className="text-[11px] font-semibold text-slate-700 dark:text-slate-300">
+                                        Sudut Pandang <span className="text-rose-500">*</span>
+                                    </label>
+                                    <select
+                                        value={data.category}
+                                        onChange={(e) => setData('category', e.target.value)}
+                                        className="w-full rounded-md border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-950 px-2.5 py-1.5 text-xs font-medium text-slate-900 dark:text-slate-100 outline-none focus:border-[#84cc16] dark:focus:border-[#b4f031] transition-all cursor-pointer"
+                                    >
+                                        <option value="Posterior View">Posterior View</option>
+                                        <option value="Lateral View">Lateral View</option>
+                                        <option value="Anterior View">Anterior View</option>
+                                        <option value="Single Leg">Single Leg</option>
+                                    </select>
+                                    {errors.category && <p className="text-[10px] text-rose-500">{errors.category}</p>}
                                 </div>
 
                                 <div className="space-y-1">
-                                    <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">
-                                        Nama Kompensasi Gerakan <span className="text-rose-500">*</span>
+                                    <label className="text-[11px] font-semibold text-slate-700 dark:text-slate-300">
+                                        Checkpoint Sendi
                                     </label>
                                     <input
                                         type="text"
-                                        placeholder="Contoh: Foot - Feet Turn Out, Knee Valgus..."
-                                        value={data.name}
-                                        onChange={(e) => setData('name', e.target.value)}
-                                        className="w-full rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50/70 dark:bg-slate-950 px-3 py-2 text-xs font-medium text-slate-900 dark:text-slate-100 outline-none focus:border-[#84cc16] dark:focus:border-[#b4f031] placeholder:text-slate-400 transition-all"
+                                        placeholder="Foot & Ankle, Knee..."
+                                        value={data.checkpoint}
+                                        onChange={(e) => setData('checkpoint', e.target.value)}
+                                        className="w-full rounded-md border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-950 px-2.5 py-1.5 text-xs font-medium text-slate-900 dark:text-slate-100 outline-none focus:border-[#84cc16] dark:focus:border-[#b4f031] placeholder:text-slate-400 transition-all"
                                     />
-                                    {errors.name && <p className="text-xs text-rose-500">{errors.name}</p>}
                                 </div>
+                            </div>
 
-                                {/* Gambar Ilustrasi Upload */}
-                                <div className="space-y-1 pt-1">
-                                    <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">
-                                        Gambar Ilustrasi Kompensasi
-                                    </label>
-                                    
-                                    {previewImage ? (
-                                        <div className="flex items-center gap-3 p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-950/50">
-                                            <div className="w-14 h-14 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 overflow-hidden shrink-0 flex items-center justify-center">
-                                                <img
-                                                    src={previewImage}
-                                                    className="w-full h-full object-contain p-1"
-                                                    alt="Ilustrasi Kompensasi"
-                                                />
-                                            </div>
-                                            <div className="flex-1 min-w-0">
-                                                <p className="text-xs font-semibold text-slate-800 dark:text-slate-200 truncate">
-                                                    Gambar ilustrasi berhasil diunggah
-                                                </p>
-                                                <div className="flex items-center gap-2.5 mt-1.5">
-                                                    <label className="inline-flex items-center gap-1 text-xs font-semibold text-[#84cc16] dark:text-[#b4f031] hover:underline cursor-pointer">
-                                                        <Upload size={12} />
-                                                        <span>Ganti File</span>
-                                                        <input
-                                                            type="file"
-                                                            accept="image/*"
-                                                            className="hidden"
-                                                            onChange={(e) => handleFileChange(e.target.files?.[0] || null)}
-                                                        />
-                                                    </label>
-                                                    <span className="text-slate-300 dark:text-slate-700">·</span>
-                                                    <button
-                                                        type="button"
-                                                        onClick={() => handleFileChange(null)}
-                                                        className="inline-flex items-center gap-1 text-xs font-semibold text-rose-500 hover:underline cursor-pointer"
-                                                    >
-                                                        <Trash2 size={12} />
-                                                        <span>Hapus</span>
-                                                    </button>
-                                                </div>
+                            <div className="space-y-1">
+                                <label className="text-[11px] font-semibold text-slate-700 dark:text-slate-300">
+                                    Nama Kompensasi Gerakan <span className="text-rose-500">*</span>
+                                </label>
+                                <input
+                                    type="text"
+                                    placeholder="Contoh: Foot - Feet Turn Out, Knee Valgus..."
+                                    value={data.name}
+                                    onChange={(e) => setData('name', e.target.value)}
+                                    className="w-full rounded-md border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-950 px-2.5 py-1.5 text-xs font-medium text-slate-900 dark:text-slate-100 outline-none focus:border-[#84cc16] dark:focus:border-[#b4f031] placeholder:text-slate-400 transition-all"
+                                />
+                                {errors.name && <p className="text-[10px] text-rose-500">{errors.name}</p>}
+                            </div>
+
+                            {/* Upload Gambar Ilustrasi */}
+                            <div className="space-y-1">
+                                <label className="text-[11px] font-semibold text-slate-700 dark:text-slate-300">
+                                    Foto / Ilustrasi Gerakan
+                                </label>
+                                
+                                {previewImage ? (
+                                    <div className="flex items-center gap-2.5 p-2 rounded-md border border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-950/50">
+                                        <div className="w-12 h-12 rounded-md border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 overflow-hidden shrink-0 flex items-center justify-center">
+                                            <img
+                                                src={previewImage}
+                                                className="w-full h-full object-contain p-0.5"
+                                                alt="Ilustrasi Kompensasi"
+                                            />
+                                        </div>
+                                        <div className="flex-1 min-w-0">
+                                            <p className="text-[11px] font-semibold text-slate-800 dark:text-slate-200 truncate">
+                                                Gambar terunggah
+                                            </p>
+                                            <div className="flex items-center gap-2 mt-1">
+                                                <label className="inline-flex items-center gap-1 text-[10.5px] font-semibold text-[#84cc16] dark:text-[#b4f031] hover:underline cursor-pointer">
+                                                    <Upload size={10} />
+                                                    <span>Ganti</span>
+                                                    <input
+                                                        type="file"
+                                                        accept="image/*"
+                                                        className="hidden"
+                                                        onChange={(e) => handleFileChange(e.target.files?.[0] || null)}
+                                                    />
+                                                </label>
+                                                <span className="text-slate-300 dark:text-slate-700">·</span>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => handleFileChange(null)}
+                                                    className="inline-flex items-center gap-1 text-[10.5px] font-semibold text-rose-500 hover:underline cursor-pointer"
+                                                >
+                                                    <Trash2 size={10} />
+                                                    <span>Hapus</span>
+                                                </button>
                                             </div>
                                         </div>
-                                    ) : (
-                                        <label className="flex items-center justify-center gap-2.5 p-3.5 rounded-xl border border-dashed border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-950/40 hover:bg-slate-100/60 dark:hover:bg-slate-900/60 transition-colors cursor-pointer text-center group">
-                                            <div className="w-7 h-7 rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-400 group-hover:text-[#84cc16] dark:group-hover:text-[#b4f031] transition-colors">
-                                                <ImageIcon size={14} />
-                                            </div>
-                                            <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">
-                                                <span className="font-bold text-[#84cc16] dark:text-[#b4f031]">Klik untuk unggah</span> ilustrasi (JPG, PNG, WEBP)
-                                            </span>
-                                            <input
-                                                type="file"
-                                                accept="image/*"
-                                                className="hidden"
-                                                onChange={(e) => handleFileChange(e.target.files?.[0] || null)}
-                                            />
-                                        </label>
-                                    )}
-                                    {errors.image && <p className="text-xs text-rose-500 mt-1">{errors.image}</p>}
-                                </div>
+                                    </div>
+                                ) : (
+                                    <label className="flex items-center justify-center gap-2 p-2.5 rounded-md border border-dashed border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-950/40 hover:bg-slate-100/60 dark:hover:bg-slate-900/60 transition-colors cursor-pointer text-center group">
+                                        <div className="w-6 h-6 rounded bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-400 group-hover:text-[#84cc16] dark:group-hover:text-[#b4f031] transition-colors">
+                                            <ImageIcon size={12} />
+                                        </div>
+                                        <span className="text-[11px] text-slate-500 dark:text-slate-400 font-medium">
+                                            <span className="font-bold text-[#84cc16] dark:text-[#b4f031]">Pilih Gambar</span> (WebP, PNG, JPG)
+                                        </span>
+                                        <input
+                                            type="file"
+                                            accept="image/*"
+                                            className="hidden"
+                                            onChange={(e) => handleFileChange(e.target.files?.[0] || null)}
+                                        />
+                                    </label>
+                                )}
+                                {errors.image && <p className="text-[10px] text-rose-500">{errors.image}</p>}
                             </div>
                         </div>
 
-                        {/* KARTU 2: KETIDAKSEIMBANGAN OTOT & CEDERA */}
-                        <div className="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-xl p-5 shadow-xs space-y-4">
-                            <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
-                                <div className="flex items-center gap-2.5">
-                                    <div className="w-7 h-7 rounded-lg bg-[#84cc16]/10 dark:bg-[#b4f031]/10 flex items-center justify-center">
-                                        <Activity size={15} className="text-[#84cc16] dark:text-[#b4f031]" />
+                        <div className="border-t border-slate-100 dark:border-slate-800 pt-2.5 space-y-2.5">
+                            {/* SECTION 2: KETIDAKSEIMBANGAN OTOT & CEDERA */}
+                            <TagInput
+                                label="Otot Overactive (Tegang)"
+                                icon={<Flame size={12} className="text-rose-500" />}
+                                colorVariant="rose"
+                                value={data.overactive_muscles}
+                                onChange={(val) => setData('overactive_muscles', val)}
+                                placeholder="Soleus, Gastrocnemius..."
+                                masterItems={allMuscles}
+                                manageUrl={route('muscles.index')}
+                                manageLabel="Master Otot"
+                            />
+
+                            <TagInput
+                                label="Otot Underactive (Lemah)"
+                                icon={<Dumbbell size={12} className="text-emerald-500" />}
+                                colorVariant="emerald"
+                                value={data.underactive_muscles}
+                                onChange={(val) => setData('underactive_muscles', val)}
+                                placeholder="Medial Hamstring, Gracilis..."
+                                masterItems={allMuscles}
+                                manageUrl={route('muscles.index')}
+                                manageLabel="Master Otot"
+                            />
+
+                            <TagInput
+                                label="Potensi Risiko Cedera"
+                                icon={<ShieldAlert size={12} className="text-amber-500" />}
+                                colorVariant="amber"
+                                value={data.possible_injuries}
+                                onChange={(val) => setData('possible_injuries', val)}
+                                placeholder="Plantar Fasciitis, Ankle Sprains..."
+                                masterItems={allInjuries}
+                                manageUrl={route('injuries.index')}
+                                manageLabel="Master Cedera"
+                            />
+                        </div>
+
+                        {/* SUBMIT BUTTON DI BAWAH KARTU FORM (PERSIS MASTER OTOT / MASTER LATIHAN) */}
+                        <div className="pt-2 border-t border-slate-100 dark:border-slate-800">
+                            <button
+                                type="submit"
+                                disabled={processing}
+                                className="w-full py-2 bg-[#84cc16] hover:bg-[#65a30d] dark:bg-[#b4f031] dark:hover:bg-[#a2dd26] text-white dark:text-slate-950 rounded-md text-xs font-bold transition-all shadow-xs flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50"
+                            >
+                                <Save size={13} />
+                                <span>{isEdit ? 'Perbarui Data Kompensasi' : 'Simpan Data Kompensasi'}</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    {/* ═══════════════════════════════════════════
+                        KOLOM KANAN (lg:col-span-7 xl:col-span-8): LIVE BODY VISUALIZER & 4 FASE NASM
+                       ═══════════════════════════════════════════ */}
+                    <div className="lg:col-span-7 xl:col-span-8 space-y-4">
+                        {/* KARTU 1: PETA ANATOMI BIOMEKANIK (REALTIME VISUALIZER) */}
+                        <BodyMuscleVisualizer
+                            overactiveMuscles={data.overactive_muscles}
+                            underactiveMuscles={data.underactive_muscles}
+                            category={data.category}
+                            checkpoint={data.checkpoint}
+                        />
+
+                        {/* KARTU 2: PROTOKOL LATIHAN KOREKTIF (4 FASE CONTINUUM) */}
+                        <div className="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-md p-3.5 shadow-xs space-y-3">
+                            <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2.5">
+                                <div className="flex items-center gap-2">
+                                    <div className="w-6 h-6 rounded-md bg-[#84cc16]/10 dark:bg-[#b4f031]/10 flex items-center justify-center">
+                                        <Zap size={13} className="text-[#84cc16] dark:text-[#b4f031]" />
                                     </div>
                                     <div>
-                                        <h3 className="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider">
-                                            Ketidakseimbangan Otot & Potensi Cedera
+                                        <h3 className="text-xs font-bold text-slate-900 dark:text-white">
+                                            Protokol Latihan Korektif (4 Fase NASM)
                                         </h3>
-                                        <p className="text-[11px] text-slate-400">
-                                            Pilih dari katalog master atau ketik bebas (Overactive vs Underactive)
+                                        <p className="text-[10px] text-slate-400">
+                                            Hubungkan gerakan latihan spesifik untuk setiap fase koreksi biomekanika
                                         </p>
                                     </div>
                                 </div>
-                                <div className="flex items-center gap-3">
+                                <div className="flex items-center gap-2">
+                                    <span className="text-[10.5px] font-bold px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
+                                        {data.exercise_ids_inhibit.length +
+                                            data.exercise_ids_lengthen.length +
+                                            data.exercise_ids_activate.length +
+                                            data.exercise_ids_integrate.length}{' '}
+                                        Latihan Terhubung
+                                    </span>
                                     <Link
-                                        href={route('muscles.index')}
+                                        href={route('exercises.index')}
                                         target="_blank"
-                                        className="text-xs font-bold text-[#84cc16] dark:text-[#b4f031] hover:underline flex items-center gap-1"
+                                        className="inline-flex items-center gap-1 text-[11px] font-bold text-[#84cc16] dark:text-[#b4f031] hover:underline"
                                     >
-                                        <BookOpen size={12} />
-                                        <span>Kelola Master Otot</span>
+                                        <span>Master Latihan</span>
+                                        <ExternalLink size={10} />
                                     </Link>
                                 </div>
                             </div>
 
-                            <div className="space-y-4">
-                                <TagInput
-                                    label="Otot Overactive (Tegang / Dominan)"
-                                    icon={<Flame size={13} className="text-rose-500" />}
-                                    colorVariant="rose"
-                                    value={data.overactive_muscles}
-                                    onChange={(val) => setData('overactive_muscles', val)}
-                                    placeholder="Ketik atau pilih dari katalog master otot..."
-                                    masterItems={allMuscles}
-                                    manageUrl={route('muscles.index')}
-                                    manageLabel="Master Otot"
-                                />
-
-                                <TagInput
-                                    label="Otot Underactive (Lemah / Terhambat)"
-                                    icon={<Dumbbell size={13} className="text-emerald-500" />}
-                                    colorVariant="emerald"
-                                    value={data.underactive_muscles}
-                                    onChange={(val) => setData('underactive_muscles', val)}
-                                    placeholder="Ketik atau pilih dari katalog master otot..."
-                                    masterItems={allMuscles}
-                                    manageUrl={route('muscles.index')}
-                                    manageLabel="Master Otot"
-                                />
-
-                                <TagInput
-                                    label="Potensi Risiko Cedera"
-                                    icon={<ShieldAlert size={13} className="text-amber-500" />}
-                                    colorVariant="amber"
-                                    value={data.possible_injuries}
-                                    onChange={(val) => setData('possible_injuries', val)}
-                                    placeholder="Ketik atau pilih dari katalog master cedera..."
-                                    masterItems={allInjuries}
-                                    manageUrl={route('injuries.index')}
-                                    manageLabel="Master Cedera"
-                                />
-                            </div>
-                        </div>
-
-                        {/* KARTU 3: PROTOKOL LATIHAN KOREKTIF (4 FASE NASM) */}
-                        <div className="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-xl p-5 shadow-xs space-y-4">
-                            <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
-                                <div className="flex items-center gap-2.5">
-                                    <div className="w-7 h-7 rounded-lg bg-[#84cc16]/10 dark:bg-[#b4f031]/10 flex items-center justify-center">
-                                        <Zap size={15} className="text-[#84cc16] dark:text-[#b4f031]" />
-                                    </div>
-                                    <div>
-                                        <h3 className="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider">
-                                            Protokol Latihan Korektif (4 Fase NASM)
-                                        </h3>
-                                        <p className="text-[11px] text-slate-400">
-                                            Hubungkan gerakan latihan spesifik untuk setiap fase koreksi
-                                        </p>
-                                    </div>
-                                </div>
-                                <Link
-                                    href={route('exercises.index')}
-                                    target="_blank"
-                                    className="inline-flex items-center gap-1 text-xs font-bold text-[#84cc16] dark:text-[#b4f031] hover:underline"
-                                >
-                                    <span>Master Latihan</span>
-                                    <ExternalLink size={12} />
-                                </Link>
-                            </div>
-
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                 {/* FASE 1: INHIBIT */}
                                 {renderPhaseCard(
                                     1,
@@ -985,63 +941,6 @@ export default function CompensationForm({
                                     },
                                     'exercise_ids_integrate'
                                 )}
-                            </div>
-                        </div>
-
-                        {/* Submit Actions Footer */}
-                        <div className="flex items-center justify-end gap-3 pt-2">
-                            <Link
-                                href={route('dpa-compensations.index')}
-                                className="px-4 py-2 rounded-lg text-xs font-semibold text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
-                            >
-                                Batal
-                            </Link>
-                            <button
-                                type="submit"
-                                disabled={processing}
-                                className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-lg bg-[#84cc16] hover:bg-[#65a30d] dark:bg-[#b4f031] dark:hover:bg-[#a2dd26] text-white dark:text-slate-950 text-xs font-bold transition-all cursor-pointer disabled:opacity-50 shadow-xs"
-                            >
-                                <Save size={14} />
-                                <span>{isEdit ? 'Perbarui Data Kompensasi' : 'Simpan Data Kompensasi'}</span>
-                            </button>
-                        </div>
-                    </div>
-
-                    {/* ═══════════════════════════════════════════
-                        KOLOM KANAN (5 Cols - Sticky Panel): ANATOMY HIGHLIGHTER
-                       ═══════════════════════════════════════════ */}
-                    <div className="lg:col-span-5 lg:sticky lg:top-6 space-y-4">
-                        <BodyMuscleVisualizer
-                            overactiveMuscles={data.overactive_muscles}
-                            underactiveMuscles={data.underactive_muscles}
-                            category={data.category}
-                            checkpoint={data.checkpoint}
-                        />
-
-                        {/* Quick Biomechanics Summary Card */}
-                        <div className="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-xl p-4 shadow-xs space-y-3">
-                            <h4 className="text-xs font-bold text-slate-800 dark:text-slate-200 flex items-center gap-1.5">
-                                <Activity size={13} className="text-[#84cc16] dark:text-[#b4f031]" />
-                                <span>Ringkasan Protokol Terhubung</span>
-                            </h4>
-
-                            <div className="grid grid-cols-2 gap-2 text-xs">
-                                <div className="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-950/60 border border-slate-100 dark:border-slate-800/80">
-                                    <p className="text-[10px] text-slate-400">Total Latihan Tertaut</p>
-                                    <p className="text-sm font-bold text-slate-900 dark:text-white mt-0.5">
-                                        {data.exercise_ids_inhibit.length +
-                                            data.exercise_ids_lengthen.length +
-                                            data.exercise_ids_activate.length +
-                                            data.exercise_ids_integrate.length}{' '}
-                                        Gerakan
-                                    </p>
-                                </div>
-                                <div className="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-950/60 border border-slate-100 dark:border-slate-800/80">
-                                    <p className="text-[10px] text-slate-400">Bidang Gerak</p>
-                                    <p className="text-xs font-bold text-slate-900 dark:text-white mt-1 truncate">
-                                        {data.category}
-                                    </p>
-                                </div>
                             </div>
                         </div>
                     </div>

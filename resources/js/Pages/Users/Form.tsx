@@ -41,7 +41,7 @@ export default function UserForm({
     const submit = (e: React.FormEvent) => {
         e.preventDefault();
         if (isEdit && user) {
-            put(route('users.update', user.id));
+            put(route('users.update', user.username || user.id));
         } else {
             post(route('users.store'));
         }
@@ -59,7 +59,7 @@ export default function UserForm({
                     title={isEdit ? 'Edit Akun Administrator' : 'Tambah Administrator Baru'}
                     description={
                         isEdit
-                            ? 'Perbarui kredensial dan detail akun administrator DPA Trace.'
+                            ? 'Perbarui kredensial dan detail akun administrator Athlete DPA.'
                             : 'Buat akun login baru untuk administrator atau penguji biomekanika.'
                     }
                     actions={

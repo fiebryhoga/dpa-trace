@@ -108,7 +108,7 @@ export default function UsersIndex({
     const handleFormSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         if (editingUser) {
-            router.post(route('users.update', editingUser.id), {
+            router.post(route('users.update', editingUser.username || editingUser.id), {
                 _method: 'put',
                 ...data,
             }, {
@@ -136,7 +136,7 @@ export default function UsersIndex({
         }
 
         if (confirm(`Hapus akun admin "${user.name}" (@${user.username}) secara permanen?`)) {
-            router.delete(route('users.destroy', user.id), {
+            router.delete(route('users.destroy', user.username || user.id), {
                 preserveScroll: true,
                 onSuccess: () => {
                     if (editingUser?.id === user.id) {
@@ -172,7 +172,7 @@ export default function UsersIndex({
 
     return (
         <AuthenticatedLayout>
-            <Head title="Kelola Admin - DPA Trace" />
+            <Head title="Kelola Admin - Athlete DPA" />
 
             <div className="space-y-5 pb-12 w-full">
                 <PageHeader
@@ -182,7 +182,7 @@ export default function UsersIndex({
                             Kelola Akun <span className="text-[#84cc16] dark:text-[#b4f031]">Admin & Penguji</span>
                         </>
                     }
-                    description="Manajemen hak akses, kredensial pengguna, dan administrator sistem DPA Trace."
+                    description="Manajemen hak akses, kredensial pengguna, dan administrator sistem Athlete DPA."
                     actions={
                         <div className="relative w-full sm:w-64">
                             <Search className="w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />

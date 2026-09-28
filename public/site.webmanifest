@@ -1,6 +1,6 @@
 {
-  "name": "DPA Trace - Dynamic Posture Assessment",
-  "short_name": "DPA Trace",
+  "name": "Athlete DPA - Dynamic Posture Assessment",
+  "short_name": "Athlete DPA",
   "icons": [
     {
       "src": "/web-app-manifest-192x192.png",

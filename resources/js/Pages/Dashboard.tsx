@@ -23,8 +23,8 @@ interface AssessmentItem {
         id: number;
         athlete_code: string;
         full_name: string;
-        sport_category: string;
         gender: string;
+        age?: number;
     };
     assessor?: {
         name: string;
@@ -42,8 +42,8 @@ interface TopCompensation {
     };
 }
 
-interface SportStat {
-    sport_category: string;
+interface GenderStat {
+    gender: string;
     count: number;
 }
 
@@ -52,17 +52,19 @@ interface DashboardProps {
         totalAthletes: number;
         activeAthletes: number;
         totalAssessments: number;
+        totalCompensations: number;
+        totalExercises: number;
     };
     recentAssessments: AssessmentItem[];
     topCompensations: TopCompensation[];
-    sportsDistribution: SportStat[];
+    genderDistribution: GenderStat[];
 }
 
 export default function Dashboard({
     stats,
     recentAssessments,
     topCompensations,
-    sportsDistribution,
+    genderDistribution,
 }: DashboardProps) {
     return (
         <AuthenticatedLayout>
@@ -139,7 +141,7 @@ export default function Dashboard({
                     <Card className="border-slate-200/90 dark:border-slate-800 bg-white dark:bg-[#0E1526] shadow-sm hover:border-[#b4f031]/80 transition-all">
                         <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
                             <CardTitle className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-                                Tracked Sport Categories
+                                Master Data DPA
                             </CardTitle>
                             <div className="p-2 rounded-lg bg-[#b4f031]/15 text-slate-950 dark:text-[#b4f031] border border-[#b4f031]/30">
                                 <TrendingUp className="h-4 w-4" />
@@ -147,17 +149,13 @@ export default function Dashboard({
                         </CardHeader>
                         <CardContent>
                             <div className="text-3xl font-black text-slate-900 dark:text-white">
-                                {sportsDistribution.length}
+                                {stats.totalCompensations}
                             </div>
-                            <div className="flex flex-wrap gap-1 mt-1.5">
-                                {sportsDistribution.slice(0, 3).map((s) => (
-                                    <span
-                                        key={s.sport_category}
-                                        className="inline-flex items-center rounded-md bg-[#b4f031]/15 border border-[#b4f031]/30 px-1.5 py-0.5 text-[10px] font-bold text-slate-900 dark:text-[#b4f031]"
-                                    >
-                                        {s.sport_category} ({s.count})
-                                    </span>
-                                ))}
+                            <div className="flex flex-wrap items-center gap-1.5 mt-1.5 text-[11px] text-slate-500 dark:text-slate-400 font-medium">
+                                <span>Pola deviasi •</span>
+                                <span className="text-slate-900 dark:text-[#b4f031] font-bold">
+                                    {stats.totalExercises} Latihan Korektif
+                                </span>
                             </div>
                         </CardContent>
                     </Card>
@@ -196,7 +194,7 @@ export default function Dashboard({
                                             <thead className="bg-slate-50/80 dark:bg-slate-900/50 border-b border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 font-semibold uppercase tracking-wider text-[10px]">
                                                 <tr>
                                                     <th className="px-4 py-3">Athlete</th>
-                                                    <th className="px-4 py-3">Sport</th>
+                                                    <th className="px-4 py-3">Gender / Usia</th>
                                                     <th className="px-4 py-3">Date</th>
                                                     <th className="px-4 py-3">Risk Severity</th>
                                                     <th className="px-4 py-3 text-right">Action</th>
@@ -239,7 +237,8 @@ export default function Dashboard({
                                                             </td>
                                                             <td className="px-4 py-3.5">
                                                                 <span className="px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-semibold text-[11px]">
-                                                                    {a.athlete.sport_category}
+                                                                    {a.athlete.gender === 'Male' ? 'Laki-laki' : 'Perempuan'}
+                                                                    {a.athlete.age ? `, ${a.athlete.age} th` : ''}
                                                                 </span>
                                                             </td>
                                                             <td className="px-4 py-3.5 text-slate-500 dark:text-slate-400">
@@ -253,7 +252,7 @@ export default function Dashboard({
                                                                 {riskBadge}
                                                             </td>
                                                             <td className="px-4 py-3.5 text-right">
-                                                                <Link href={route('dpa.athletes.show', a.athlete.id)}>
+                                                                <Link href={route('dpa.athletes.show', a.athlete.athlete_code || a.athlete.id)}>
                                                                     <Button variant="outline" size="sm" className="h-7 px-2.5 text-[11px]">
                                                                         Report
                                                                     </Button>

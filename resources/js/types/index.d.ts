@@ -40,6 +40,7 @@ export interface DpaCompensation {
     id: number;
     category: string; // 'Anterior View' | 'Lateral View' | 'Posterior View' | 'Single Leg'
     name: string;
+    slug?: string;
     checkpoint?: string;
     image_path?: string;
     overactive_muscles?: string;
@@ -61,6 +62,7 @@ export interface DpaCompensation {
 export interface Exercise {
     id: number;
     name: string;
+    slug?: string;
     instructions?: string;
     image_path?: string;
     video_url?: string;
@@ -125,7 +127,7 @@ export interface Muscle {
 export interface Injury {
     id: number;
     name: string;
-    body_region?: string;
+    slug?: string;
     description?: string;
     created_at?: string;
     updated_at?: string;

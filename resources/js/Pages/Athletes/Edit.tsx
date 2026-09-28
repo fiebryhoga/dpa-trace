@@ -46,7 +46,7 @@ export default function AthleteEdit({ athlete }: { athlete: Athlete }) {
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
-        put(route('athletes.update', athlete.id));
+        put(route('athletes.update', athlete.athlete_code || athlete.id));
     };
 
     return (
@@ -56,7 +56,7 @@ export default function AthleteEdit({ athlete }: { athlete: Athlete }) {
             <div className="w-full space-y-6">
                 <PageHeader
                     icon={UserCog}
-                    backUrl={route('athletes.show', athlete.id)}
+                    backUrl={route('athletes.show', athlete.athlete_code || athlete.id)}
                     backLabel="Kembali ke Detail Atlet"
                     title={
                         <>

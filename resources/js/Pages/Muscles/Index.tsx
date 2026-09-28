@@ -113,7 +113,7 @@ export default function MuscleIndex({
     const handleFormSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         if (editingMuscle) {
-            put(route('muscles.update', editingMuscle.id), {
+            put(route('muscles.update', editingMuscle.slug || editingMuscle.id), {
                 preserveScroll: true,
                 onSuccess: () => handleCancelEdit(),
             });
@@ -127,7 +127,7 @@ export default function MuscleIndex({
 
     const handleDelete = (muscle: Muscle) => {
         if (confirm(`Hapus master otot "${muscle.name}" secara permanen?`)) {
-            router.delete(route('muscles.destroy', muscle.id), {
+            router.delete(route('muscles.destroy', muscle.slug || muscle.id), {
                 preserveScroll: true,
             });
         }
@@ -152,7 +152,7 @@ export default function MuscleIndex({
 
     return (
         <AuthenticatedLayout>
-            <Head title="Master Anatomi Otot - DPA Trace" />
+            <Head title="Master Anatomi Otot - Athlete DPA" />
 
             <div className="space-y-4 pb-12" ref={formTopRef}>
                 {/* ─── PAGE HEADER WITH SEARCH BAR IN ACTIONS ─── */}
@@ -191,13 +191,13 @@ export default function MuscleIndex({
                     }
                 />
 
-                {/* ─── SPLIT WORKSPACE (KOLOM KIRI RAMPING & KOMPAK, KANAN TABEL LEBAR) ─── */}
-                <div className="flex flex-col lg:flex-row gap-5 items-start w-full">
+                {/* ─── SPLIT 2-COLUMN WORKSPACE (KIRI: FORMULIR, KANAN: DAFTAR OTOT) ─── */}
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start w-full">
                     {/* ═══════════════════════════════════════════
-                        KOLOM KIRI (LEBAR RAMPING ~290px - 310px): FORMULIR + LIVE BODY SILUET
+                        KOLOM KIRI (lg:col-span-4 xl:col-span-3): FORMULIR + LIVE BODY SILUET
                        ═══════════════════════════════════════════ */}
-                    <div className="w-full lg:w-[290px] xl:w-[310px] shrink-0 bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-md p-3 shadow-xs space-y-2.5 sticky top-4 max-h-[calc(100vh-2rem)] overflow-y-auto">
-                        <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2">
+                    <div className="lg:col-span-4 xl:col-span-3 bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-md p-3.5 shadow-xs space-y-3 sticky top-4 max-h-[calc(100vh-2rem)] overflow-y-auto">
+                        <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2.5">
                             <div>
                                 <h3 className="text-xs font-bold text-slate-900 dark:text-white">
                                     {editingMuscle ? 'Edit Data Otot' : 'Tambah Otot Baru'}
@@ -376,9 +376,9 @@ export default function MuscleIndex({
                     </div>
 
                     {/* ═══════════════════════════════════════════
-                        KOLOM KANAN (flex-1 min-w-0): TABEL DAFTAR OTOT LEBAR
+                        KOLOM KANAN (lg:col-span-8 xl:col-span-9): TABEL DAFTAR OTOT
                        ═══════════════════════════════════════════ */}
-                    <div className="flex-1 min-w-0 space-y-3">
+                    <div className="lg:col-span-8 xl:col-span-9 space-y-3">
                         {/* Header Total */}
                         <div className="flex items-center justify-between pb-0.5">
                             <span className="text-xs font-bold text-slate-600 dark:text-slate-400">

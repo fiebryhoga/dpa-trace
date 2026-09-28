@@ -158,7 +158,7 @@ export default function DpaCreate({
 
     return (
         <AuthenticatedLayout>
-            <Head title="New DPA Assessment - DPA Trace" />
+            <Head title="New DPA Assessment - Athlete DPA" />
 
             <form onSubmit={submit} className="space-y-6">
                 <PageHeader
@@ -170,7 +170,7 @@ export default function DpaCreate({
                             Lembar Penilaian <span className="text-[#84cc16] dark:text-[#b4f031]">DPA</span>
                         </>
                     }
-                    description="Protokol Standar DPA Trace • 4-View Kinetic Checkpoints & Overactive/Underactive Muscle Mapping."
+                    description="Protokol Standar Athlete DPA • 4-View Kinetic Checkpoints & Overactive/Underactive Muscle Mapping."
                     actions={
                         <Button type="submit" size="sm" className="gap-1.5 font-bold rounded-md" isLoading={processing}>
                             <Save className="h-4 w-4" />

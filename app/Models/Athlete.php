@@ -25,6 +25,18 @@ class Athlete extends Model
         'is_active',
     ];
 
+    public function getRouteKeyName(): string
+    {
+        return 'athlete_code';
+    }
+
+    public function resolveRouteBinding($value, $field = null)
+    {
+        return $this->where('athlete_code', $value)
+            ->orWhere('id', $value)
+            ->firstOrFail();
+    }
+
     protected $casts = [
         'age' => 'integer',
         'is_active' => 'boolean',

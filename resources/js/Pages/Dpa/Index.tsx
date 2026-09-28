@@ -245,7 +245,7 @@ export default function DpaIndex({
                                     return (
                                         <Link
                                             key={athlete.id}
-                                            href={route('dpa.athletes.show', athlete.id)}
+                                            href={route('dpa.athletes.show', athlete.athlete_code || athlete.id)}
                                             className="group bg-white dark:bg-[#0D1322] rounded-lg border border-slate-200/90 dark:border-slate-800 hover:border-[#84cc16] dark:hover:border-[#b4f031] shadow-2xs hover:shadow-xs transition-all duration-200 flex flex-col justify-between overflow-hidden"
                                         >
                                             <div className="p-4 space-y-3">

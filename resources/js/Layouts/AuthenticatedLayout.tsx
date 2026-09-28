@@ -30,13 +30,13 @@ export default function Authenticated({
                 <div className="w-full flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500 dark:text-slate-400">
                     <div className="flex items-center gap-2">
                         <ShieldCheck className="h-4 w-4 text-[#84cc16] dark:text-[#b4f031]" />
-                        <span className="font-bold text-slate-700 dark:text-slate-300">DPA Trace</span>
+                        <span className="font-bold text-slate-700 dark:text-slate-300">Athlete DPA</span>
                         <span className="hidden sm:inline text-slate-300 dark:text-slate-700">•</span>
                         <span className="hidden sm:inline">Olympus Training Surabaya X Unesa</span>
                     </div>
                     <div className="flex items-center gap-4">
                         <span className="px-2 py-0.5 rounded-md bg-[#b4f031]/15 text-slate-900 dark:text-[#b4f031] font-semibold text-[11px] border border-[#b4f031]/30">
-                            DPA Trace v2.4.0
+                            Athlete DPA v2.4.0
                         </span>
                         <span>© {new Date().getFullYear()} Olympus Training Surabaya X Unesa</span>
                     </div>

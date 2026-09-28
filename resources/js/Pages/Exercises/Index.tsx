@@ -151,7 +151,7 @@ export default function ExerciseIndex({
     const handleFormSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         const targetUrl = editingExercise
-            ? route('exercises.update', editingExercise.id)
+            ? route('exercises.update', editingExercise.slug || editingExercise.id)
             : route('exercises.store');
 
         post(targetUrl, {
@@ -165,7 +165,7 @@ export default function ExerciseIndex({
 
     const handleDelete = (item: Exercise) => {
         if (confirm(`Hapus latihan "${item.name}" secara permanen?`)) {
-            router.delete(route('exercises.destroy', item.id), {
+            router.delete(route('exercises.destroy', item.slug || item.id), {
                 preserveScroll: true,
             });
         }
@@ -182,7 +182,7 @@ export default function ExerciseIndex({
 
     return (
         <AuthenticatedLayout>
-            <Head title="Master Data Latihan - DPA Trace" />
+            <Head title="Master Data Latihan - Athlete DPA" />
 
             <div className="space-y-4 pb-12" ref={formTopRef}>
                 {/* ─── PAGE HEADER WITH SEARCH BAR IN ACTIONS ─── */}

@@ -19,23 +19,16 @@ class InjuryController extends Controller
             $search = $request->search;
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('body_region', 'like', "%{$search}%")
+                  ->orWhere('slug', 'like', "%{$search}%")
                   ->orWhere('description', 'like', "%{$search}%");
             });
         }
 
-        if ($request->filled('region')) {
-            $query->where('body_region', $request->region);
-        }
-
-        $injuries = $query->orderBy('body_region')->orderBy('name')->paginate(20)->withQueryString();
-
-        $regions = Injury::select('body_region')->whereNotNull('body_region')->distinct()->pluck('body_region');
+        $injuries = $query->orderBy('name')->paginate(20)->withQueryString();
 
         return Inertia::render('Injuries/Index', [
             'injuries' => $injuries,
-            'regions' => $regions,
-            'filters' => $request->only(['search', 'region']),
+            'filters' => $request->only(['search']),
         ]);
     }
 
@@ -46,7 +39,7 @@ class InjuryController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255|unique:injuries,name',
-            'body_region' => 'nullable|string|max:100',
+            'slug' => 'nullable|string|max:255',
             'description' => 'nullable|string',
         ]);
 
@@ -62,7 +55,7 @@ class InjuryController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255|unique:injuries,name,' . $injury->id,
-            'body_region' => 'nullable|string|max:100',
+            'slug' => 'nullable|string|max:255',
             'description' => 'nullable|string',
         ]);
 

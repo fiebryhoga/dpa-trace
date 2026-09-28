@@ -22,7 +22,7 @@ return new class extends Migration
         Schema::create('injuries', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('body_region')->nullable();
+            $table->string('slug')->nullable();
             $table->text('description')->nullable();
             $table->timestamps();
         });

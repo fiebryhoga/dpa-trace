@@ -32,6 +32,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::put('/dpa/assessments/{dpaAssessment}', [DpaAssessmentController::class, 'update'])->name('dpa.update');
     Route::delete('/dpa/assessments/{dpaAssessment}', [DpaAssessmentController::class, 'destroy'])->name('dpa.destroy');
     Route::post('/dpa/athletes/{athlete}/export-pdf', [DpaAssessmentController::class, 'exportPdf'])->name('dpa.export-pdf');
+    Route::post('/dpa/analyze-posture', [\App\Http\Controllers\DpaAiAnalysisController::class, 'analyze'])->name('dpa.analyze-posture');
 
     // Master Data & Konfigurasi (DPA Compensations, Exercise Library, Muscles, Injuries, Admin Users)
     Route::resource('dpa-compensations', DpaCompensationController::class);
