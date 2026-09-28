@@ -13,7 +13,6 @@ class Athlete extends Model
     protected $fillable = [
         'athlete_code',
         'full_name',
-        'nickname',
         'gender',
         'age',
         'height_cm',

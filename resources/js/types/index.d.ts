@@ -15,7 +15,6 @@ export interface Athlete {
     id: number;
     athlete_code: string;
     full_name: string;
-    nickname?: string;
     gender: 'L' | 'P';
     age?: number;
     calculated_age?: number;

@@ -329,12 +329,12 @@ export default function AthleteGallery({
                                 {/* Area Catatan Analisis */}
                                 {item.notes && (
                                     <div 
-                                        className="p-2.5 bg-slate-50/60 flex-1 border-t border-slate-100 cursor-pointer hover:bg-orange-50/20 transition-colors" 
+                                        className="p-2.5 bg-slate-50/70 dark:bg-slate-950/60 flex-1 border-t border-slate-100 dark:border-slate-800 cursor-pointer hover:bg-slate-100/80 dark:hover:bg-slate-800/50 transition-colors" 
                                         onClick={() => setViewer({ isOpen: true, photo: item })}
                                     >
-                                        <div className="flex items-start gap-1.5 text-slate-600">
-                                            <Info className="w-3.5 h-3.5 mt-0.5 shrink-0 text-orange-500" />
-                                            <p className="text-[10.5px] italic text-slate-700 leading-relaxed line-clamp-2">
+                                        <div className="flex items-start gap-1.5 text-slate-600 dark:text-slate-300">
+                                            <Info className="w-3.5 h-3.5 mt-0.5 shrink-0 text-[#84cc16] dark:text-[#b4f031]" />
+                                            <p className="text-[10.5px] italic text-slate-700 dark:text-slate-300 leading-relaxed line-clamp-2">
                                                 "{item.notes}"
                                             </p>
                                         </div>
@@ -342,12 +342,12 @@ export default function AthleteGallery({
                                 )}
 
                                 {/* Toolbar Aksi Bawah */}
-                                <div className="p-1.5 bg-white flex justify-between items-center border-t border-slate-100">
+                                <div className="p-1.5 bg-white dark:bg-slate-900 flex justify-between items-center border-t border-slate-100 dark:border-slate-800">
                                     <button 
                                         type="button"
                                         onClick={() => setViewer({ isOpen: true, photo: item })} 
                                         title="Lihat Penuh" 
-                                        className="p-1.5 text-slate-400 hover:bg-slate-100 hover:text-orange-500 rounded-lg transition-colors cursor-pointer touch-manipulation"
+                                        className="p-1.5 text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white rounded-md transition-colors cursor-pointer touch-manipulation"
                                     >
                                         <Maximize2 className="w-3.5 h-3.5"/>
                                     </button>
@@ -357,7 +357,7 @@ export default function AthleteGallery({
                                             type="button"
                                             onClick={() => setEditorState({ isOpen: true, photo: item })} 
                                             title="Anotasi & Ukur Postur" 
-                                            className="p-1.5 text-slate-400 hover:bg-cyan-50 hover:text-cyan-600 rounded-lg transition-colors cursor-pointer touch-manipulation"
+                                            className="p-1.5 text-slate-400 hover:bg-[#84cc16]/10 hover:text-[#84cc16] dark:hover:text-[#b4f031] rounded-md transition-colors cursor-pointer touch-manipulation"
                                         >
                                             <Pencil className="w-3.5 h-3.5"/>
                                         </button>
@@ -367,7 +367,7 @@ export default function AthleteGallery({
                                         type="button"
                                         onClick={() => handleDownload(item.image_path, `dpa-${athlete.name || 'athlete'}-${item.id}.jpg`)} 
                                         title="Download Foto" 
-                                        className="p-1.5 text-slate-400 hover:bg-slate-100 hover:text-orange-500 rounded-lg transition-colors cursor-pointer touch-manipulation"
+                                        className="p-1.5 text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white rounded-md transition-colors cursor-pointer touch-manipulation"
                                     >
                                         <Download className="w-3.5 h-3.5"/>
                                     </button>
@@ -378,7 +378,7 @@ export default function AthleteGallery({
                                                 type="button"
                                                 onClick={() => openEdit(item)} 
                                                 title="Edit Foto & Catatan" 
-                                                className="p-1.5 text-slate-400 hover:bg-amber-50 hover:text-amber-600 rounded-lg transition-colors cursor-pointer touch-manipulation"
+                                                className="p-1.5 text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white rounded-md transition-colors cursor-pointer touch-manipulation"
                                             >
                                                 <Edit3 className="w-3.5 h-3.5"/>
                                             </button>
@@ -387,7 +387,7 @@ export default function AthleteGallery({
                                                 type="button"
                                                 onClick={() => deleteGallery(item.id)} 
                                                 title="Hapus Foto" 
-                                                className="p-1.5 text-slate-400 hover:bg-rose-50 hover:text-rose-600 rounded-lg transition-colors cursor-pointer touch-manipulation"
+                                                className="p-1.5 text-slate-400 hover:bg-rose-50 dark:hover:bg-rose-950/40 hover:text-rose-600 dark:hover:text-rose-400 rounded-md transition-colors cursor-pointer touch-manipulation"
                                             >
                                                 <Trash2 className="w-3.5 h-3.5"/>
                                             </button>
@@ -401,7 +401,7 @@ export default function AthleteGallery({
             </div>
 
             {/* =========================================
-                MODAL 1: VIEWER / LIGHTBOX FOTO (STUDIO INSPECTOR LIGHT THEME)
+                MODAL 1: VIEWER / LIGHTBOX FOTO (STUDIO INSPECTOR SHADCN THEME)
             ========================================= */}
             {viewer.isOpen && viewer.photo && (() => {
                 const curPhoto = viewer.photo;
@@ -412,21 +412,21 @@ export default function AthleteGallery({
                     <div className="fixed inset-0 z-[110] flex items-center justify-center p-2 sm:p-4 md:p-6">
                         {/* Backdrop */}
                         <div 
-                            className="absolute inset-0 bg-slate-900/80 backdrop-blur-xs animate-in fade-in duration-200" 
+                            className="absolute inset-0 bg-slate-950/80 backdrop-blur-xs animate-in fade-in duration-200" 
                             onClick={() => setViewer({ isOpen: false, photo: null })}
                         />
                         
                         {/* Modal Box */}
-                        <div className="relative z-10 w-full max-w-5xl max-h-[92vh] bg-white rounded-lg shadow-2xl border border-slate-200 overflow-hidden flex flex-col md:flex-row animate-in zoom-in-95 duration-200">
+                        <div className="relative z-10 w-full max-w-5xl max-h-[92vh] bg-white dark:bg-slate-900 rounded-xl shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden flex flex-col md:flex-row animate-in zoom-in-95 duration-200">
                             
                             {/* Mobile Top Bar */}
-                            <div className="md:hidden flex items-center justify-between p-3 border-b border-slate-200 bg-white">
+                            <div className="md:hidden flex items-center justify-between p-3 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
                                 <div className="flex items-center gap-2">
-                                    <span className="text-xs font-bold text-slate-800">
+                                    <span className="text-xs font-bold text-slate-900 dark:text-white">
                                         Foto Postur #{activeIdx !== -1 ? activeIdx + 1 : 1}
                                     </span>
                                     {hasMultiple && (
-                                        <span className="text-[10px] bg-slate-100 text-slate-600 font-semibold px-2 py-0.5 rounded-lg">
+                                        <span className="text-[10px] bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-semibold px-2 py-0.5 rounded-md">
                                             {activeIdx + 1} / {galleries.length}
                                         </span>
                                     )}
@@ -434,25 +434,25 @@ export default function AthleteGallery({
                                 <button
                                     type="button"
                                     onClick={() => setViewer({ isOpen: false, photo: null })}
-                                    className="p-1 rounded-lg hover:bg-slate-100 text-slate-500 cursor-pointer"
+                                    className="p-1 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500 dark:text-slate-400 cursor-pointer"
                                 >
                                     <X size={18} />
                                 </button>
                             </div>
 
-                            {/* Left Visual Area (Light Dot-Grid Canvas) */}
-                            <div className="flex-1 flex flex-col bg-slate-100/70 border-b md:border-b-0 md:border-r border-slate-200 overflow-hidden min-h-[320px] md:min-h-[500px]">
+                            {/* Left Visual Area (Subtle Canvas) */}
+                            <div className="flex-1 flex flex-col bg-slate-50 dark:bg-slate-950 border-b md:border-b-0 md:border-r border-slate-200 dark:border-slate-800 overflow-hidden min-h-[320px] md:min-h-[500px]">
                                 <div 
                                     className="flex-1 relative flex items-center justify-center p-4 md:p-6 overflow-hidden"
                                     style={{
-                                        backgroundImage: "radial-gradient(#cbd5e1 1.2px, transparent 1.2px)",
+                                        backgroundImage: "radial-gradient(currentColor 1px, transparent 1px)",
                                         backgroundSize: "20px 20px"
                                     }}
                                 >
                                     <img 
                                         src={getPhotoUrl(curPhoto.image_path)} 
                                         alt="Detail Postur" 
-                                        className="max-w-full max-h-[55vh] md:max-h-[66vh] object-contain rounded-lg shadow-md border border-slate-200/80 bg-white transition-all duration-300" 
+                                        className="max-w-full max-h-[55vh] md:max-h-[66vh] object-contain rounded-lg shadow-sm border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-900 transition-all duration-300" 
                                     />
 
                                     {/* Navigation Arrows */}
@@ -464,7 +464,7 @@ export default function AthleteGallery({
                                                     const prevIdx = (activeIdx - 1 + galleries.length) % galleries.length;
                                                     setViewer({ isOpen: true, photo: galleries[prevIdx] });
                                                 }}
-                                                className="absolute left-3 top-1/2 -translate-y-1/2 p-2.5 rounded-lg bg-white/95 hover:bg-orange-500 text-slate-700 hover:text-white border border-slate-200 hover:border-orange-500 shadow-md backdrop-blur-xs transition-all hover:scale-110 cursor-pointer"
+                                                className="absolute left-3 top-1/2 -translate-y-1/2 p-2 rounded-md bg-white/90 dark:bg-slate-800/90 hover:bg-[#84cc16] hover:text-slate-950 dark:hover:bg-[#b4f031] text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 shadow-sm backdrop-blur-xs transition-all hover:scale-105 cursor-pointer"
                                                 title="Foto Sebelumnya (Panah Kiri)"
                                             >
                                                 <ChevronLeft size={18} />
@@ -475,7 +475,7 @@ export default function AthleteGallery({
                                                     const nextIdx = (activeIdx + 1) % galleries.length;
                                                     setViewer({ isOpen: true, photo: galleries[nextIdx] });
                                                 }}
-                                                className="absolute right-3 top-1/2 -translate-y-1/2 p-2.5 rounded-lg bg-white/95 hover:bg-orange-500 text-slate-700 hover:text-white border border-slate-200 hover:border-orange-500 shadow-md backdrop-blur-xs transition-all hover:scale-110 cursor-pointer"
+                                                className="absolute right-3 top-1/2 -translate-y-1/2 p-2 rounded-md bg-white/90 dark:bg-slate-800/90 hover:bg-[#84cc16] hover:text-slate-950 dark:hover:bg-[#b4f031] text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 shadow-sm backdrop-blur-xs transition-all hover:scale-105 cursor-pointer"
                                                 title="Foto Berikutnya (Panah Kanan)"
                                             >
                                                 <ChevronRight size={18} />
@@ -486,16 +486,16 @@ export default function AthleteGallery({
 
                                 {/* Bottom Thumbnail Strip */}
                                 {hasMultiple && (
-                                    <div className="p-2.5 bg-white border-t border-slate-200 flex items-center gap-2 overflow-x-auto">
+                                    <div className="p-2.5 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 flex items-center gap-2 overflow-x-auto">
                                         {galleries.map((thumb, idx) => (
                                             <button
                                                 key={thumb.id || idx}
                                                 type="button"
                                                 onClick={() => setViewer({ isOpen: true, photo: thumb })}
-                                                className={`relative shrink-0 w-12 h-14 rounded-lg overflow-hidden border transition-all cursor-pointer ${
+                                                className={`relative shrink-0 w-12 h-14 rounded-md overflow-hidden border transition-all cursor-pointer ${
                                                     thumb.id === curPhoto.id 
-                                                        ? "border-orange-500 ring-2 ring-orange-500/40 shadow-xs scale-105" 
-                                                        : "border-slate-200 opacity-60 hover:opacity-100 hover:border-slate-400"
+                                                        ? "border-[#84cc16] dark:border-[#b4f031] ring-2 ring-[#84cc16]/40 dark:ring-[#b4f031]/40 shadow-xs scale-105" 
+                                                        : "border-slate-200 dark:border-slate-700 opacity-60 hover:opacity-100 hover:border-slate-400 dark:hover:border-slate-500"
                                                 }`}
                                             >
                                                 <img 
@@ -512,18 +512,18 @@ export default function AthleteGallery({
                                 )}
                             </div>
 
-                            {/* Right Inspector Panel (Light Theme) */}
-                            <div className="w-full md:w-80 lg:w-96 bg-white p-5 flex flex-col justify-between overflow-y-auto space-y-4">
+                            {/* Right Inspector Panel */}
+                            <div className="w-full md:w-80 lg:w-96 bg-white dark:bg-slate-900 p-5 flex flex-col justify-between overflow-y-auto space-y-4">
                                 
                                 {/* Header Panel */}
                                 <div className="space-y-3">
-                                    <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+                                    <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
                                         <div>
-                                            <h3 className="font-bold text-sm sm:text-base text-slate-900">
+                                            <h3 className="font-bold text-sm sm:text-base text-slate-900 dark:text-white">
                                                 Foto Postur #{activeIdx !== -1 ? activeIdx + 1 : 1}
                                             </h3>
-                                            <div className="flex items-center gap-1.5 text-xs text-slate-500 mt-0.5">
-                                                <CalendarDays size={12} className="text-orange-500" />
+                                            <div className="flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                                                <CalendarDays size={12} className="text-[#84cc16] dark:text-[#b4f031]" />
                                                 <span>
                                                     {formatDateIndo(curPhoto.created_at)}
                                                 </span>
@@ -533,7 +533,7 @@ export default function AthleteGallery({
                                         <button
                                             type="button"
                                             onClick={() => setViewer({ isOpen: false, photo: null })}
-                                            className="hidden md:flex p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-800 transition-colors cursor-pointer"
+                                            className="hidden md:flex p-1.5 rounded-md bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white transition-colors cursor-pointer"
                                             title="Tutup (Esc)"
                                         >
                                             <X size={16} />
@@ -542,17 +542,17 @@ export default function AthleteGallery({
 
                                     {/* Catatan Observasi Klinis */}
                                     <div className="space-y-1.5">
-                                        <label className="text-[10.5px] font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
-                                            <Info size={11} className="text-orange-500" />
+                                        <label className="text-[11px] font-semibold text-slate-600 dark:text-slate-300 flex items-center gap-1.5">
+                                            <Info size={12} className="text-[#84cc16] dark:text-[#b4f031]" />
                                             <span>Observasi &amp; Catatan Klinis</span>
                                         </label>
-                                        <div className="p-3.5 bg-slate-50 border border-slate-200 rounded-lg min-h-[70px] max-h-[18vh] overflow-y-auto custom-scrollbar">
+                                        <div className="p-3 bg-slate-50 dark:bg-slate-950/60 border border-slate-200/80 dark:border-slate-800 rounded-md min-h-[70px] max-h-[18vh] overflow-y-auto custom-scrollbar">
                                             {curPhoto.notes ? (
-                                                <p className="text-xs text-slate-700 italic leading-relaxed whitespace-pre-line">
+                                                <p className="text-xs text-slate-700 dark:text-slate-300 italic leading-relaxed whitespace-pre-line">
                                                     "{curPhoto.notes}"
                                                 </p>
                                             ) : (
-                                                <p className="text-xs text-slate-400 italic">
+                                                <p className="text-xs text-slate-400 dark:text-slate-500 italic">
                                                     Tidak ada catatan observasi klinis khusus untuk foto ini.
                                                 </p>
                                             )}
@@ -560,26 +560,26 @@ export default function AthleteGallery({
                                     </div>
 
                                     {/* Ringkasan Atlet & Status */}
-                                    <div className="p-3 bg-slate-50 border border-slate-200 rounded-lg space-y-2">
+                                    <div className="p-3 bg-slate-50 dark:bg-slate-950/60 border border-slate-200/80 dark:border-slate-800 rounded-md space-y-2">
                                         <div className="flex items-center justify-between text-xs">
-                                            <span className="text-slate-500">Atlet</span>
-                                            <span className="font-bold text-slate-800">{athlete?.name || '-'}</span>
+                                            <span className="text-slate-500 dark:text-slate-400">Atlet</span>
+                                            <span className="font-semibold text-slate-900 dark:text-white">{athlete?.name || '-'}</span>
                                         </div>
                                         <div className="flex items-center justify-between text-xs">
-                                            <span className="text-slate-500">Modul Analisis</span>
-                                            <span className="font-bold text-orange-600">Dynamic Posture (DPA)</span>
+                                            <span className="text-slate-500 dark:text-slate-400">Modul Analisis</span>
+                                            <span className="font-semibold text-[#84cc16] dark:text-[#b4f031]">Dynamic Posture (DPA)</span>
                                         </div>
                                         <div className="flex items-center justify-between text-xs">
-                                            <span className="text-slate-500">Status Anotasi</span>
-                                            <span className="font-bold text-slate-800">
+                                            <span className="text-slate-500 dark:text-slate-400">Status Anotasi</span>
+                                            <span className="font-semibold text-slate-800 dark:text-slate-200">
                                                 {curPhoto.annotations ? "Sudah Diukur / Dianotasi" : "Belum Ada Anotasi"}
                                             </span>
                                         </div>
                                     </div>
                                 </div>
 
-                                {/* Action Studio Buttons */}
-                                <div className="pt-3 space-y-2 border-t border-slate-100">
+                                {/* Action Buttons */}
+                                <div className="pt-3 space-y-2 border-t border-slate-100 dark:border-slate-800">
                                     {canManage && (
                                         <button
                                             type="button"
@@ -588,7 +588,7 @@ export default function AthleteGallery({
                                                 setViewer({ isOpen: false, photo: null });
                                                 setEditorState({ isOpen: true, photo: currentPhoto });
                                             }}
-                                            className="w-full py-2.5 px-4 rounded-lg bg-orange-600 hover:bg-orange-700 text-white font-bold text-xs shadow-xs hover:shadow-md transition-all flex items-center justify-center gap-2 active:scale-95 cursor-pointer"
+                                            className="w-full py-2.5 px-4 rounded-md bg-[#84cc16] hover:bg-[#65a30d] dark:bg-[#b4f031] dark:hover:bg-[#84cc16] text-slate-950 font-bold text-xs shadow-xs hover:shadow-sm transition-all flex items-center justify-center gap-2 active:scale-95 cursor-pointer"
                                         >
                                             <Pencil size={13} />
                                             <span>Anotasi &amp; Ukur Postur</span>
@@ -598,7 +598,7 @@ export default function AthleteGallery({
                                     <button
                                         type="button"
                                         onClick={() => handleDownload(curPhoto.image_path, `dpa-${athlete?.name || 'athlete'}-${curPhoto.id}.jpg`)}
-                                        className="w-full py-2 px-4 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 font-semibold text-xs flex items-center justify-center gap-2 transition-all cursor-pointer"
+                                        className="w-full py-2 px-4 rounded-md bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 font-semibold text-xs flex items-center justify-center gap-2 transition-all cursor-pointer"
                                     >
                                         <Download size={13} />
                                         <span>Download Foto HD</span>
@@ -613,7 +613,7 @@ export default function AthleteGallery({
                                                     setViewer({ isOpen: false, photo: null });
                                                     openEdit(currentPhoto);
                                                 }}
-                                                className="flex-1 py-2 px-3 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 font-semibold text-xs flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+                                                className="flex-1 py-2 px-3 rounded-md bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 font-semibold text-xs flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
                                             >
                                                 <Edit3 size={12} />
                                                 <span>Edit Catatan</span>
@@ -622,7 +622,7 @@ export default function AthleteGallery({
                                             <button
                                                 type="button"
                                                 onClick={() => deleteGallery(curPhoto.id)}
-                                                className="px-3 py-2 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200 font-semibold text-xs flex items-center justify-center transition-colors cursor-pointer"
+                                                className="px-3 py-2 rounded-md bg-rose-50 hover:bg-rose-100 dark:bg-rose-950/40 dark:hover:bg-rose-900/60 text-rose-600 dark:text-rose-400 border border-rose-200 dark:border-rose-900/50 font-semibold text-xs flex items-center justify-center transition-colors cursor-pointer"
                                                 title="Hapus Foto"
                                             >
                                                 <Trash2 size={13} />
@@ -643,17 +643,17 @@ export default function AthleteGallery({
                 <div className="fixed inset-0 z-[120] flex items-center justify-center p-3 sm:p-4">
                     {/* Backdrop */}
                     <div 
-                        className="absolute inset-0 bg-slate-900/70 backdrop-blur-xs animate-in fade-in duration-200" 
+                        className="absolute inset-0 bg-slate-950/80 backdrop-blur-xs animate-in fade-in duration-200" 
                         onClick={closeEdit}
                     />
                     
                     {/* Modal Box */}
-                    <div className="relative z-10 bg-white w-full max-w-lg rounded-lg shadow-2xl flex flex-col animate-in zoom-in-95 duration-200 overflow-hidden max-h-[92vh]">
+                    <div className="relative z-10 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 w-full max-w-lg rounded-xl shadow-2xl flex flex-col animate-in zoom-in-95 duration-200 overflow-hidden max-h-[92vh]">
                         {/* Modal Header */}
-                        <div className="px-5 py-3.5 border-b border-slate-100 flex justify-between items-center bg-gradient-to-r from-orange-50/70 via-white to-orange-50/30">
+                        <div className="px-5 py-3.5 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center bg-slate-50/70 dark:bg-slate-900/50">
                             <div>
-                                <h3 className="font-bold text-sm sm:text-base text-slate-800 flex items-center gap-2">
-                                    <Edit3 className="w-4 h-4 text-orange-500" />
+                                <h3 className="font-bold text-sm sm:text-base text-slate-900 dark:text-white flex items-center gap-2">
+                                    <Edit3 className="w-4 h-4 text-[#84cc16] dark:text-[#b4f031]" />
                                     <span>Edit Foto &amp; Catatan Postur</span>
                                 </h3>
                                 <p className="text-[10.5px] text-slate-400 font-medium mt-0.5">
@@ -663,7 +663,7 @@ export default function AthleteGallery({
                             <button 
                                 type="button"
                                 onClick={closeEdit} 
-                                className="p-1.5 text-slate-400 hover:bg-slate-200 rounded-lg cursor-pointer"
+                                className="p-1.5 text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-md cursor-pointer"
                             >
                                 <X className="w-4 h-4" />
                             </button>
@@ -673,19 +673,19 @@ export default function AthleteGallery({
                         <form onSubmit={submitEdit} className="flex-1 overflow-y-auto p-5 space-y-4 custom-scrollbar">
                             {/* Area Preview Foto Sekarang / Baru */}
                             <div>
-                                <label className="text-[11px] font-bold text-slate-700 mb-1.5 block">
+                                <label className="text-[11px] font-semibold text-slate-700 dark:text-slate-200 mb-1.5 block">
                                     Gambar Postur DPA
                                 </label>
                                 
-                                <div className="p-2.5 bg-slate-50 border border-slate-200/90 rounded-lg space-y-2">
-                                    <div className="w-full h-44 rounded-lg overflow-hidden border border-slate-200 bg-black/90 flex items-center justify-center relative">
+                                <div className="p-2.5 bg-slate-50 dark:bg-slate-950/60 border border-slate-200/90 dark:border-slate-800 rounded-lg space-y-2">
+                                    <div className="w-full h-44 rounded-lg overflow-hidden border border-slate-200 dark:border-slate-800 bg-slate-950 flex items-center justify-center relative">
                                         <img 
                                             src={editPreview || getPhotoUrl(editModal.photo.image_path)} 
                                             alt="Preview" 
                                             className="max-h-full max-w-full object-contain" 
                                         />
                                         {editPreview && (
-                                            <div className="absolute top-2 right-2 bg-emerald-600 text-white text-[9.5px] font-bold px-2 py-0.5 rounded-lg shadow-sm flex items-center gap-1">
+                                            <div className="absolute top-2 right-2 bg-emerald-600 text-white text-[9.5px] font-bold px-2 py-0.5 rounded-md shadow-sm flex items-center gap-1">
                                                 <CheckCircle2 size={11} />
                                                 <span>File Baru Dipilih</span>
                                             </div>
@@ -697,7 +697,7 @@ export default function AthleteGallery({
                                         <button
                                             type="button"
                                             onClick={() => editFileInputRef.current?.click()}
-                                            className="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-1.5 bg-white border border-slate-300 hover:border-orange-500 text-slate-700 hover:text-orange-600 rounded-lg text-xs font-bold transition-all shadow-2xs cursor-pointer"
+                                            className="flex-1 inline-flex items-center justify-center gap-1.5 px-3 py-1.5 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 hover:border-[#84cc16] text-slate-700 dark:text-slate-200 hover:text-[#84cc16] dark:hover:text-[#b4f031] rounded-md text-xs font-semibold transition-all shadow-2xs cursor-pointer"
                                         >
                                             <Camera size={13.5} />
                                             <span>{editPreview ? 'Pilih File Lain' : 'Ganti / Upload Gambar Baru'}</span>
@@ -707,7 +707,7 @@ export default function AthleteGallery({
                                             <button
                                                 type="button"
                                                 onClick={cancelReplacementImage}
-                                                className="inline-flex items-center justify-center gap-1 px-2.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-lg text-xs font-bold transition-colors cursor-pointer"
+                                                className="inline-flex items-center justify-center gap-1 px-2.5 py-1.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 rounded-md text-xs font-semibold transition-colors cursor-pointer"
                                                 title="Batalkan ganti gambar"
                                             >
                                                 <RotateCcw size={12} />
@@ -731,47 +731,47 @@ export default function AthleteGallery({
 
                             {/* Tanggal Foto */}
                             <div>
-                                <label className="text-[11px] font-bold text-slate-700 mb-1.5 block">
+                                <label className="text-[11px] font-semibold text-slate-700 dark:text-slate-200 mb-1.5 block">
                                     Tanggal Pengambilan / Evaluasi
                                 </label>
                                 <input 
                                     type="date"
                                     value={editForm.data.created_at}
                                     onChange={(e) => editForm.setData('created_at', e.target.value)}
-                                    className="w-full rounded-lg border border-slate-200 bg-slate-50 p-2.5 text-xs focus:bg-white focus:border-orange-500 focus:ring-1 focus:ring-orange-500 outline-none transition-all font-medium"
+                                    className="w-full rounded-md border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 p-2.5 text-xs text-slate-900 dark:text-white focus:bg-white dark:focus:bg-slate-900 focus:border-[#84cc16] focus:ring-1 focus:ring-[#84cc16] outline-none transition-all font-medium"
                                 />
                             </div>
 
                             {/* Catatan Analisis */}
                             <div>
-                                <label className="text-[11px] font-bold text-slate-700 mb-1.5 block">
+                                <label className="text-[11px] font-semibold text-slate-700 dark:text-slate-200 mb-1.5 block">
                                     Catatan Analisis &amp; Temuan Klinis Postur
                                 </label>
                                 <textarea 
                                     rows="4" 
                                     value={editForm.data.notes}
                                     onChange={(e) => editForm.setData('notes', e.target.value)}
-                                    className="w-full rounded-lg border border-slate-200 bg-slate-50 p-3 text-xs focus:bg-white focus:border-orange-500 focus:ring-1 focus:ring-orange-500 outline-none transition-all resize-none leading-relaxed"
+                                    className="w-full rounded-md border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 p-3 text-xs text-slate-900 dark:text-white focus:bg-white dark:focus:bg-slate-900 focus:border-[#84cc16] focus:ring-1 focus:ring-[#84cc16] outline-none transition-all resize-none leading-relaxed"
                                     placeholder="Contoh: Overhead Squat Anterior: pronasi kaki bilateral disertai dynamic knee valgus derajat 115°..."
                                 />
                             </div>
 
                             {/* Modal Footer */}
-                            <div className="pt-3 border-t border-slate-100 flex justify-end gap-2.5">
+                            <div className="pt-3 border-t border-slate-100 dark:border-slate-800 flex justify-end gap-2.5">
                                 <button 
                                     type="button" 
                                     onClick={closeEdit} 
-                                    className="px-4 py-2 text-xs font-bold text-slate-600 hover:bg-slate-100 rounded-lg transition-colors cursor-pointer"
+                                    className="px-4 py-2 text-xs font-semibold text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-md transition-colors cursor-pointer"
                                 >
                                     Batal
                                 </button>
                                 <button 
                                     type="submit" 
                                     disabled={editForm.processing} 
-                                    className="px-5 py-2 bg-orange-600 hover:bg-orange-700 text-white font-bold text-xs rounded-lg flex items-center gap-1.5 shadow-2xs disabled:opacity-50 transition-all cursor-pointer"
+                                    className="px-5 py-2 bg-[#84cc16] hover:bg-[#65a30d] dark:bg-[#b4f031] dark:hover:bg-[#84cc16] text-slate-950 font-bold text-xs rounded-md flex items-center gap-1.5 shadow-2xs disabled:opacity-50 transition-all cursor-pointer"
                                 >
                                     {editForm.processing ? (
-                                        <span className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                                        <span className="w-3.5 h-3.5 border-2 border-slate-950/30 border-t-slate-950 rounded-full animate-spin" />
                                     ) : (
                                         <Save className="w-3.5 h-3.5"/>
                                     )}
@@ -790,17 +790,17 @@ export default function AthleteGallery({
                 <div className="fixed inset-0 z-[100] flex items-center justify-center p-3 sm:p-6">
                     {/* Backdrop */}
                     <div 
-                        className="absolute inset-0 bg-slate-900/70 backdrop-blur-xs animate-in fade-in duration-200" 
+                        className="absolute inset-0 bg-slate-950/80 backdrop-blur-xs animate-in fade-in duration-200" 
                         onClick={closeUploadModal}
                     />
                     
                     {/* Box Modal */}
-                    <div className="relative z-10 bg-white w-full max-w-2xl rounded-lg shadow-2xl flex flex-col max-h-[90vh] animate-in zoom-in-95 duration-200 overflow-hidden">
+                    <div className="relative z-10 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 w-full max-w-2xl rounded-xl shadow-2xl flex flex-col max-h-[90vh] animate-in zoom-in-95 duration-200 overflow-hidden">
                         {/* Header */}
-                        <div className="px-5 py-4 border-b border-slate-100 flex justify-between items-center bg-gradient-to-r from-orange-50/70 via-white to-orange-50/30 shrink-0">
+                        <div className="px-5 py-4 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center bg-slate-50/70 dark:bg-slate-900/50 shrink-0">
                             <div>
-                                <h3 className="font-bold text-sm sm:text-base text-slate-800 flex items-center gap-2">
-                                    <ImagePlus className="w-4 h-4 text-orange-500" />
+                                <h3 className="font-bold text-sm sm:text-base text-slate-900 dark:text-white flex items-center gap-2">
+                                    <ImagePlus className="w-4 h-4 text-[#84cc16] dark:text-[#b4f031]" />
                                     <span>Upload Foto Postur DPA</span>
                                 </h3>
                                 <p className="text-[10.5px] text-slate-400 font-medium mt-0.5">
@@ -810,7 +810,7 @@ export default function AthleteGallery({
                             <button 
                                 type="button"
                                 onClick={closeUploadModal} 
-                                className="p-1.5 text-slate-400 hover:bg-slate-200 rounded-lg cursor-pointer"
+                                className="p-1.5 text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-md cursor-pointer"
                             >
                                 <X className="w-4 h-4" />
                             </button>
@@ -821,12 +821,12 @@ export default function AthleteGallery({
                             {uploadData.photos.length === 0 && (
                                 <div 
                                     onClick={() => fileInputRef.current?.click()}
-                                    className="w-full h-44 sm:h-48 border-2 border-dashed border-slate-300 hover:border-orange-500 bg-slate-50/70 hover:bg-orange-50/40 rounded-lg flex flex-col items-center justify-center cursor-pointer transition-all group p-4 text-center"
+                                    className="w-full h-44 sm:h-48 border-2 border-dashed border-slate-300 dark:border-slate-700 hover:border-[#84cc16] dark:hover:border-[#b4f031] bg-slate-50/70 dark:bg-slate-950/40 hover:bg-[#84cc16]/5 rounded-lg flex flex-col items-center justify-center cursor-pointer transition-all group p-4 text-center"
                                 >
-                                    <div className="p-3 bg-white rounded-lg shadow-2xs group-hover:scale-110 transition-transform mb-2.5 text-slate-400 group-hover:text-orange-500 border border-slate-200">
+                                    <div className="p-3 bg-white dark:bg-slate-800 rounded-lg shadow-2xs group-hover:scale-110 transition-transform mb-2.5 text-slate-400 group-hover:text-[#84cc16] dark:group-hover:text-[#b4f031] border border-slate-200 dark:border-slate-700">
                                         <ImagePlus className="w-6 h-6" />
                                     </div>
-                                    <p className="text-xs sm:text-sm font-bold text-slate-700 group-hover:text-orange-600">
+                                    <p className="text-xs sm:text-sm font-bold text-slate-800 dark:text-slate-200 group-hover:text-[#84cc16] dark:group-hover:text-[#b4f031]">
                                         Pilih Foto Postur dari Komputer
                                     </p>
                                     <p className="text-[10.5px] text-slate-400 mt-1">
@@ -840,10 +840,10 @@ export default function AthleteGallery({
                                     {uploadData.photos.map((photo, index) => (
                                         <div 
                                             key={index} 
-                                            className="flex flex-col sm:flex-row gap-3 bg-slate-50/80 border border-slate-200 p-3 rounded-lg relative group"
+                                            className="flex flex-col sm:flex-row gap-3 bg-slate-50/80 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 p-3 rounded-lg relative group"
                                         >
                                             {/* Preview */}
-                                            <div className="w-full sm:w-28 h-36 sm:h-28 rounded-lg overflow-hidden border border-slate-200 bg-black/90 shrink-0 flex items-center justify-center">
+                                            <div className="w-full sm:w-28 h-36 sm:h-28 rounded-lg overflow-hidden border border-slate-200 dark:border-slate-800 bg-slate-950 shrink-0 flex items-center justify-center">
                                                 <img 
                                                     src={photo.preview} 
                                                     alt="preview" 
@@ -855,7 +855,7 @@ export default function AthleteGallery({
                                             <div className="flex-1 flex flex-col gap-2">
                                                 <div className="flex items-center gap-2">
                                                     <div className="flex-1">
-                                                        <label className="text-[10px] font-bold text-slate-500 mb-1 block">
+                                                        <label className="text-[10px] font-semibold text-slate-500 dark:text-slate-400 mb-1 block">
                                                             Tanggal Foto
                                                         </label>
                                                         <input
@@ -866,13 +866,13 @@ export default function AthleteGallery({
                                                                 updated[index].created_at = e.target.value;
                                                                 setUploadData('photos', updated);
                                                             }}
-                                                            className="w-full rounded-lg border border-slate-200 text-xs p-1.5 bg-white"
+                                                            className="w-full rounded-md border border-slate-200 dark:border-slate-700 text-xs p-1.5 bg-white dark:bg-slate-900 text-slate-900 dark:text-white"
                                                         />
                                                     </div>
                                                 </div>
 
                                                 <div>
-                                                    <label className="text-[10px] font-bold text-slate-500 mb-1 block">
+                                                    <label className="text-[10px] font-semibold text-slate-500 dark:text-slate-400 mb-1 block">
                                                         Catatan Analisis Postur (Opsional)
                                                     </label>
                                                     <textarea 
@@ -884,7 +884,7 @@ export default function AthleteGallery({
                                                             setUploadData('photos', updated);
                                                         }}
                                                         placeholder="Cth: Overhead squat lateral: excessive forward lean..."
-                                                        className="w-full rounded-lg border border-slate-200 text-xs p-2 bg-white resize-none outline-none focus:border-orange-500"
+                                                        className="w-full rounded-md border border-slate-200 dark:border-slate-700 text-xs p-2 bg-white dark:bg-slate-900 text-slate-900 dark:text-white resize-none outline-none focus:border-[#84cc16]"
                                                     />
                                                 </div>
                                             </div>
@@ -893,7 +893,7 @@ export default function AthleteGallery({
                                             <button 
                                                 type="button" 
                                                 onClick={() => removePhoto(index)}
-                                                className="absolute top-2 right-2 p-1 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg cursor-pointer"
+                                                className="absolute top-2 right-2 p-1 text-slate-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40 rounded-md cursor-pointer"
                                                 title="Hapus foto ini"
                                             >
                                                 <Trash2 className="w-4 h-4" />
@@ -904,7 +904,7 @@ export default function AthleteGallery({
                                     <button 
                                         type="button" 
                                         onClick={() => fileInputRef.current?.click()}
-                                        className="w-full py-2.5 border-2 border-dashed border-slate-200 text-slate-500 hover:text-orange-600 hover:border-orange-400 hover:bg-orange-50/50 font-bold text-xs rounded-lg flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+                                        className="w-full py-2.5 border-2 border-dashed border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 hover:text-[#84cc16] dark:hover:text-[#b4f031] hover:border-[#84cc16] dark:hover:border-[#b4f031] hover:bg-[#84cc16]/5 font-semibold text-xs rounded-md flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
                                     >
                                         <Plus className="w-4 h-4" /> 
                                         <span>Tambah Foto Lainnya</span>
@@ -923,11 +923,11 @@ export default function AthleteGallery({
                         </div>
 
                         {/* Footer */}
-                        <div className="p-4 border-t border-slate-100 bg-white shrink-0 flex justify-end gap-2.5">
+                        <div className="p-4 border-t border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 shrink-0 flex justify-end gap-2.5">
                             <button 
                                 type="button" 
                                 onClick={closeUploadModal} 
-                                className="px-4 py-2 text-slate-600 font-bold text-xs hover:bg-slate-100 rounded-lg transition-colors cursor-pointer"
+                                className="px-4 py-2 text-slate-600 dark:text-slate-400 font-semibold text-xs hover:bg-slate-100 dark:hover:bg-slate-800 rounded-md transition-colors cursor-pointer"
                             >
                                 Batal
                             </button>
@@ -935,10 +935,10 @@ export default function AthleteGallery({
                                 type="button" 
                                 onClick={submitUpload}
                                 disabled={uploadProcessing || uploadData.photos.length === 0}
-                                className="px-5 py-2 bg-orange-600 hover:bg-orange-700 text-white font-bold text-xs rounded-lg shadow-2xs flex items-center gap-1.5 disabled:opacity-50 disabled:cursor-not-allowed transition-all cursor-pointer"
+                                className="px-5 py-2 bg-[#84cc16] hover:bg-[#65a30d] dark:bg-[#b4f031] dark:hover:bg-[#84cc16] text-slate-950 font-bold text-xs rounded-md shadow-2xs flex items-center gap-1.5 disabled:opacity-50 disabled:cursor-not-allowed transition-all cursor-pointer"
                             >
                                 {uploadProcessing ? (
-                                    <span className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                                    <span className="w-3.5 h-3.5 border-2 border-slate-950/30 border-t-slate-950 rounded-full animate-spin" />
                                 ) : (
                                     <Save className="w-3.5 h-3.5" />
                                 )}

@@ -12,7 +12,6 @@ interface Athlete {
     id: number;
     athlete_code: string;
     full_name: string;
-    nickname?: string;
     gender: 'L' | 'P';
     birth_date?: string;
     height_cm?: number;
@@ -30,7 +29,6 @@ export default function AthleteEdit({ athlete }: { athlete: Athlete }) {
     const { data, setData, put, processing, errors } = useForm({
         athlete_code: athlete.athlete_code,
         full_name: athlete.full_name,
-        nickname: athlete.nickname || '',
         gender: athlete.gender,
         birth_date: athlete.birth_date ? athlete.birth_date.split('T')[0] : '',
         height_cm: athlete.height_cm || '',
@@ -110,16 +108,7 @@ export default function AthleteEdit({ athlete }: { athlete: Athlete }) {
                                 </div>
                             </div>
 
-                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                                <div className="space-y-1.5">
-                                    <Label htmlFor="nickname">Nickname</Label>
-                                    <Input
-                                        id="nickname"
-                                        value={data.nickname}
-                                        onChange={(e) => setData('nickname', e.target.value)}
-                                    />
-                                </div>
-
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div className="space-y-1.5">
                                     <Label htmlFor="gender" required>
                                         Gender

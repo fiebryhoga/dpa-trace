@@ -46,7 +46,6 @@ interface Athlete {
     id: number;
     athlete_code: string;
     full_name: string;
-    nickname?: string;
     gender: 'L' | 'P';
     age?: number;
     calculated_age?: number;
@@ -72,7 +71,6 @@ export default function AthleteShow({ athlete }: { athlete: Athlete }) {
                     backUrl={route('athletes.index')}
                     backLabel="Daftar Atlet"
                     title={athlete.full_name}
-                    badge={athlete.athlete_code}
                     description={
                         <span>
                             <strong className="text-[#84cc16] dark:text-[#b4f031] font-semibold">

@@ -18,6 +18,7 @@ import SmartPostureScanner from './SmartPostureScanner';
 
 interface AssessmentFormProps {
     athleteId?: number;
+    athleteGender?: string;
     compensations: DpaCompensation[];
     galleryPhotos?: AthleteGallery[];
     data: {
@@ -37,6 +38,7 @@ interface AssessmentFormProps {
 
 export default function AssessmentForm({
     athleteId,
+    athleteGender,
     compensations = [],
     galleryPhotos = [],
     data,
@@ -84,6 +86,7 @@ export default function AssessmentForm({
                ═══════════════════════════════════════ */}
             <SmartPostureScanner
                 athleteId={athleteId}
+                athleteGender={athleteGender}
                 availableCompensations={compensations}
                 galleryPhotos={galleryPhotos}
                 selectedCompensationIds={data.compensations || []}
@@ -332,9 +335,9 @@ export default function AssessmentForm({
                                 <button
                                     type="submit"
                                     disabled={processing}
-                                    className="w-full inline-flex items-center justify-center rounded-md text-xs font-extrabold bg-[#84cc16] hover:bg-[#65a30d] dark:bg-[#b4f031] dark:hover:bg-[#a3e635] text-slate-950 shadow-md h-9 px-4 gap-1.5 cursor-pointer transition-all disabled:opacity-50"
+                                    className="w-full inline-flex items-center justify-center rounded-md text-xs font-bold bg-[#84cc16] hover:bg-[#65a30d] dark:bg-[#b4f031] dark:hover:bg-[#a3e635] text-slate-950 shadow-2xs h-9 px-4 gap-1.5 cursor-pointer transition-all disabled:opacity-50"
                                 >
-                                    <Save size={14} />
+                                    <Save size={14} className="stroke-[2.5]" />
                                     <span>{isEditMode ? 'Perbarui Evaluasi' : 'Simpan Evaluasi DPA'}</span>
                                 </button>
 
@@ -342,7 +345,7 @@ export default function AssessmentForm({
                                     <button
                                         type="button"
                                         onClick={cancelEdit}
-                                        className="w-full inline-flex items-center justify-center rounded-md text-xs font-semibold border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 text-slate-700 dark:text-slate-200 h-8 px-3.5 gap-1.5 shadow-2xs cursor-pointer transition-colors"
+                                        className="w-full inline-flex items-center justify-center rounded-md text-xs font-semibold border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 h-8 px-3.5 gap-1.5 shadow-2xs cursor-pointer transition-colors"
                                     >
                                         <X size={13} />
                                         <span>Batal Edit</span>

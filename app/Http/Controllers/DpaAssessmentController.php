@@ -31,8 +31,7 @@ class DpaAssessmentController extends Controller
         if ($search) {
             $query->where(function ($q) use ($search) {
                 $q->where('full_name', 'like', "%{$search}%")
-                  ->orWhere('athlete_code', 'like', "%{$search}%")
-                  ->orWhere('nickname', 'like', "%{$search}%");
+                  ->orWhere('athlete_code', 'like', "%{$search}%");
             });
         }
 

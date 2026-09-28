@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->string('athlete_code')->unique();
             $table->string('full_name');
-            $table->string('nickname')->nullable();
             $table->enum('gender', ['L', 'P']);
             $table->date('birth_date')->nullable();
             $table->integer('age')->nullable();

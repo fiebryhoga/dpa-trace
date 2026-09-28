@@ -22,7 +22,6 @@ class AthleteSeeder extends Seeder
             [
                 'athlete_code' => 'DPA-2026-001',
                 'full_name' => 'Dimas Arya Pratama',
-                'nickname' => 'Dimas',
                 'gender' => 'L',
                 'age' => 22,
                 'height_cm' => 184.0,
@@ -35,7 +34,6 @@ class AthleteSeeder extends Seeder
             [
                 'athlete_code' => 'DPA-2026-002',
                 'full_name' => 'Siti Rahmawati',
-                'nickname' => 'Rahma',
                 'gender' => 'P',
                 'age' => 21,
                 'height_cm' => 168.0,
@@ -48,7 +46,6 @@ class AthleteSeeder extends Seeder
             [
                 'athlete_code' => 'DPA-2026-003',
                 'full_name' => 'Rizky Fajar Nugraha',
-                'nickname' => 'Rizky',
                 'gender' => 'L',
                 'age' => 22,
                 'height_cm' => 175.0,

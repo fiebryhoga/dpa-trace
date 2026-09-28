@@ -12,7 +12,6 @@ export default function AthleteCreate() {
     const { data, setData, post, processing, errors } = useForm({
         athlete_code: `DPA-${new Date().getFullYear()}-${Math.floor(100 + Math.random() * 900)}`,
         full_name: '',
-        nickname: '',
         gender: 'L' as 'L' | 'P',
         birth_date: '',
         height_cm: '' as any,
@@ -93,17 +92,7 @@ export default function AthleteCreate() {
                                 </div>
                             </div>
 
-                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                                <div className="space-y-1.5">
-                                    <Label htmlFor="nickname">Nickname</Label>
-                                    <Input
-                                        id="nickname"
-                                        placeholder="e.g. Dimas"
-                                        value={data.nickname}
-                                        onChange={(e) => setData('nickname', e.target.value)}
-                                    />
-                                </div>
-
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div className="space-y-1.5">
                                     <Label htmlFor="gender" required>
                                         Gender

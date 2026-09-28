@@ -27,7 +27,6 @@ interface AthleteItem {
     id: number;
     athlete_code: string;
     full_name: string;
-    nickname?: string;
     gender: 'L' | 'P';
     age?: number;
     calculated_age?: number;
@@ -80,7 +79,6 @@ export default function AthleteIndex({
     const { data, setData, post, processing, errors, reset, clearErrors } = useForm<{
         athlete_code: string;
         full_name: string;
-        nickname: string;
         gender: 'L' | 'P';
         age: string;
         height_cm: string;
@@ -94,7 +92,6 @@ export default function AthleteIndex({
     }>({
         athlete_code: `DPA-${new Date().getFullYear()}-${String(totalCount + 1).padStart(3, '0')}`,
         full_name: '',
-        nickname: '',
         gender: 'L',
         age: '20',
         height_cm: '',
@@ -114,7 +111,6 @@ export default function AthleteIndex({
         setData({
             athlete_code: ath.athlete_code,
             full_name: ath.full_name,
-            nickname: ath.nickname || '',
             gender: ath.gender,
             age: ath.age ? String(ath.age) : '',
             height_cm: ath.height_cm ? String(ath.height_cm) : '',

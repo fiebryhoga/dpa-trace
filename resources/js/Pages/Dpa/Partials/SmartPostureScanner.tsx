@@ -22,11 +22,17 @@ import {
     Move,
     ChevronLeft,
     ChevronRight,
-    ArrowRight,
     Check,
+    Upload,
+    Trash2,
+    Image as ImageIcon,
+    Lock,
+    Activity,
+    ListChecks,
 } from 'lucide-react';
 import { AthleteGallery, DpaCompensation } from '@/types';
 import { detectPoseFromImage } from '@/lib/poseDetection';
+import BodyMuscleVisualizer from '@/Components/BodyMuscleVisualizer';
 
 interface DetectedCompensation {
     compensation_id: number;
@@ -39,6 +45,7 @@ interface DetectedCompensation {
     clinical_rationale?: string;
     overactive_muscles?: string;
     underactive_muscles?: string;
+    possible_injuries?: string;
 }
 
 interface LandmarkPoint {
@@ -51,6 +58,7 @@ interface LandmarkPoint {
 
 interface SmartPostureScannerProps {
     athleteId?: number;
+    athleteGender?: string;
     availableCompensations: DpaCompensation[];
     galleryPhotos?: AthleteGallery[];
     selectedCompensationIds: number[];
@@ -199,6 +207,7 @@ function detectSpineContourOffset(
 
 export default function SmartPostureScanner({
     athleteId,
+    athleteGender,
     availableCompensations = [],
     galleryPhotos = [],
     selectedCompensationIds = [],
@@ -218,8 +227,9 @@ export default function SmartPostureScanner({
         landmarks?: Array<{ name: string; x: number; y: number }>;
     } | null>(null);
     const [checkedResults, setCheckedResults] = useState<number[]>([]);
-    const [appliedNotification, setAppliedNotification] = useState(false);
+    const [showGalleryPicker, setShowGalleryPicker] = useState(false);
     const [errorMsg, setErrorMsg] = useState<string | null>(null);
+    const [analysisTab, setAnalysisTab] = useState<'list' | 'visual'>('list');
 
     // Multi-step cache to retain each step's photo and results across transitions
     const [stepCache, setStepCache] = useState<Record<ViewType, StepCacheItem>>({
@@ -249,10 +259,38 @@ export default function SmartPostureScanner({
     const imageContainerRef = useRef<HTMLDivElement>(null);
     const viewportRef = useRef<HTMLDivElement>(null);
 
+    const currentStepIndex = ASSESSMENT_STEPS.findIndex((s) => s.view === selectedView);
+    const currentStep = ASSESSMENT_STEPS[currentStepIndex] || ASSESSMENT_STEPS[0];
+    const hasPrevStep = currentStepIndex > 0;
+    const hasNextStep = currentStepIndex < ASSESSMENT_STEPS.length - 1;
+    const prevStep = hasPrevStep ? ASSESSMENT_STEPS[currentStepIndex - 1] : null;
+    const nextStep = hasNextStep ? ASSESSMENT_STEPS[currentStepIndex + 1] : null;
+    const hasActivePhoto = Boolean(imagePreview || imageFile || selectedGalleryPhoto);
+
     // Step navigation and state caching across views
     const handleSwitchStep = useCallback(
         (targetView: ViewType) => {
             if (targetView === selectedView) return;
+
+            const targetIdx = ASSESSMENT_STEPS.findIndex((s) => s.view === targetView);
+            const currentIdx = ASSESSMENT_STEPS.findIndex((s) => s.view === selectedView);
+            const hasCurrentPhoto = Boolean(imagePreview || imageFile || selectedGalleryPhoto);
+
+            // Block proceeding to future steps if current step or any prior step lacks a photo
+            if (targetIdx > currentIdx) {
+                for (let i = 0; i < targetIdx; i++) {
+                    const s = ASSESSMENT_STEPS[i];
+                    const isCur = s.view === selectedView;
+                    const hasPhoto = isCur
+                        ? Boolean(imagePreview || imageFile || selectedGalleryPhoto)
+                        : Boolean(stepCache[s.view]?.imagePreview || stepCache[s.view]?.imageFile || stepCache[s.view]?.selectedGalleryPhoto);
+
+                    if (!hasPhoto) {
+                        setErrorMsg(`Wajib unggah atau pilih foto untuk ${s.title} (${s.subtitle}) terlebih dahulu sebelum melanjutkan.`);
+                        return;
+                    }
+                }
+            }
 
             // 1. Save current active step state into stepCache
             setStepCache((prev) => ({
@@ -295,13 +333,6 @@ export default function SmartPostureScanner({
         ]
     );
 
-    const currentStepIndex = ASSESSMENT_STEPS.findIndex((s) => s.view === selectedView);
-    const currentStep = ASSESSMENT_STEPS[currentStepIndex] || ASSESSMENT_STEPS[0];
-    const hasPrevStep = currentStepIndex > 0;
-    const hasNextStep = currentStepIndex < ASSESSMENT_STEPS.length - 1;
-    const prevStep = hasPrevStep ? ASSESSMENT_STEPS[currentStepIndex - 1] : null;
-    const nextStep = hasNextStep ? ASSESSMENT_STEPS[currentStepIndex + 1] : null;
-
     const goToPrevStep = () => {
         if (hasPrevStep && prevStep) {
             handleSwitchStep(prevStep.view);
@@ -309,6 +340,10 @@ export default function SmartPostureScanner({
     };
 
     const goToNextStep = () => {
+        if (!hasActivePhoto) {
+            setErrorMsg(`Wajib unggah foto untuk ${currentStep.title} (${currentStep.subtitle}) terlebih dahulu.`);
+            return;
+        }
         if (hasNextStep && nextStep) {
             handleSwitchStep(nextStep.view);
         }
@@ -553,6 +588,7 @@ export default function SmartPostureScanner({
                                 clinical_rationale: `Sumbu patella kolaps ke arah medial melewati garis netral ASIS-Ankle saat squat, indikasi kelemahan gluteus medius/VMO.`,
                                 overactive_muscles: comp.overactive_muscles,
                                 underactive_muscles: comp.underactive_muscles,
+                                possible_injuries: comp.possible_injuries,
                             });
                         }
                     } else if (isLeftVarus || isRightVarus) {
@@ -573,6 +609,7 @@ export default function SmartPostureScanner({
                                 clinical_rationale: `Lutut bergerak ke lateral keluar dari sumbu kaki akibat ketegangan piriformis dan gluteus minimus.`,
                                 overactive_muscles: comp.overactive_muscles,
                                 underactive_muscles: comp.underactive_muscles,
+                                possible_injuries: comp.possible_injuries,
                             });
                         }
                     }
@@ -601,6 +638,7 @@ export default function SmartPostureScanner({
                                 clinical_rationale: `Jari kaki berotasi ke arah lateral keluar melewati batas netral 12-15° akibat ketegangan gastrocnemius lateral dan soleus.`,
                                 overactive_muscles: comp.overactive_muscles,
                                 underactive_muscles: comp.underactive_muscles,
+                                possible_injuries: comp.possible_injuries,
                             });
                         }
                     }
@@ -637,6 +675,7 @@ export default function SmartPostureScanner({
                                     clinical_rationale: `Lengkung medial longitudinal kaki kolaps ke arah lantai akibat overaktivitas kompleks peroneus dan kelemahan tibialis anterior/posterior.`,
                                     overactive_muscles: comp.overactive_muscles,
                                     underactive_muscles: comp.underactive_muscles,
+                                possible_injuries: comp.possible_injuries,
                                 });
                             }
                         }
@@ -697,6 +736,7 @@ export default function SmartPostureScanner({
                                 clinical_rationale: `Garis torso tidak paralel dengan sumbu tibia (condong ke depan lebih besar ${forwardLeanExcess.toFixed(1)}°), indikasi kelemahan erector spinae dan defisit mobilitas dorsofleksi ankle.`,
                                 overactive_muscles: comp.overactive_muscles,
                                 underactive_muscles: comp.underactive_muscles,
+                                possible_injuries: comp.possible_injuries,
                             });
                         }
                     }
@@ -732,6 +772,7 @@ export default function SmartPostureScanner({
                                 clinical_rationale: `Lengan jatuh ke depan (${devDeg}° deviasi dari bidang torso) akibat hiperaktivitas latissimus dorsi, teres major, dan pectoralis major serta kelemahan lower trapezius/rhomboid.`,
                                 overactive_muscles: comp.overactive_muscles,
                                 underactive_muscles: comp.underactive_muscles,
+                                possible_injuries: comp.possible_injuries,
                             });
                         }
                     }
@@ -770,6 +811,7 @@ export default function SmartPostureScanner({
                                 clinical_rationale: `Punggung bawah melengkung ke anterior (Low Back Arches / Hiperlordosis) akibat overaktivitas hip flexors dan erector spinae serta kelemahan gluteus maximus dan otot core intrinsik.`,
                                 overactive_muscles: comp.overactive_muscles,
                                 underactive_muscles: comp.underactive_muscles,
+                                possible_injuries: comp.possible_injuries,
                             });
                         }
                     } else if (lumbarOffset <= -1.5 || (lumbarOffset <= -1.0 && lumbarCurvatureAngle >= 4.5)) {
@@ -790,6 +832,7 @@ export default function SmartPostureScanner({
                                 clinical_rationale: `Punggung bawah membulat/fleksi ke posterior (Low Back Rounds / Butt Wink) akibat overaktivitas hamstrings dan rectus abdominis serta kelemahan erector spinae dan gluteus maximus.`,
                                 overactive_muscles: comp.overactive_muscles,
                                 underactive_muscles: comp.underactive_muscles,
+                                possible_injuries: comp.possible_injuries,
                             });
                         }
                     }
@@ -833,6 +876,7 @@ export default function SmartPostureScanner({
                                 clinical_rationale: `Kemiringan garis panggul PSIS sebesar ${Math.abs(pelvicSlantDeg).toFixed(1)}° (${slantSideText}) menunjukkan pergeseran asimetris beban panggul (Asymmetrical Weight Shift) ke sisi ${primarySide}, indikasi overaktivitas adductor/QL kontralateral dan kelemahan gluteus medius.`,
                                 overactive_muscles: comp.overactive_muscles,
                                 underactive_muscles: comp.underactive_muscles,
+                                possible_injuries: comp.possible_injuries,
                             });
                         }
                     }
@@ -891,6 +935,7 @@ export default function SmartPostureScanner({
                                 clinical_rationale: `Tendon achilles mengalami deviasi eversi lateral akibat keruntuhan arkus medial kaki (Feet Flatten) saat menahan beban squat.`,
                                 overactive_muscles: comp.overactive_muscles,
                                 underactive_muscles: comp.underactive_muscles,
+                                possible_injuries: comp.possible_injuries,
                             });
                         }
                     }
@@ -943,6 +988,7 @@ export default function SmartPostureScanner({
                                 clinical_rationale: `Tumit (calcaneus) terangkat dari lantai saat squat, indikasi keterbatasan dorsofleksi talocrural akibat overaktivitas gastrocnemius & soleus serta kelemahan anterior tibialis.`,
                                 overactive_muscles: comp.overactive_muscles,
                                 underactive_muscles: comp.underactive_muscles,
+                                possible_injuries: comp.possible_injuries,
                             });
                         }
                     }
@@ -975,6 +1021,7 @@ export default function SmartPostureScanner({
                                 clinical_rationale: `Panggul kontralateral turun (Trendelenburg sign) menandakan kelemahan gluteus medius pada kaki tumpuan.`,
                                 overactive_muscles: comp.overactive_muscles,
                                 underactive_muscles: comp.underactive_muscles,
+                                possible_injuries: comp.possible_injuries,
                             });
                         }
                     } else if (pelvicTiltAngle < -3.5) {
@@ -995,6 +1042,7 @@ export default function SmartPostureScanner({
                                 clinical_rationale: `Panggul terangkat naik (Hip Hike) akibat overaktivitas quadratus lumborum kontralateral.`,
                                 overactive_muscles: comp.overactive_muscles,
                                 underactive_muscles: comp.underactive_muscles,
+                                possible_injuries: comp.possible_injuries,
                             });
                         }
                     }
@@ -1020,6 +1068,7 @@ export default function SmartPostureScanner({
                                 clinical_rationale: `Instabilitas frontal plane lutut saat Single Leg Squat, kolaps ke medial akibat defisit stabilisasi hip abductor.`,
                                 overactive_muscles: comp.overactive_muscles,
                                 underactive_muscles: comp.underactive_muscles,
+                                possible_injuries: comp.possible_injuries,
                             });
                         }
                     }
@@ -1076,7 +1125,10 @@ export default function SmartPostureScanner({
                         : `Kalibrasi manual: Posisi sendi berada dalam rentang normal (tidak ada kompensasi signifikan).`,
                 detected_compensations: liveDetected,
             });
-            setCheckedResults(liveDetected.map((d) => d.compensation_id));
+            if (liveDetected.length > 0) {
+                const detectedIds = liveDetected.map((d) => d.compensation_id);
+                onApplyCompensations(Array.from(new Set([...selectedCompensationIds, ...detectedIds])));
+            }
         }
     };
 
@@ -1232,13 +1284,18 @@ export default function SmartPostureScanner({
                                 : `Deteksi AI anatomi: Persendian atlet berada dalam rentang anatomi normal (tidak ada deviasi signifikan).`,
                         detected_compensations: liveDetected,
                     });
-                    setCheckedResults(liveDetected.map((d: DetectedCompensation) => d.compensation_id));
+                    if (liveDetected.length > 0) {
+                        const detectedIds = liveDetected.map((d: DetectedCompensation) => d.compensation_id);
+                        onApplyCompensations(Array.from(new Set([...selectedCompensationIds, ...detectedIds])));
+                    }
                 } else {
                     setScanResults(res);
                     const allIds = (res.detected_compensations || []).map(
                         (d: DetectedCompensation) => d.compensation_id
                     );
-                    setCheckedResults(allIds);
+                    if (allIds.length > 0) {
+                        onApplyCompensations(Array.from(new Set([...selectedCompensationIds, ...allIds])));
+                    }
                 }
             }
         } catch (err: any) {
@@ -1251,19 +1308,11 @@ export default function SmartPostureScanner({
     };
 
     const toggleCheckResult = (id: number) => {
-        if (checkedResults.includes(id)) {
-            setCheckedResults(checkedResults.filter((item) => item !== id));
+        if (selectedCompensationIds.includes(id)) {
+            onApplyCompensations(selectedCompensationIds.filter((item) => item !== id));
         } else {
-            setCheckedResults([...checkedResults, id]);
+            onApplyCompensations([...selectedCompensationIds, id]);
         }
-    };
-
-    const applySelectedToForm = () => {
-        if (checkedResults.length === 0) return;
-        const merged = Array.from(new Set([...selectedCompensationIds, ...checkedResults]));
-        onApplyCompensations(merged);
-        setAppliedNotification(true);
-        setTimeout(() => setAppliedNotification(false), 4000);
     };
 
     const getGuideImage = (view: ViewType) => {
@@ -1307,149 +1356,140 @@ export default function SmartPostureScanner({
     const rShoulder = findLandmark(['right shoulder', 'r_shoulder']);
 
     return (
-        <div className="bg-white dark:bg-[#0D1322] border border-slate-200/90 dark:border-slate-800 rounded-lg p-4 shadow-xs space-y-4">
+        <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg p-4 sm:p-5 space-y-4">
             {/* Header */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 dark:border-slate-800 pb-3">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100 dark:border-slate-800">
                 <div className="flex items-center gap-2.5">
                     <div className="w-8 h-8 rounded-md bg-[#84cc16]/10 dark:bg-[#b4f031]/10 flex items-center justify-center shrink-0">
                         <Sparkles size={16} className="text-[#84cc16] dark:text-[#b4f031]" />
                     </div>
                     <div>
-                        <h4 className="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                            <span>Smart AI Posture Scanner</span>
-                            <span className="px-1.5 py-0.2 rounded text-[9px] font-bold bg-[#84cc16]/15 dark:bg-[#b4f031]/15 text-[#84cc16] dark:text-[#b4f031] flex items-center gap-1">
+                        <div className="flex items-center gap-2">
+                            <h4 className="text-xs font-bold text-slate-900 dark:text-white">
+                                Smart AI Posture Scanner
+                            </h4>
+                            <span className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-[#84cc16]/15 dark:bg-[#b4f031]/15 text-[#84cc16] dark:text-[#b4f031] flex items-center gap-1">
                                 <Zap size={10} />
                                 MediaPipe Vision AI
                             </span>
-                        </h4>
-                        <p className="text-[10px] text-slate-400">
+                        </div>
+                        <p className="text-[11px] text-slate-400">
                             Deteksi anatomi tubuh otomatis dengan Google Computer Vision & kalkulasi garis kompensasi NASM
                         </p>
                     </div>
                 </div>
 
-                {/* Right controls: Guide Modal + API Key modal */}
-                <div className="flex items-center gap-2 flex-wrap">
-                    <button
-                        type="button"
-                        onClick={() => setShowGuideModal(true)}
-                        className="px-2 py-1 rounded text-[10.5px] font-semibold flex items-center gap-1.5 transition-colors cursor-pointer border bg-slate-50 dark:bg-slate-900 text-slate-700 dark:text-slate-200 border-slate-200 dark:border-slate-800 hover:border-[#84cc16]"
-                        title="Lihat Clue Gambar Standar NASM"
-                    >
-                        <BookOpen size={11} className="text-[#84cc16] dark:text-[#b4f031]" />
-                        <span>Panduan NASM</span>
-                    </button>
-                </div>
+                <button
+                    type="button"
+                    onClick={() => setShowGuideModal(true)}
+                    className="self-start sm:self-auto px-2.5 py-1.5 rounded-md text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer border bg-slate-50 dark:bg-slate-800/80 text-slate-700 dark:text-slate-200 border-slate-200 dark:border-slate-700 hover:border-[#84cc16] dark:hover:border-[#b4f031]"
+                    title="Lihat Clue Gambar Standar NASM"
+                >
+                    <BookOpen size={12} className="text-[#84cc16] dark:text-[#b4f031]" />
+                    <span>Panduan NASM</span>
+                </button>
             </div>
 
-            {/* ═════════════════════════════════════════════════════
-                4-STEP SEQUENTIAL WORKFLOW STEPPER BAR
-               ═════════════════════════════════════════════════════ */}
-            <div className="space-y-1.5">
-                <div className="flex items-center justify-between text-[11px] font-semibold text-slate-500 dark:text-slate-400 px-0.5">
-                    <span className="flex items-center gap-1.5">
-                        <Crosshair size={13} className="text-[#84cc16] dark:text-[#b4f031]" />
-                        <span>Alur Penilaian Postur (4 Sudut Pandang)</span>
-                    </span>
-                    <span className="text-[10.5px]">
-                        Langkah <strong className="text-slate-900 dark:text-white">{currentStep.stepNumber}</strong> dari 4
-                    </span>
-                </div>
+            {/* Sleek Segmented Stepper Bar (4 Sudut Pandang) */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-1.5 p-1 bg-slate-100/80 dark:bg-slate-950/60 rounded-lg border border-slate-200/80 dark:border-slate-800">
+                {ASSESSMENT_STEPS.map((step, idx) => {
+                    const isActive = selectedView === step.view;
+                    const cached = stepCache[step.view];
+                    const hasStepPhoto = Boolean(
+                        (isActive && (imagePreview || imageFile || selectedGalleryPhoto)) ||
+                        (cached && (cached.imagePreview || cached.imageFile || cached.selectedGalleryPhoto))
+                    );
+                    const isCompleted = Boolean(
+                        (cached && (cached.scanResults || cached.imagePreview)) || (isActive && (scanResults || imagePreview))
+                    );
+                    const detectedCount = isActive
+                        ? scanResults?.detected_compensations.length
+                        : cached?.scanResults?.detected_compensations.length;
 
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-                    {ASSESSMENT_STEPS.map((step) => {
-                        const isActive = selectedView === step.view;
-                        const cached = stepCache[step.view];
-                        const isCurrentActiveCached = isActive && (scanResults || imagePreview);
-                        const isCompleted = Boolean(
-                            (cached && (cached.scanResults || cached.imagePreview)) || isCurrentActiveCached
-                        );
-                        const detectedCount = isActive
-                            ? scanResults?.detected_compensations.length
-                            : cached?.scanResults?.detected_compensations.length;
+                    // Locked if prior steps don't have photos
+                    let isLocked = false;
+                    if (idx > currentStepIndex) {
+                        for (let i = 0; i < idx; i++) {
+                            const s = ASSESSMENT_STEPS[i];
+                            const isCur = s.view === selectedView;
+                            const hasPhoto = isCur
+                                ? Boolean(imagePreview || imageFile || selectedGalleryPhoto)
+                                : Boolean(stepCache[s.view]?.imagePreview || stepCache[s.view]?.imageFile || stepCache[s.view]?.selectedGalleryPhoto);
+                            if (!hasPhoto) {
+                                isLocked = true;
+                                break;
+                            }
+                        }
+                    }
 
-                        return (
-                            <button
-                                key={step.view}
-                                type="button"
-                                onClick={() => handleSwitchStep(step.view)}
-                                className={`p-2.5 rounded-lg border text-left transition-all cursor-pointer relative overflow-hidden flex flex-col justify-between gap-1.5 ${
-                                    isActive
-                                        ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-950 border-slate-900 dark:border-white shadow-xs'
-                                        : isCompleted
-                                        ? 'bg-emerald-50/70 dark:bg-emerald-950/30 border-emerald-300 dark:border-emerald-800/80 text-emerald-950 dark:text-emerald-200 hover:border-emerald-400'
-                                        : 'bg-slate-50/60 dark:bg-slate-900/50 border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:border-slate-300 dark:hover:border-slate-700'
-                                }`}
-                            >
-                                <div className="flex items-center justify-between gap-1">
-                                    <span
-                                        className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0 ${
-                                            isActive
-                                                ? 'bg-[#84cc16] text-slate-950'
-                                                : isCompleted
-                                                ? 'bg-emerald-500 text-white'
-                                                : 'bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400'
-                                        }`}
-                                    >
-                                        {isCompleted && !isActive ? <Check size={11} /> : step.stepNumber}
-                                    </span>
-                                    <span
-                                        className={`text-[9.5px] font-semibold uppercase tracking-tight px-1.5 py-0.2 rounded ${
-                                            isActive
-                                                ? 'bg-white/15 text-white dark:bg-slate-900/20 dark:text-slate-950 font-bold'
-                                                : isCompleted
-                                                ? 'bg-emerald-100 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-300'
-                                                : 'bg-slate-200/60 dark:bg-slate-800 text-slate-500'
-                                        }`}
-                                    >
-                                        {isActive
-                                            ? 'Aktif'
-                                            : isCompleted
-                                            ? typeof detectedCount === 'number'
-                                                ? `${detectedCount} Deviasi`
-                                                : 'Foto Siap'
-                                            : 'Belum'}
-                                    </span>
-                                </div>
-
-                                <div>
-                                    <div className="font-bold text-xs flex items-center gap-1">
-                                        <span>{step.title}</span>
-                                    </div>
-                                    <p
-                                        className={`text-[10px] truncate ${
-                                            isActive
-                                                ? 'text-slate-300 dark:text-slate-600'
-                                                : 'text-slate-400 dark:text-slate-500'
-                                        }`}
-                                    >
+                    return (
+                        <button
+                            key={step.view}
+                            type="button"
+                            onClick={() => handleSwitchStep(step.view)}
+                            disabled={isLocked}
+                            title={isLocked ? `Langkah ${step.stepNumber} terkunci: Lengkapi foto langkah sebelumnya terlebih dahulu` : undefined}
+                            className={`py-2 px-3 rounded-md text-left transition-all flex items-center justify-between gap-2 ${
+                                isActive
+                                    ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-xs font-semibold border border-slate-200/60 dark:border-slate-700'
+                                    : isLocked
+                                    ? 'text-slate-400 dark:text-slate-600 cursor-not-allowed opacity-50 bg-slate-50/50 dark:bg-slate-900/30'
+                                    : isCompleted
+                                    ? 'text-emerald-700 dark:text-emerald-400 hover:bg-white/50 dark:hover:bg-slate-800/50 cursor-pointer'
+                                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-white/40 dark:hover:bg-slate-800/40 cursor-pointer'
+                            }`}
+                        >
+                            <div className="flex items-center gap-2 min-w-0">
+                                <span
+                                    className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0 ${
+                                        hasStepPhoto
+                                            ? 'bg-[#84cc16] text-slate-950 font-bold'
+                                            : isActive
+                                            ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-900'
+                                            : isLocked
+                                            ? 'bg-slate-100 dark:bg-slate-800/50 text-slate-400 dark:text-slate-600'
+                                            : 'bg-slate-200 dark:bg-slate-800 text-slate-500'
+                                    }`}
+                                >
+                                    {isLocked ? <Lock size={10} /> : hasStepPhoto ? <Check size={11} /> : step.stepNumber}
+                                </span>
+                                <div className="min-w-0">
+                                    <div className="text-xs truncate">{step.title}</div>
+                                    <div className="text-[10px] text-slate-400 truncate hidden sm:block">
                                         {step.subtitle}
-                                    </p>
+                                    </div>
                                 </div>
-                            </button>
-                        );
-                    })}
-                </div>
-            </div>
+                            </div>
 
-            {/* Step Focus Banner */}
-            <div className="px-3 py-2 rounded-md bg-slate-50 dark:bg-slate-900/70 border border-slate-200/80 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-1 text-xs">
-                <div className="flex items-center gap-2">
-                    <span className="font-bold text-slate-900 dark:text-white">
-                        {currentStep.badgeText}: {currentStep.title} ({currentStep.subtitle})
-                    </span>
-                    <span className="hidden sm:inline text-slate-300 dark:text-slate-700">•</span>
-                    <span className="text-[11px] text-slate-500 dark:text-slate-400">
-                        {currentStep.description}
-                    </span>
-                </div>
-                <span className="text-[10.5px] font-semibold text-slate-400 shrink-0">
-                    Langkah {currentStep.stepNumber} dari 4
-                </span>
+                            {/* Status / Photo Indicator */}
+                            <div className="shrink-0 flex items-center gap-1">
+                                {hasStepPhoto ? (
+                                    <span className="text-[9px] font-semibold px-1.5 py-0.5 rounded bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400 flex items-center gap-0.5">
+                                        <ImageIcon size={9} />
+                                        <span>
+                                            {typeof detectedCount === 'number' && detectedCount > 0
+                                                ? `${detectedCount} deviasi`
+                                                : 'Foto Siap'}
+                                        </span>
+                                    </span>
+                                ) : isLocked ? (
+                                    <span className="text-[9px] font-medium px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-500 flex items-center gap-0.5">
+                                        <Lock size={8} />
+                                        <span>Terkunci</span>
+                                    </span>
+                                ) : (
+                                    <span className="text-[9px] font-medium px-1.5 py-0.5 rounded bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400">
+                                        Wajib Foto
+                                    </span>
+                                )}
+                            </div>
+                        </button>
+                    );
+                })}
             </div>
 
             {/* Upload & Preview Workspace */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start pt-1">
                 {/* Left Area: Photo Dropzone / Image Viewer */}
                 <div className="lg:col-span-6 space-y-2">
                     <input
@@ -1850,15 +1890,6 @@ export default function SmartPostureScanner({
                                             );
                                         })}
 
-                                    {/* Retake/clear button */}
-                                    <button
-                                        type="button"
-                                        onClick={handleClearPhoto}
-                                        className="absolute top-2 right-2 p-1 rounded-full bg-black/60 hover:bg-rose-600 text-white transition-colors cursor-pointer z-30"
-                                        title="Hapus foto"
-                                    >
-                                        <X size={13} />
-                                    </button>
                                 </div>
 
                                 {/* Floating View Badge overlay */}
@@ -1867,7 +1898,7 @@ export default function SmartPostureScanner({
                                 </div>
 
                                 {/* Floating Zoom & Pan Toolbar */}
-                                <div className="absolute top-2 right-10 flex items-center gap-1.5 bg-black/80 backdrop-blur-xs px-2 py-1 rounded-md border border-white/20 z-30 text-white text-[10px]">
+                                <div className="absolute top-2 right-2 flex items-center gap-1.5 bg-black/80 backdrop-blur-xs px-2 py-1 rounded-md border border-white/20 z-30 text-white text-[10px]">
                                     {activeLandmarks.length > 0 && (
                                         <button
                                             type="button"
@@ -1881,7 +1912,10 @@ export default function SmartPostureScanner({
                                     )}
 
                                     {/* Flexible Pin Size Selector */}
-                                    <div className="flex items-center gap-0.5 bg-white/10 rounded p-0.5" title="Ubah ukuran titik pin goniometer">
+                                    <div
+                                        className="flex items-center gap-0.5 bg-white/10 rounded p-0.5"
+                                        title="Ubah ukuran titik pin goniometer"
+                                    >
                                         {(['sm', 'md', 'lg'] as const).map((sz) => (
                                             <button
                                                 key={sz}
@@ -1987,100 +2021,157 @@ export default function SmartPostureScanner({
                                 </div>
                             </div>
 
-                            <p className="text-[10px] text-slate-400">
-                                <span>💡 Klik <strong>Deteksi Cerdas AI</strong> untuk memetakan garis anatomi langsung ke tubuh atlet pada foto ini.</span>
-                            </p>
+                            {/* Prominent Photo Control Toolbar (Ganti Foto, Galeri, Hapus) */}
+                            <div className="flex flex-wrap items-center justify-between gap-2 pt-0.5">
+                                <div className="flex items-center gap-2">
+                                    <button
+                                        type="button"
+                                        onClick={() => fileInputRef.current?.click()}
+                                        className="px-2.5 py-1.5 rounded-md text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer border bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 border-slate-200 dark:border-slate-700 shadow-2xs"
+                                        title="Unggah foto baru untuk menggantikan foto saat ini"
+                                    >
+                                        <Upload size={13} className="text-[#84cc16] dark:text-[#b4f031]" />
+                                        <span>Ganti Foto</span>
+                                    </button>
+
+                                    {galleryPhotos.length > 0 && (
+                                        <button
+                                            type="button"
+                                            onClick={() => setShowGalleryPicker(!showGalleryPicker)}
+                                            className={`px-2.5 py-1.5 rounded-md text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer border ${
+                                                showGalleryPicker
+                                                    ? 'bg-[#84cc16]/15 border-[#84cc16] text-[#84cc16] dark:text-[#b4f031]'
+                                                    : 'bg-slate-50 hover:bg-slate-100 dark:bg-slate-900 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-800'
+                                            }`}
+                                            title="Pilih dari galeri foto atlet"
+                                        >
+                                            <ImageIcon size={13} />
+                                            <span>Galeri ({galleryPhotos.length})</span>
+                                        </button>
+                                    )}
+                                </div>
+
+                                <button
+                                    type="button"
+                                    onClick={handleClearPhoto}
+                                    className="px-2.5 py-1.5 rounded-md text-xs font-semibold flex items-center gap-1 transition-colors cursor-pointer text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/30 border border-transparent hover:border-rose-200 dark:hover:border-rose-900"
+                                    title="Hapus foto saat ini"
+                                >
+                                    <Trash2 size={13} />
+                                    <span>Hapus</span>
+                                </button>
+                            </div>
+
+                            {/* Gallery Drawer when toggled */}
+                            {showGalleryPicker && galleryPhotos.length > 0 && (
+                                <div className="p-2.5 rounded-md bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 space-y-2">
+                                    <div className="flex items-center justify-between text-[11px] font-semibold text-slate-700 dark:text-slate-300">
+                                        <span>Pilih Foto dari Galeri Atlet:</span>
+                                        <button
+                                            type="button"
+                                            onClick={() => setShowGalleryPicker(false)}
+                                            className="text-slate-400 hover:text-slate-600 dark:hover:text-white"
+                                        >
+                                            <X size={12} />
+                                        </button>
+                                    </div>
+                                    <div className="flex gap-2 overflow-x-auto pb-1">
+                                        {galleryPhotos.map((gal) => (
+                                            <button
+                                                key={gal.id}
+                                                type="button"
+                                                onClick={() => {
+                                                    handleSelectGalleryPhoto(gal.image_path);
+                                                    setShowGalleryPicker(false);
+                                                }}
+                                                className={`w-14 h-14 rounded-md border overflow-hidden shrink-0 transition-all cursor-pointer ${
+                                                    selectedGalleryPhoto === gal.image_path
+                                                        ? 'border-[#84cc16] ring-2 ring-[#84cc16]/40'
+                                                        : 'border-slate-200 dark:border-slate-800 hover:border-[#84cc16]'
+                                                }`}
+                                            >
+                                                <img
+                                                    src={
+                                                        gal.image_path.startsWith('/')
+                                                            ? gal.image_path
+                                                            : `/storage/${gal.image_path}`
+                                                    }
+                                                    alt={gal.notes || 'Galeri'}
+                                                    className="w-full h-full object-cover"
+                                                />
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
                         </div>
                     ) : (
-                        <div
-                            onClick={() => fileInputRef.current?.click()}
-                            className="rounded-lg border-2 border-dashed border-slate-200 dark:border-slate-800 hover:border-[#84cc16] dark:hover:border-[#b4f031] p-6 flex flex-col items-center justify-center text-center cursor-pointer transition-colors group aspect-[4/3] bg-slate-50/50 dark:bg-slate-950/40"
-                        >
-                            <div className="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-900 flex items-center justify-center text-slate-400 group-hover:text-[#84cc16] dark:group-hover:text-[#b4f031] mb-2 transition-colors">
-                                <Camera size={18} />
+                        <div className="space-y-2">
+                            <div
+                                onClick={() => fileInputRef.current?.click()}
+                                className="rounded-lg border-2 border-dashed border-slate-200 dark:border-slate-800 hover:border-[#84cc16] dark:hover:border-[#b4f031] p-6 flex flex-col items-center justify-center text-center cursor-pointer transition-colors group aspect-[4/3] bg-slate-50/50 dark:bg-slate-950/40"
+                            >
+                                <div className="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-900 flex items-center justify-center text-slate-400 group-hover:text-[#84cc16] dark:group-hover:text-[#b4f031] mb-2 transition-colors">
+                                    <Camera size={18} />
+                                </div>
+                                <p className="text-xs font-bold text-slate-800 dark:text-slate-200">
+                                    Klik untuk unggah foto {selectedView}
+                                </p>
+                                <p className="text-[10.5px] text-slate-400 mt-0.5">
+                                    Wajib foto • Format PNG, JPG, atau WebP (maks. 10MB)
+                                </p>
                             </div>
-                            <p className="text-xs font-bold text-slate-800 dark:text-slate-200">
-                                Klik untuk unggah foto {selectedView}
-                            </p>
-                            <p className="text-[10px] text-slate-400 mt-0.5">
-                                Format PNG, JPG, atau WebP (maks. 10MB)
-                            </p>
+
+                            {/* Quick Select from Athlete's Gallery */}
+                            {galleryPhotos.length > 0 && (
+                                <div className="space-y-1.5 pt-1">
+                                    <span className="text-[10.5px] font-semibold text-slate-400 block">
+                                        Atau pilih langsung dari Galeri Atlet:
+                                    </span>
+                                    <div className="flex gap-1.5 overflow-x-auto pb-1">
+                                        {galleryPhotos.slice(0, 6).map((gal) => (
+                                            <button
+                                                key={gal.id}
+                                                type="button"
+                                                onClick={() => handleSelectGalleryPhoto(gal.image_path)}
+                                                className="w-12 h-12 rounded border border-slate-200 dark:border-slate-800 overflow-hidden shrink-0 hover:border-[#84cc16] dark:hover:border-[#b4f031] cursor-pointer"
+                                            >
+                                                <img
+                                                    src={
+                                                        gal.image_path.startsWith('/')
+                                                            ? gal.image_path
+                                                            : `/storage/${gal.image_path}`
+                                                    }
+                                                    alt={gal.notes || 'Galeri'}
+                                                    className="w-full h-full object-cover"
+                                                />
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
                         </div>
                     )}
 
-                    {/* Quick Select from Athlete's Gallery */}
-                    {galleryPhotos.length > 0 && !imagePreview && (
-                        <div className="space-y-1 pt-1">
-                            <span className="text-[10px] font-semibold text-slate-400 block">
-                                Atau pilih dari Galeri Atlet:
-                            </span>
-                            <div className="flex gap-1.5 overflow-x-auto pb-1">
-                                {galleryPhotos.slice(0, 5).map((gal) => (
-                                    <button
-                                        key={gal.id}
-                                        type="button"
-                                        onClick={() => handleSelectGalleryPhoto(gal.image_path)}
-                                        className="w-12 h-12 rounded border border-slate-200 dark:border-slate-800 overflow-hidden shrink-0 hover:border-[#84cc16] dark:hover:border-[#b4f031] cursor-pointer"
-                                    >
-                                        <img
-                                            src={
-                                                gal.image_path.startsWith('/')
-                                                    ? gal.image_path
-                                                    : `/storage/${gal.image_path}`
-                                            }
-                                            alt={gal.notes || 'Galeri'}
-                                            className="w-full h-full object-cover"
-                                        />
-                                    </button>
-                                ))}
-                            </div>
-                        </div>
-                    )}
-
-                    {/* Action Scan Buttons */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
+                    {/* Action Scan Button */}
+                    <div className="pt-1">
                         <button
                             type="button"
                             onClick={runScan}
                             disabled={isScanning || !imagePreview}
-                            className="py-2 px-3 rounded-md bg-[#84cc16] hover:bg-[#65a30d] dark:bg-[#b4f031] dark:hover:bg-[#a2dd26] text-white dark:text-slate-950 text-xs font-bold transition-all shadow-2xs flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-40"
+                            className="w-full py-2.5 px-4 rounded-md bg-[#84cc16] hover:bg-[#65a30d] dark:bg-[#b4f031] dark:hover:bg-[#a2dd26] text-slate-950 text-xs font-bold transition-all shadow-xs flex items-center justify-center gap-2 cursor-pointer disabled:opacity-40"
                         >
                             {isScanning ? (
                                 <>
-                                    <RefreshCw size={13} className="animate-spin" />
+                                    <RefreshCw size={14} className="animate-spin" />
                                     <span>Memetakan Anatomi Tubuh...</span>
                                 </>
                             ) : (
                                 <>
-                                    <Sparkles size={13} />
+                                    <Sparkles size={14} />
                                     <span>Deteksi Cerdas AI</span>
                                 </>
                             )}
-                        </button>
-
-                        <button
-                            type="button"
-                            onClick={() => {
-                                if (activeLandmarks.length === 0) {
-                                    setActiveLandmarks(getDefaultLandmarksForManual(selectedView));
-                                    setShowGoniometer(true);
-                                }
-                                const live = evaluateGoniometerDeviations();
-                                setScanResults({
-                                    engine: 'Goniometer Biomekanika Terkalibrasi',
-                                    summary:
-                                        live.length > 0
-                                            ? `Kalibrasi goniometer mendeteksi ${live.length} deviasi kompensasi pada ${selectedView}.`
-                                            : `Hasil Kalibrasi: Posisi persendian berada dalam rentang anatomi normal.`,
-                                    detected_compensations: live,
-                                });
-                                setCheckedResults(live.map((d) => d.compensation_id));
-                            }}
-                            disabled={!imagePreview}
-                            className="py-2 px-3 rounded-md bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-40 border border-slate-200 dark:border-slate-700"
-                        >
-                            <Crosshair size={13} />
-                            <span>Hitung Sudut Pin</span>
                         </button>
                     </div>
 
@@ -2096,9 +2187,9 @@ export default function SmartPostureScanner({
                 <div className="lg:col-span-6 space-y-3">
                     {scanResults ? (
                         <div className="space-y-3">
-                            {/* Summary Box */}
-                            <div className="p-2.5 rounded-md bg-slate-50/80 dark:bg-slate-950/60 border border-slate-200/80 dark:border-slate-800 space-y-1">
-                                <div className="flex items-center justify-between text-[10.5px]">
+                            {/* Summary Box & Visual Switcher */}
+                            <div className="p-2.5 rounded-md bg-slate-50/80 dark:bg-slate-950/60 border border-slate-200/80 dark:border-slate-800 space-y-2">
+                                <div className="flex flex-wrap items-center justify-between gap-1.5 text-[10.5px]">
                                     <span className="font-bold text-slate-800 dark:text-slate-200 flex items-center gap-1">
                                         <CheckCircle2 size={12} className="text-[#84cc16] dark:text-[#b4f031]" />
                                         <span>
@@ -2107,112 +2198,161 @@ export default function SmartPostureScanner({
                                                 : 'Postur Terverifikasi Normal'}
                                         </span>
                                     </span>
-                                    <span className="text-[9.5px] text-slate-400 font-mono truncate max-w-[160px]">
-                                        {scanResults.engine}
-                                    </span>
+                                    
+                                    {/* Tab switcher between List and Body Visual */}
+                                    <div className="flex items-center gap-1 p-0.5 bg-slate-200/70 dark:bg-slate-850 rounded-md border border-slate-200/80 dark:border-slate-800">
+                                        <button
+                                            type="button"
+                                            onClick={() => setAnalysisTab('list')}
+                                            className={`px-2 py-0.5 rounded text-[10.5px] font-semibold transition-all flex items-center gap-1 cursor-pointer ${
+                                                analysisTab === 'list'
+                                                    ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-2xs font-bold'
+                                                    : 'text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'
+                                            }`}
+                                        >
+                                            <ListChecks size={11} />
+                                            <span>Daftar Deviasi ({scanResults.detected_compensations.length})</span>
+                                        </button>
+                                        <button
+                                            type="button"
+                                            onClick={() => setAnalysisTab('visual')}
+                                            className={`px-2 py-0.5 rounded text-[10.5px] font-semibold transition-all flex items-center gap-1 cursor-pointer ${
+                                                analysisTab === 'visual'
+                                                    ? 'bg-white dark:bg-slate-800 text-[#84cc16] dark:text-[#b4f031] shadow-2xs font-bold'
+                                                    : 'text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'
+                                            }`}
+                                        >
+                                            <Activity size={11} />
+                                            <span>Visual Anatomi Tubuh</span>
+                                        </button>
+                                    </div>
                                 </div>
                                 <p className="text-[11px] text-slate-600 dark:text-slate-300 leading-relaxed">
                                     {scanResults.summary}
                                 </p>
                             </div>
 
-                            {/* Detected Compensations Cards List */}
-                            <div className="space-y-2 max-h-64 overflow-y-auto pr-1">
-                                {scanResults.detected_compensations.length === 0 ? (
-                                    <div className="p-4 rounded-md border border-dashed border-slate-200 dark:border-slate-800 text-center space-y-1 bg-slate-50/40 dark:bg-slate-950/20">
-                                        <CheckCircle2 size={20} className="text-emerald-500 mx-auto" />
-                                        <h5 className="text-xs font-bold text-slate-800 dark:text-slate-200">
-                                            Tidak Ada Deviasi Kompensasi
-                                        </h5>
-                                        <p className="text-[10.5px] text-slate-400 max-w-xs mx-auto">
-                                            Keselarasan kinetik chain atlet pada sudut pandang {selectedView} dinilai baik dan simetris tanpa kompensasi abnormal.
-                                        </p>
-                                    </div>
-                                ) : (
-                                    scanResults.detected_compensations.map((comp) => {
-                                        const isChecked = checkedResults.includes(comp.compensation_id);
-                                        return (
-                                            <div
-                                                key={comp.compensation_id}
-                                                onClick={() => toggleCheckResult(comp.compensation_id)}
-                                                className={`p-2.5 rounded-lg border transition-all cursor-pointer flex items-start gap-2.5 ${
-                                                    isChecked
-                                                        ? 'bg-white dark:bg-slate-900 border-[#84cc16] dark:border-[#b4f031] shadow-xs'
-                                                        : 'bg-slate-50/50 dark:bg-slate-950/40 border-slate-200 dark:border-slate-800 opacity-60'
-                                                }`}
-                                            >
-                                                <input
-                                                    type="checkbox"
-                                                    checked={isChecked}
-                                                    onChange={() => {}}
-                                                    className="mt-0.5 rounded border-slate-300 text-[#84cc16] focus:ring-[#84cc16] cursor-pointer"
-                                                />
-                                                <div className="space-y-1 min-w-0 flex-1">
-                                                    <div className="flex items-center justify-between gap-1">
-                                                        <h5 className="text-xs font-bold text-slate-900 dark:text-white truncate">
-                                                            {comp.name}
-                                                        </h5>
-                                                        <div className="flex items-center gap-1 shrink-0">
-                                                            {comp.angle_metric && (
-                                                                <span className="px-1.5 py-0.2 rounded text-[9px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
-                                                                    {comp.angle_metric}
+                            {/* Content based on selected tab */}
+                            {analysisTab === 'list' ? (
+                                <div className="space-y-2 max-h-64 overflow-y-auto pr-1">
+                                    {scanResults.detected_compensations.length === 0 ? (
+                                        <div className="p-4 rounded-md border border-dashed border-slate-200 dark:border-slate-800 text-center space-y-1 bg-slate-50/40 dark:bg-slate-950/20">
+                                            <CheckCircle2 size={20} className="text-emerald-500 mx-auto" />
+                                            <h5 className="text-xs font-bold text-slate-800 dark:text-slate-200">
+                                                Tidak Ada Deviasi Kompensasi
+                                            </h5>
+                                            <p className="text-[10.5px] text-slate-400 max-w-xs mx-auto">
+                                                Keselarasan kinetik chain atlet pada sudut pandang {selectedView} dinilai baik dan simetris tanpa kompensasi abnormal.
+                                            </p>
+                                        </div>
+                                    ) : (
+                                        scanResults.detected_compensations.map((comp) => {
+                                            const isChecked = selectedCompensationIds.includes(comp.compensation_id);
+                                            return (
+                                                <div
+                                                    key={comp.compensation_id}
+                                                    onClick={() => toggleCheckResult(comp.compensation_id)}
+                                                    className={`p-2.5 rounded-lg border transition-all cursor-pointer flex items-start gap-2.5 ${
+                                                        isChecked
+                                                            ? 'bg-white dark:bg-slate-900 border-[#84cc16] dark:border-[#b4f031] shadow-xs'
+                                                            : 'bg-slate-50/50 dark:bg-slate-950/40 border-slate-200 dark:border-slate-800 opacity-60'
+                                                    }`}
+                                                >
+                                                    <input
+                                                        type="checkbox"
+                                                        checked={isChecked}
+                                                        onChange={() => {}}
+                                                        className="mt-0.5 rounded border-slate-300 text-[#84cc16] focus:ring-[#84cc16] cursor-pointer"
+                                                    />
+                                                    <div className="space-y-1 min-w-0 flex-1">
+                                                        <div className="flex items-center justify-between gap-1">
+                                                            <h5 className="text-xs font-bold text-slate-900 dark:text-white truncate">
+                                                                {comp.name}
+                                                            </h5>
+                                                            <div className="flex items-center gap-1 shrink-0">
+                                                                {comp.angle_metric && (
+                                                                    <span className="px-1.5 py-0.2 rounded text-[9px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
+                                                                        {comp.angle_metric}
+                                                                    </span>
+                                                                )}
+                                                                <span className="px-1.5 py-0.2 rounded text-[9px] font-bold bg-[#84cc16]/15 dark:bg-[#b4f031]/15 text-[#84cc16] dark:text-[#b4f031]">
+                                                                    {comp.confidence}%
                                                                 </span>
-                                                            )}
-                                                            <span className="px-1.5 py-0.2 rounded text-[9px] font-bold bg-[#84cc16]/15 dark:bg-[#b4f031]/15 text-[#84cc16] dark:text-[#b4f031]">
-                                                                {comp.confidence}%
-                                                            </span>
+                                                            </div>
                                                         </div>
+
+                                                        {comp.clinical_rationale && (
+                                                            <p className="text-[10px] text-slate-500 dark:text-slate-400 leading-snug">
+                                                                {comp.clinical_rationale}
+                                                            </p>
+                                                        )}
+
+                                                        {/* Overactive / Underactive preview */}
+                                                        {(comp.overactive_muscles || comp.underactive_muscles) && (
+                                                            <div className="flex flex-wrap gap-2 pt-0.5 text-[9.5px]">
+                                                                {comp.overactive_muscles && (
+                                                                    <span className="text-rose-600 dark:text-rose-400 font-medium">
+                                                                        Tegang: {comp.overactive_muscles.split('\n')[0]}
+                                                                    </span>
+                                                                )}
+                                                                {comp.underactive_muscles && (
+                                                                    <span className="text-emerald-600 dark:text-emerald-400 font-medium">
+                                                                        Lemah: {comp.underactive_muscles.split('\n')[0]}
+                                                                    </span>
+                                                                )}
+                                                            </div>
+                                                        )}
                                                     </div>
-
-                                                    {comp.clinical_rationale && (
-                                                        <p className="text-[10px] text-slate-500 dark:text-slate-400 leading-snug">
-                                                            {comp.clinical_rationale}
-                                                        </p>
-                                                    )}
-
-                                                    {/* Overactive / Underactive preview */}
-                                                    {(comp.overactive_muscles || comp.underactive_muscles) && (
-                                                        <div className="flex flex-wrap gap-2 pt-0.5 text-[9.5px]">
-                                                            {comp.overactive_muscles && (
-                                                                <span className="text-rose-600 dark:text-rose-400 font-medium">
-                                                                    Tegang: {comp.overactive_muscles.split('\n')[0]}
-                                                                </span>
-                                                            )}
-                                                            {comp.underactive_muscles && (
-                                                                <span className="text-emerald-600 dark:text-emerald-400 font-medium">
-                                                                    Lemah: {comp.underactive_muscles.split('\n')[0]}
-                                                                </span>
-                                                            )}
-                                                        </div>
-                                                    )}
                                                 </div>
-                                            </div>
+                                            );
+                                        })
+                                    )}
+                                </div>
+                            ) : (
+                                <div className="p-3 bg-white dark:bg-slate-900 rounded-lg border border-slate-200/80 dark:border-slate-800 shadow-2xs">
+                                    {(() => {
+                                        const activeOrAll = scanResults.detected_compensations.filter((c) =>
+                                            selectedCompensationIds.includes(c.compensation_id)
                                         );
-                                    })
-                                )}
-                            </div>
+                                        const targetComps = activeOrAll.length > 0 ? activeOrAll : scanResults.detected_compensations;
+                                        const combinedOveractive = targetComps
+                                            .map((c) => c.overactive_muscles)
+                                            .filter(Boolean)
+                                            .join('\n');
+                                        const combinedUnderactive = targetComps
+                                            .map((c) => c.underactive_muscles)
+                                            .filter(Boolean)
+                                            .join('\n');
 
-                            {/* Apply Button */}
-                            {scanResults.detected_compensations.length > 0 && (
-                                <div className="flex items-center justify-between pt-1 border-t border-slate-100 dark:border-slate-800">
-                                    <span className="text-[10.5px] text-slate-500">
-                                        {checkedResults.length} kompensasi terpilih
-                                    </span>
-                                    <button
-                                        type="button"
-                                        onClick={applySelectedToForm}
-                                        className="py-1.5 px-3 rounded-md bg-slate-900 hover:bg-slate-800 dark:bg-white dark:hover:bg-slate-100 text-white dark:text-slate-900 text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 shadow-xs"
-                                    >
-                                        <CheckCircle2 size={12} className="text-[#84cc16] dark:text-[#84cc16]" />
-                                        <span>Terapkan ke Form Penilaian</span>
-                                    </button>
+                                        const combinedInjuries = targetComps
+                                            .map((c) => c.possible_injuries)
+                                            .filter(Boolean)
+                                            .join('\n');
+
+                                        return (
+                                            <BodyMuscleVisualizer
+                                                overactiveMuscles={combinedOveractive}
+                                                underactiveMuscles={combinedUnderactive}
+                                                possibleInjuries={combinedInjuries}
+                                                category={currentStep.title}
+                                                gender={athleteGender}
+                                                showModeSwitcher={true}
+                                            />
+                                        );
+                                    })()}
                                 </div>
                             )}
 
-                            {appliedNotification && (
-                                <div className="p-2 rounded bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-300 text-[11px] font-semibold flex items-center gap-1.5 animate-in fade-in-50">
-                                    <CheckCircle2 size={13} className="shrink-0 text-emerald-500" />
-                                    <span>Kompensasi terdeteksi telah otomatis dicentang di lembar formulir di bawah!</span>
+                            {/* Real-time sync indicator */}
+                            {scanResults.detected_compensations.length > 0 && (
+                                <div className="flex items-center justify-between pt-1 border-t border-slate-100 dark:border-slate-800 text-[10.5px]">
+                                    <span className="flex items-center gap-1 text-[#84cc16] dark:text-[#b4f031] font-medium">
+                                        <CheckCircle2 size={12} />
+                                        <span>Otomatis terhubung ke formulir di bawah</span>
+                                    </span>
+                                    <span className="text-slate-500 dark:text-slate-400">
+                                        {scanResults.detected_compensations.filter((c) => selectedCompensationIds.includes(c.compensation_id)).length} deviasi aktif
+                                    </span>
                                 </div>
                             )}
                         </div>
@@ -2255,7 +2395,13 @@ export default function SmartPostureScanner({
                         <button
                             type="button"
                             onClick={goToNextStep}
-                            className="px-3.5 py-1.5 rounded-md bg-[#84cc16] hover:bg-[#74be09] dark:bg-[#b4f031] dark:hover:bg-[#a3e421] text-slate-950 text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 shadow-xs"
+                            disabled={!hasActivePhoto}
+                            className={`px-3.5 py-1.5 rounded-md text-xs font-bold transition-all flex items-center gap-1.5 shadow-xs ${
+                                hasActivePhoto
+                                    ? 'bg-[#84cc16] hover:bg-[#74be09] dark:bg-[#b4f031] dark:hover:bg-[#a3e421] text-slate-950 cursor-pointer'
+                                    : 'bg-slate-100 dark:bg-slate-850 text-slate-400 dark:text-slate-600 border border-slate-200 dark:border-slate-800 cursor-not-allowed opacity-60'
+                            }`}
+                            title={!hasActivePhoto ? `Wajib unggah atau pilih foto untuk ${currentStep.title} (${currentStep.subtitle}) terlebih dahulu sebelum melanjutkan` : undefined}
                         >
                             <span>Lanjut ke Langkah {nextStep?.stepNumber}: {nextStep?.title} ({nextStep?.subtitle})</span>
                             <ChevronRight size={14} />

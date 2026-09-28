@@ -24,8 +24,7 @@ class AthleteController extends Controller
         if ($search) {
             $query->where(function ($q) use ($search) {
                 $q->where('full_name', 'like', "%{$search}%")
-                  ->orWhere('athlete_code', 'like', "%{$search}%")
-                  ->orWhere('nickname', 'like', "%{$search}%");
+                  ->orWhere('athlete_code', 'like', "%{$search}%");
             });
         }
 
@@ -57,7 +56,6 @@ class AthleteController extends Controller
         $validated = $request->validate([
             'athlete_code' => 'required|string|unique:athletes,athlete_code|max:50',
             'full_name' => 'required|string|max:255',
-            'nickname' => 'nullable|string|max:100',
             'gender' => 'required|in:L,P',
             'age' => 'required|integer|min:5|max:120',
             'height_cm' => 'nullable|numeric|min:50|max:250',
@@ -112,7 +110,6 @@ class AthleteController extends Controller
         $validated = $request->validate([
             'athlete_code' => 'required|string|max:50|unique:athletes,athlete_code,' . $athlete->id,
             'full_name' => 'required|string|max:255',
-            'nickname' => 'nullable|string|max:100',
             'gender' => 'required|in:L,P',
             'age' => 'required|integer|min:5|max:120',
             'height_cm' => 'nullable|numeric|min:50|max:250',
