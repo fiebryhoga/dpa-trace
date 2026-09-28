@@ -78,7 +78,7 @@ function CompensationCard({
     const exerciseCount = item.exercises?.length || 0;
 
     return (
-        <div className="group bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 hover:shadow-xs transition-all duration-200 flex flex-col justify-between overflow-hidden">
+        <div className="group bg-white dark:bg-slate-900 rounded-md border border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 hover:shadow-xs transition-all duration-200 flex flex-col justify-between overflow-hidden">
             <div>
                 {/* ── Visual Media / Image Banner ── */}
                 {image ? (
@@ -90,7 +90,7 @@ function CompensationCard({
                         />
                         {item.checkpoint && (
                             <div className="absolute top-2.5 left-2.5">
-                                <span className="inline-flex items-center text-[10px] font-medium text-slate-700 dark:text-slate-300 bg-white/95 dark:bg-slate-900/95 backdrop-blur-xs px-2 py-0.5 rounded shadow-2xs border border-slate-200/80 dark:border-slate-800">
+                                <span className="inline-flex items-center text-[10px] font-medium text-slate-700 dark:text-slate-300 bg-white/95 dark:bg-slate-900/95 backdrop-blur-xs px-2 py-0.5 rounded-md shadow-2xs border border-slate-200/80 dark:border-slate-800">
                                     {item.checkpoint}
                                 </span>
                             </div>
@@ -99,7 +99,7 @@ function CompensationCard({
                 ) : (
                     <div className="px-4 pt-3.5 pb-0 flex items-center justify-between gap-2">
                         {item.checkpoint ? (
-                            <span className="inline-flex items-center text-[10px] font-medium text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded border border-slate-200/60 dark:border-slate-700/60">
+                            <span className="inline-flex items-center text-[10px] font-medium text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded-md border border-slate-200/60 dark:border-slate-700/60">
                                 {item.checkpoint}
                             </span>
                         ) : (
@@ -283,7 +283,7 @@ export default function CompensationsIndex({
 
                 {/* ─── FILTER SEGMENTED TABS (SHADCN UI STYLE) ─── */}
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                    <div className="inline-flex p-1 bg-slate-100 dark:bg-slate-900 rounded-lg border border-slate-200/80 dark:border-slate-800 overflow-x-auto max-w-full">
+                    <div className="inline-flex p-1 bg-slate-100 dark:bg-slate-900 rounded-md border border-slate-200/80 dark:border-slate-800 overflow-x-auto max-w-full">
                         <button
                             type="button"
                             onClick={() => setSelectedCategory('All')}
@@ -294,7 +294,7 @@ export default function CompensationsIndex({
                             }`}
                         >
                             <span>Semua Kategori</span>
-                            <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-slate-200/70 dark:bg-slate-700/70 text-slate-600 dark:text-slate-300">
+                            <span className="text-[10px] px-1.5 py-0.2 rounded-md bg-slate-200/70 dark:bg-slate-700/70 text-slate-600 dark:text-slate-300">
                                 {compensations.length}
                             </span>
                         </button>
@@ -313,7 +313,7 @@ export default function CompensationsIndex({
                                     }`}
                                 >
                                     <span>{cat}</span>
-                                    <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-slate-200/70 dark:bg-slate-700/70 text-slate-600 dark:text-slate-300">
+                                    <span className="text-[10px] px-1.5 py-0.2 rounded-md bg-slate-200/70 dark:bg-slate-700/70 text-slate-600 dark:text-slate-300">
                                         {count}
                                     </span>
                                 </button>
@@ -360,7 +360,7 @@ export default function CompensationsIndex({
                                             <h3 className="text-xs font-bold text-slate-900 dark:text-white">
                                                 {info.label}
                                             </h3>
-                                            <span className="px-2 py-0.5 rounded-full text-[10px] font-medium bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">
+                                            <span className="px-2 py-0.5 rounded-md text-[10px] font-medium bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">
                                                 {categoryItems.length} kompensasi
                                             </span>
                                         </div>
