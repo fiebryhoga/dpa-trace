@@ -41,29 +41,18 @@ export default function DpaIndex({
     testedCount = 0,
 }: DpaIndexProps) {
     const [searchQuery, setSearchQuery] = useState(filters.search || '');
-    const [statusFilter, setStatusFilter] = useState<'all' | 'tested' | 'untested'>('all');
     const [sortBy, setSortBy] = useState(filters.sort || 'name_asc');
 
-    const untestedCount = Math.max(0, totalCount - testedCount);
     const coveragePercentage = totalCount > 0 ? Math.round((testedCount / totalCount) * 100) : 0;
 
     const filteredAthletes = useMemo(() => {
         return (athletes || [])
             .filter((athlete) => {
-                const matchesSearch =
+                return (
                     !searchQuery.trim() ||
                     athlete.full_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                    athlete.athlete_code?.toLowerCase().includes(searchQuery.toLowerCase());
-
-                const totalRecords = athlete.total_records || 0;
-                let matchesStatus = true;
-                if (statusFilter === 'tested') {
-                    matchesStatus = totalRecords > 0;
-                } else if (statusFilter === 'untested') {
-                    matchesStatus = totalRecords === 0;
-                }
-
-                return matchesSearch && matchesStatus;
+                    athlete.athlete_code?.toLowerCase().includes(searchQuery.toLowerCase())
+                );
             })
             .sort((a, b) => {
                 if (sortBy === 'name_asc') return (a.full_name || '').localeCompare(b.full_name || '');
@@ -71,13 +60,12 @@ export default function DpaIndex({
                 if (sortBy === 'records_desc') return (b.total_records || 0) - (a.total_records || 0);
                 return 0;
             });
-    }, [athletes, searchQuery, statusFilter, sortBy]);
+    }, [athletes, searchQuery, sortBy]);
 
-    const isFiltered = searchQuery.trim() !== '' || statusFilter !== 'all' || sortBy !== 'name_asc';
+    const isFiltered = searchQuery.trim() !== '' || sortBy !== 'name_asc';
 
     const resetFilters = () => {
         setSearchQuery('');
-        setStatusFilter('all');
         setSortBy('name_asc');
     };
 
@@ -86,7 +74,7 @@ export default function DpaIndex({
             <Head title="Analisis DPA - Dynamic Posture Assessment" />
 
             <div className="space-y-5 pb-16">
-                {/* ─── PAGE HEADER WITH SEARCH, FILTER & SORT ─── */}
+                {/* ─── PAGE HEADER WITH SEARCH & SORT ─── */}
                 <PageHeader
                     icon={Activity}
                     title={
@@ -97,43 +85,6 @@ export default function DpaIndex({
                     description="Evaluasi pola gerak atlet, identifikasi deviasi kompensasi anatomi (overactive & underactive), dan tentukan protokol korektif berbasis biomekanika."
                     actions={
                         <div className="flex items-center gap-2 flex-wrap">
-                            {/* Status Filter Tab Group */}
-                            <div className="inline-flex p-0.5 bg-slate-100 dark:bg-slate-800 rounded-md border border-slate-200/80 dark:border-slate-700/60">
-                                <button
-                                    type="button"
-                                    onClick={() => setStatusFilter('all')}
-                                    className={`px-2.5 py-1 rounded-md text-xs transition-all whitespace-nowrap cursor-pointer ${
-                                        statusFilter === 'all'
-                                            ? 'bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-2xs font-semibold'
-                                            : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white font-medium'
-                                    }`}
-                                >
-                                    Semua ({totalCount})
-                                </button>
-                                <button
-                                    type="button"
-                                    onClick={() => setStatusFilter('tested')}
-                                    className={`px-2.5 py-1 rounded-md text-xs transition-all whitespace-nowrap cursor-pointer ${
-                                        statusFilter === 'tested'
-                                            ? 'bg-white dark:bg-slate-900 text-emerald-600 dark:text-emerald-400 shadow-2xs font-semibold'
-                                            : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white font-medium'
-                                    }`}
-                                >
-                                    Sudah Dites ({testedCount})
-                                </button>
-                                <button
-                                    type="button"
-                                    onClick={() => setStatusFilter('untested')}
-                                    className={`px-2.5 py-1 rounded-md text-xs transition-all whitespace-nowrap cursor-pointer ${
-                                        statusFilter === 'untested'
-                                            ? 'bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-2xs font-semibold'
-                                            : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white font-medium'
-                                    }`}
-                                >
-                                    Belum Dites ({untestedCount})
-                                </button>
-                            </div>
-
                             {/* Search Input */}
                             <div className="relative w-52 sm:w-60">
                                 <Search className="w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />

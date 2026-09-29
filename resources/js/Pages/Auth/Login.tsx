@@ -224,7 +224,7 @@ export default function Login({ status, canResetPassword = true }: LoginProps) {
 
                 {/* Subdued Footer */}
                 <div className="text-center text-xs text-zinc-400 dark:text-zinc-600 pt-4">
-                    <p>© {new Date().getFullYear()} Athlete DPA • Dynamic Posture Assessment</p>
+                    <p>© {new Date().getFullYear()} PKO Unesa x Olympus Training Surabaya</p>
                 </div>
             </div>
         </div>

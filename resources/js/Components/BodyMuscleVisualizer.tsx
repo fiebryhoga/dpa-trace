@@ -382,8 +382,9 @@ export default function BodyMuscleVisualizer({
 
                     {/* Anatomical Canvas for Injuries */}
                     <div
-                        className="relative flex items-center justify-center gap-6 sm:gap-10 py-2 bg-slate-50/70 dark:bg-slate-950/60 rounded-lg border border-slate-100 dark:border-slate-800 select-none"
+                        className="relative flex items-center justify-center gap-6 sm:gap-10 py-2.5 bg-slate-50/70 dark:bg-slate-950/60 rounded-lg border border-slate-100 dark:border-slate-800 select-none cursor-pointer min-h-[185px]"
                         onMouseMove={(e) => handleCanvasMouseMove(e, 'injuries')}
+                        onClick={(e) => handleCanvasMouseMove(e, 'injuries')}
                         onMouseLeave={handleCanvasMouseLeave}
                     >
                         {(viewMode === 'both' || viewMode === 'front') && (
@@ -424,33 +425,32 @@ export default function BodyMuscleVisualizer({
                             </div>
                         )}
 
-                        {/* Interactive Floating Hover Tooltip (Injuries) */}
+                        {/* Compact Floating Modal for Injuries (Positioned on opposite side so it never covers the body) */}
                         {hoveredInfo && hoveredInfo.type === 'injuries' && (() => {
                             const findings = getFindingsForSlug(hoveredInfo.slug);
+                            const isLeftSide = hoveredInfo.x < 150;
                             return (
                                 <div
-                                    className="absolute z-50 pointer-events-none p-2.5 bg-slate-900/95 dark:bg-slate-900 text-white rounded-md shadow-xl border border-slate-700/80 max-w-[240px] text-left animate-in fade-in zoom-in-95 duration-150 backdrop-blur-xs"
-                                    style={{
-                                        left: Math.min(Math.max(hoveredInfo.x + 12, 10), 220),
-                                        top: Math.max(hoveredInfo.y - 45, 10),
-                                    }}
+                                    className={`absolute z-50 p-2.5 bg-white/95 dark:bg-slate-900/95 text-slate-900 dark:text-white rounded-md shadow-2xl border border-slate-200 dark:border-slate-700/80 max-w-[210px] text-left pointer-events-none transition-all duration-150 animate-in fade-in zoom-in-95 backdrop-blur-xs top-1 max-h-[220px] overflow-y-auto ${
+                                        isLeftSide ? 'right-1' : 'left-1'
+                                    }`}
                                 >
-                                    <div className="pb-1 mb-1 border-b border-slate-700 flex items-center justify-between gap-1.5">
-                                        <span className="font-bold text-[11px] text-amber-400">
+                                    <div className="pb-1 mb-1 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between gap-1.5">
+                                        <span className="font-bold text-[11px] text-amber-600 dark:text-amber-400">
                                             {findings.label.id}
                                         </span>
-                                        <span className="text-[9px] text-slate-400">
+                                        <span className="text-[9px] text-slate-500 dark:text-slate-400 truncate">
                                             {findings.label.en}
                                         </span>
                                     </div>
 
                                     {findings.injuries.length > 0 ? (
-                                        <div className="space-y-1">
-                                            <div className="flex items-center gap-1 text-[10px] font-semibold text-amber-300">
-                                                <ShieldAlert size={10} />
+                                        <div className="space-y-0.5">
+                                            <div className="flex items-center gap-1 text-[10px] font-semibold text-amber-600 dark:text-amber-300">
+                                                <ShieldAlert size={10} className="shrink-0" />
                                                 <span>Risiko Cedera:</span>
                                             </div>
-                                            <ul className="text-[10px] space-y-0.5 pl-2 border-l border-amber-500/40 text-slate-200">
+                                            <ul className="text-[9.5px] space-y-0.5 pl-1.5 border-l border-amber-500/40 text-slate-700 dark:text-slate-200">
                                                 {findings.injuries.map((item, idx) => (
                                                     <li key={idx} className="leading-tight">
                                                         • {item}
@@ -459,7 +459,7 @@ export default function BodyMuscleVisualizer({
                                             </ul>
                                         </div>
                                     ) : (
-                                        <p className="text-[10px] text-slate-400 italic">
+                                        <p className="text-[9.5px] text-slate-500 dark:text-slate-400 italic">
                                             Tidak ada risiko cedera pada area ini.
                                         </p>
                                     )}
@@ -502,8 +502,9 @@ export default function BodyMuscleVisualizer({
 
                     {/* Anatomical Canvas for Muscles */}
                     <div
-                        className="relative flex items-center justify-center gap-6 sm:gap-10 py-2 bg-slate-50/70 dark:bg-slate-950/60 rounded-lg border border-slate-100 dark:border-slate-800 select-none"
+                        className="relative flex items-center justify-center gap-6 sm:gap-10 py-2.5 bg-slate-50/70 dark:bg-slate-950/60 rounded-lg border border-slate-100 dark:border-slate-800 select-none cursor-pointer min-h-[185px]"
                         onMouseMove={(e) => handleCanvasMouseMove(e, 'muscles')}
+                        onClick={(e) => handleCanvasMouseMove(e, 'muscles')}
                         onMouseLeave={handleCanvasMouseLeave}
                     >
                         {(viewMode === 'both' || viewMode === 'front') && (
@@ -544,68 +545,70 @@ export default function BodyMuscleVisualizer({
                             </div>
                         )}
 
-                        {/* Interactive Floating Hover Tooltip (Muscles) */}
+                        {/* Compact Floating Modal for Muscles (Positioned on opposite side so it never covers the body) */}
                         {hoveredInfo && hoveredInfo.type === 'muscles' && (() => {
                             const findings = getFindingsForSlug(hoveredInfo.slug);
                             const hasAny = findings.overactive.length > 0 || findings.underactive.length > 0;
+                            const isLeftSide = hoveredInfo.x < 150;
                             return (
                                 <div
-                                    className="absolute z-50 pointer-events-none p-2.5 bg-slate-900/95 dark:bg-slate-900 text-white rounded-md shadow-xl border border-slate-700/80 max-w-[240px] text-left animate-in fade-in zoom-in-95 duration-150 backdrop-blur-xs"
-                                    style={{
-                                        left: Math.min(Math.max(hoveredInfo.x + 12, 10), 220),
-                                        top: Math.max(hoveredInfo.y - 45, 10),
-                                    }}
+                                    className={`absolute z-50 p-2.5 bg-white/95 dark:bg-slate-900/95 text-slate-900 dark:text-white rounded-md shadow-2xl border border-slate-200 dark:border-slate-700/80 max-w-[210px] text-left pointer-events-none transition-all duration-150 animate-in fade-in zoom-in-95 backdrop-blur-xs top-1 max-h-[220px] overflow-y-auto ${
+                                        isLeftSide ? 'right-1' : 'left-1'
+                                    }`}
                                 >
-                                    <div className="pb-1 mb-1 border-b border-slate-700 flex items-center justify-between gap-1.5">
-                                        <span className="font-bold text-[11px] text-white">
+                                    <div className="pb-1 mb-1 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between gap-1.5">
+                                        <span className="font-bold text-[11px] text-[#65a30d] dark:text-[#b4f031]">
                                             {findings.label.id}
                                         </span>
-                                        <span className="text-[9px] text-slate-400">
+                                        <span className="text-[9px] text-slate-500 dark:text-slate-400 truncate">
                                             {findings.label.en}
                                         </span>
                                     </div>
 
-                                    {findings.overactive.length > 0 && (
-                                        <div className="space-y-0.5 mb-1.5">
-                                            <div className="flex items-center gap-1 text-[10px] font-semibold text-rose-400">
-                                                <Flame size={10} />
-                                                <span>Overactive (Tegang):</span>
-                                            </div>
-                                            <ul className="text-[10px] space-y-0.5 pl-2 border-l border-rose-500/40 text-slate-200">
-                                                {findings.overactive.map((item, idx) => (
-                                                    <li key={idx} className="leading-tight">
-                                                        • {item}
-                                                    </li>
-                                                ))}
-                                            </ul>
-                                        </div>
-                                    )}
+                                    {hasAny ? (
+                                        <div className="space-y-1">
+                                            {findings.overactive.length > 0 && (
+                                                <div className="space-y-0.5">
+                                                    <div className="flex items-center gap-1 text-[10px] font-semibold text-rose-600 dark:text-rose-400">
+                                                        <Flame size={10} className="shrink-0" />
+                                                        <span>Overactive (Tegang):</span>
+                                                    </div>
+                                                    <ul className="text-[9.5px] space-y-0.5 pl-1.5 border-l border-rose-500/40 text-slate-700 dark:text-slate-200">
+                                                        {findings.overactive.map((item, idx) => (
+                                                            <li key={idx} className="leading-tight">
+                                                                • {item}
+                                                            </li>
+                                                        ))}
+                                                    </ul>
+                                                </div>
+                                            )}
 
-                                    {findings.underactive.length > 0 && (
-                                        <div className="space-y-0.5">
-                                            <div className="flex items-center gap-1 text-[10px] font-semibold text-emerald-400">
-                                                <Dumbbell size={10} />
-                                                <span>Underactive (Lemah):</span>
-                                            </div>
-                                            <ul className="text-[10px] space-y-0.5 pl-2 border-l border-emerald-500/40 text-slate-200">
-                                                {findings.underactive.map((item, idx) => (
-                                                    <li key={idx} className="leading-tight">
-                                                        • {item}
-                                                    </li>
-                                                ))}
-                                            </ul>
+                                            {findings.underactive.length > 0 && (
+                                                <div className="space-y-0.5">
+                                                    <div className="flex items-center gap-1 text-[10px] font-semibold text-emerald-600 dark:text-emerald-400">
+                                                        <Dumbbell size={10} className="shrink-0" />
+                                                        <span>Underactive (Lemah):</span>
+                                                    </div>
+                                                    <ul className="text-[9.5px] space-y-0.5 pl-1.5 border-l border-emerald-500/40 text-slate-700 dark:text-slate-200">
+                                                        {findings.underactive.map((item, idx) => (
+                                                            <li key={idx} className="leading-tight">
+                                                                • {item}
+                                                            </li>
+                                                        ))}
+                                                    </ul>
+                                                </div>
+                                            )}
                                         </div>
-                                    )}
-
-                                    {!hasAny && (
-                                        <p className="text-[10px] text-slate-400 italic">
-                                            Kondisi normal / seimbang.
+                                    ) : (
+                                        <p className="text-[9.5px] text-slate-500 dark:text-slate-400 italic">
+                                            Normal / seimbang.
                                         </p>
                                     )}
                                 </div>
                             );
                         })()}
                     </div>
+
 
                     {/* Legend (Hidden if hideLegend is true) */}
                     {!hideLegend && (
