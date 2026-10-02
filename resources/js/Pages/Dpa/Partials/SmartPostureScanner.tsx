@@ -32,6 +32,7 @@ import {
 } from 'lucide-react';
 import { AthleteGallery, DpaCompensation } from '@/types';
 import { detectPoseFromImage } from '@/lib/poseDetection';
+import { generateAnnotatedPostureImage, LandmarkPoint } from '@/lib/postureCanvasExporter';
 import BodyMuscleVisualizer from '@/Components/BodyMuscleVisualizer';
 
 interface DetectedCompensation {
@@ -48,12 +49,12 @@ interface DetectedCompensation {
     possible_injuries?: string;
 }
 
-interface LandmarkPoint {
-    id: string;
-    name: string;
-    x: number; // percentage 0-100 relative to image
-    y: number; // percentage 0-100 relative to image
-    color?: string;
+export interface InitialStepDataItem {
+    imagePath: string;
+    originalImagePath?: string;
+    landmarks?: LandmarkPoint[];
+    scanResults?: any;
+    showGoniometer?: boolean;
 }
 
 interface SmartPostureScannerProps {
@@ -62,8 +63,11 @@ interface SmartPostureScannerProps {
     availableCompensations: DpaCompensation[];
     galleryPhotos?: AthleteGallery[];
     selectedCompensationIds: number[];
+    initialStepData?: Record<string, InitialStepDataItem>;
     onApplyCompensations: (newCompensationIds: number[]) => void;
     onStepPhotosChange?: (photos: Record<string, File>) => void;
+    onStepAnnotatedPhotosChange?: (annotatedPhotos: Record<string, File>) => void;
+    onStepMetadataChange?: (metadata: Record<string, any>) => void;
 }
 
 type ViewType = 'Anterior View' | 'Lateral View' | 'Posterior View' | 'Single Leg';
@@ -211,8 +215,11 @@ export default function SmartPostureScanner({
     availableCompensations = [],
     galleryPhotos = [],
     selectedCompensationIds = [],
+    initialStepData,
     onApplyCompensations,
     onStepPhotosChange,
+    onStepAnnotatedPhotosChange,
+    onStepMetadataChange,
 }: SmartPostureScannerProps) {
     const [selectedView, setSelectedView] = useState<ViewType>('Anterior View');
     const [imageFile, setImageFile] = useState<File | null>(null);
@@ -253,6 +260,52 @@ export default function SmartPostureScanner({
 
     // Visual Reference Guide Modal
     const [showGuideModal, setShowGuideModal] = useState(false);
+
+    // Photos & Metadata dictionary for all steps to submit with assessment form
+    const [stepPhotos, setStepPhotos] = useState<Record<string, File>>({});
+    const [stepAnnotatedPhotos, setStepAnnotatedPhotos] = useState<Record<string, File>>({});
+    const [stepMetadata, setStepMetadata] = useState<Record<string, any>>({});
+
+    // Load initial data (e.g. from existing assessment in edit mode)
+    useEffect(() => {
+        if (initialStepData && Object.keys(initialStepData).length > 0) {
+            setStepCache((prev) => {
+                const nextCache = { ...prev };
+                (Object.keys(initialStepData) as ViewType[]).forEach((viewKey) => {
+                    const item = initialStepData[viewKey];
+                    if (item && item.imagePath) {
+                        const preview = item.imagePath.startsWith('/') || item.imagePath.startsWith('http') || item.imagePath.startsWith('blob:') || item.imagePath.startsWith('data:')
+                            ? item.imagePath
+                            : `/storage/${item.imagePath}`;
+                        nextCache[viewKey] = {
+                            imageFile: null,
+                            imagePreview: preview,
+                            selectedGalleryPhoto: item.imagePath,
+                            landmarks: item.landmarks || [],
+                            scanResults: item.scanResults || null,
+                            checkedResults: [],
+                            showGoniometer: Boolean(item.showGoniometer ?? (item.landmarks && item.landmarks.length > 0)),
+                        };
+                    }
+                });
+                return nextCache;
+            });
+
+            // If current view has initial data, load it immediately
+            const initialCurrent = initialStepData[selectedView];
+            if (initialCurrent && initialCurrent.imagePath) {
+                const preview = initialCurrent.imagePath.startsWith('/') || initialCurrent.imagePath.startsWith('http') || initialCurrent.imagePath.startsWith('blob:') || initialCurrent.imagePath.startsWith('data:')
+                    ? initialCurrent.imagePath
+                    : `/storage/${initialCurrent.imagePath}`;
+                setImagePreview(preview);
+                setSelectedGalleryPhoto(initialCurrent.imagePath);
+                if (initialCurrent.landmarks && initialCurrent.landmarks.length > 0) {
+                    setActiveLandmarks(initialCurrent.landmarks);
+                    setShowGoniometer(initialCurrent.showGoniometer ?? true);
+                }
+            }
+        }
+    }, [initialStepData]);
 
     const fileInputRef = useRef<HTMLInputElement>(null);
     const imgElementRef = useRef<HTMLImageElement>(null);
@@ -453,8 +506,91 @@ export default function SmartPostureScanner({
         ];
     }, []);
 
-    // Photos dictionary for all steps to submit with assessment form
-    const [stepPhotos, setStepPhotos] = useState<Record<string, File>>({});
+    // Helper to generate and sync annotated photo & metadata
+    const syncStepAnnotatedPhoto = useCallback(
+        async (
+            view: ViewType,
+            imgSource: string | File | null,
+            landmarks: LandmarkPoint[],
+            showGonio: boolean,
+            scanRes: any
+        ) => {
+            if (!imgSource || landmarks.length === 0) {
+                setStepAnnotatedPhotos((prev) => {
+                    const next = { ...prev };
+                    delete next[view];
+                    if (onStepAnnotatedPhotosChange) onStepAnnotatedPhotosChange(next);
+                    return next;
+                });
+                return;
+            }
+
+            try {
+                const annotatedFile = await generateAnnotatedPostureImage(
+                    imgSource,
+                    landmarks,
+                    view,
+                    {
+                        showGoniometer: showGonio,
+                        detectedCompensations: scanRes?.detected_compensations || [],
+                    }
+                );
+
+                if (annotatedFile) {
+                    setStepAnnotatedPhotos((prev) => {
+                        const next = { ...prev, [view]: annotatedFile };
+                        if (onStepAnnotatedPhotosChange) onStepAnnotatedPhotosChange(next);
+                        return next;
+                    });
+                }
+
+                // Sync metadata
+                setStepMetadata((prev) => {
+                    const next = {
+                        ...prev,
+                        [view]: {
+                            view,
+                            landmarks,
+                            showGoniometer: showGonio,
+                            detectedCompensations: scanRes?.detected_compensations || [],
+                        },
+                    };
+                    if (onStepMetadataChange) onStepMetadataChange(next);
+                    return next;
+                });
+            } catch (err) {
+                console.error('Error generating annotated image for step:', view, err);
+            }
+        },
+        [onStepAnnotatedPhotosChange, onStepMetadataChange]
+    );
+
+    // Debounced automatic generation of annotated image whenever landmarks or options change
+    useEffect(() => {
+        if (!imagePreview && !imageFile && !selectedGalleryPhoto) return;
+        if (activeLandmarks.length === 0) return;
+
+        const timer = setTimeout(() => {
+            syncStepAnnotatedPhoto(
+                selectedView,
+                imageFile || imagePreview || selectedGalleryPhoto,
+                activeLandmarks,
+                showGoniometer,
+                scanResults
+            );
+        }, 350);
+
+        return () => clearTimeout(timer);
+    }, [
+        activeLandmarks,
+        imagePreview,
+        imageFile,
+        selectedGalleryPhoto,
+        showGoniometer,
+        selectedView,
+        scanResults,
+        syncStepAnnotatedPhoto,
+    ]);
 
     const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -481,7 +617,9 @@ export default function SmartPostureScanner({
     const handleSelectGalleryPhoto = (photoPath: string) => {
         setSelectedGalleryPhoto(photoPath);
         setImageFile(null);
-        const url = photoPath.startsWith('/') ? photoPath : `/storage/${photoPath}`;
+        const url = photoPath.startsWith('/') || photoPath.startsWith('http') || photoPath.startsWith('blob:') || photoPath.startsWith('data:')
+            ? photoPath
+            : `/storage/${photoPath}`;
         setImagePreview(url);
         setScanResults(null);
         setErrorMsg(null);
@@ -499,11 +637,25 @@ export default function SmartPostureScanner({
         setShowGoniometer(false);
         if (fileInputRef.current) fileInputRef.current.value = '';
 
-        const updated = { ...stepPhotos };
-        delete updated[selectedView];
-        setStepPhotos(updated);
+        const updatedPhotos = { ...stepPhotos };
+        delete updatedPhotos[selectedView];
+        setStepPhotos(updatedPhotos);
         if (onStepPhotosChange) {
-            onStepPhotosChange(updated);
+            onStepPhotosChange(updatedPhotos);
+        }
+
+        const updatedAnnotated = { ...stepAnnotatedPhotos };
+        delete updatedAnnotated[selectedView];
+        setStepAnnotatedPhotos(updatedAnnotated);
+        if (onStepAnnotatedPhotosChange) {
+            onStepAnnotatedPhotosChange(updatedAnnotated);
+        }
+
+        const updatedMeta = { ...stepMetadata };
+        delete updatedMeta[selectedView];
+        setStepMetadata(updatedMeta);
+        if (onStepMetadataChange) {
+            onStepMetadataChange(updatedMeta);
         }
     };
 
@@ -1971,14 +2123,21 @@ export default function SmartPostureScanner({
                                 {/* Bottom toggles inside preview box */}
                                 <div className="absolute bottom-2 left-2 flex items-center gap-1.5 z-30">
                                     {activeLandmarks.length > 0 && (
-                                        <button
-                                            type="button"
-                                            onClick={() => setShowGoniometer(!showGoniometer)}
-                                            className="px-2 py-0.5 rounded bg-black/75 hover:bg-black/95 backdrop-blur-xs text-white text-[9.5px] font-semibold flex items-center gap-1 border border-white/20 cursor-pointer"
-                                        >
-                                            {showGoniometer ? <EyeOff size={11} /> : <Eye size={11} />}
-                                            <span>{showGoniometer ? 'Sembunyikan Garis' : 'Tampilkan Garis'}</span>
-                                        </button>
+                                        <>
+                                            <button
+                                                type="button"
+                                                onClick={() => setShowGoniometer(!showGoniometer)}
+                                                className="px-2 py-0.5 rounded bg-black/75 hover:bg-black/95 backdrop-blur-xs text-white text-[9.5px] font-semibold flex items-center gap-1 border border-white/20 cursor-pointer"
+                                            >
+                                                {showGoniometer ? <EyeOff size={11} /> : <Eye size={11} />}
+                                                <span>{showGoniometer ? 'Sembunyikan Garis' : 'Tampilkan Garis'}</span>
+                                            </button>
+
+                                            <span className="hidden sm:inline-flex items-center gap-1 px-2 py-0.5 rounded bg-emerald-950/80 border border-emerald-500/40 text-emerald-300 text-[9px] font-semibold backdrop-blur-xs">
+                                                <CheckCircle2 size={10} className="text-emerald-400" />
+                                                <span>Garis Postur Siap Disimpan (Dapat Diedit Ulang)</span>
+                                            </span>
+                                        </>
                                     )}
 
                                     {activeLandmarks.length === 0 && (

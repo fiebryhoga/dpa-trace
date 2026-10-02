@@ -31,7 +31,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/dpa/athletes/{athlete}', [DpaAssessmentController::class, 'store'])->name('dpa.store');
     Route::put('/dpa/assessments/{dpaAssessment}', [DpaAssessmentController::class, 'update'])->name('dpa.update');
     Route::delete('/dpa/assessments/{dpaAssessment}', [DpaAssessmentController::class, 'destroy'])->name('dpa.destroy');
-    Route::post('/dpa/athletes/{athlete}/export-pdf', [DpaAssessmentController::class, 'exportPdf'])->name('dpa.export-pdf');
     Route::post('/dpa/analyze-posture', [\App\Http\Controllers\DpaAiAnalysisController::class, 'analyze'])->name('dpa.analyze-posture');
 
     // Master Data & Konfigurasi (DPA Compensations, Exercise Library, Muscles, Injuries, Admin Users)
@@ -45,6 +44,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    // Error Page Preview / Testing Route
+    Route::get('/error/{status?}', function ($status = 404) {
+        $allowed = [400, 401, 403, 404, 405, 419, 429, 500, 502, 503, 504];
+        $code = in_array((int)$status, $allowed) ? (int)$status : 404;
+        return \Inertia\Inertia::render('Error', [
+            'status' => $code,
+        ]);
+    })->name('error.preview');
 });
 
 require __DIR__.'/auth.php';

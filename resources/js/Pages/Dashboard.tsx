@@ -149,14 +149,13 @@ export default function Dashboard({
     genderDistribution = [],
     recentAssessments = [],
 }: DashboardProps) {
-    const [trendMode, setTrendMode] = useState<'monthly' | 'sessions'>('monthly');
-    const [monthlyMetric, setMonthlyMetric] = useState<'both' | 'assessments' | 'deviations'>('both');
+    const [distributionTab, setDistributionTab] = useState<'risk' | 'screening'>('risk');
 
     // Custom Glassmorphism Tooltip for Recharts that adapts to Dark/Light Mode
     const CustomTooltip = ({ active, payload, label }: any) => {
         if (active && payload && payload.length) {
             return (
-                <div className="bg-slate-900/95 dark:bg-slate-900/95 text-white p-2 rounded-lg shadow-xl border border-slate-700/80 text-[10px] space-y-0.5 backdrop-blur-xs min-w-[120px]">
+                <div className="bg-slate-900/95 dark:bg-slate-900/95 text-white p-2 rounded-md shadow-xl border border-slate-700/80 text-[10px] space-y-0.5 backdrop-blur-xs min-w-[120px]">
                     <p className="font-bold text-slate-200 border-b border-slate-700 pb-0.5 text-[10px]">{label}</p>
                     {payload.map((entry: any, index: number) => (
                         <div key={index} className="flex items-center justify-between gap-2.5 pt-0.5">
@@ -177,15 +176,15 @@ export default function Dashboard({
     const TimelineTooltip = ({ active, payload }: any) => {
         if (active && payload && payload.length) {
             const data = payload[0]?.payload as AssessmentTimelineItem;
-            if (trendMode === 'sessions' && data) {
+            if (data && data.sessionNumber) {
                 return (
-                    <div className="bg-slate-900/95 dark:bg-slate-900/95 text-white p-2.5 rounded-lg shadow-xl border border-slate-700/80 text-[10px] space-y-1 backdrop-blur-xs min-w-[160px]">
+                    <div className="bg-slate-900/95 dark:bg-slate-900/95 text-white p-2.5 rounded-md shadow-xl border border-slate-700/80 text-[10px] space-y-1 backdrop-blur-xs min-w-[150px]">
                         <div className="flex items-center justify-between border-b border-slate-700 pb-0.5">
                             <span className="font-bold text-[#b4f031] text-[10px]">{data.sessionNumber}</span>
                             <span className="text-[9px] text-slate-400">{data.fullDate}</span>
                         </div>
                         <div className="pt-0.5">
-                            <p className="font-bold text-slate-100 text-[11px]">{data.athleteName}</p>
+                            <p className="font-bold text-slate-100 text-[11px] truncate max-w-[140px]">{data.athleteName}</p>
                             {data.athleteCode && <p className="text-[9px] text-slate-400">{data.athleteCode}</p>}
                         </div>
                         <div className="flex items-center justify-between pt-0.5 border-t border-slate-800 text-[10px]">
@@ -297,7 +296,7 @@ export default function Dashboard({
                 {/* ─── 1. TOP STATS OVERVIEW CARDS (4 METRICS) ─── */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
                     {/* Total Athletes */}
-                    <Card className="border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-2xs hover:border-[#84cc16]/60 dark:hover:border-[#b4f031]/60 transition-all rounded-lg">
+                    <Card className="border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-2xs hover:border-[#84cc16]/60 dark:hover:border-[#b4f031]/60 transition-all rounded-md">
                         <CardHeader className="flex flex-row items-center justify-between pb-1 space-y-0 px-4 pt-3">
                             <span className="text-[11px] font-medium text-slate-500 dark:text-slate-400">
                                 Total Atlet Terdaftar
@@ -323,7 +322,7 @@ export default function Dashboard({
                     </Card>
 
                     {/* Total DPA Sessions */}
-                    <Card className="border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-2xs hover:border-[#84cc16]/60 dark:hover:border-[#b4f031]/60 transition-all rounded-lg">
+                    <Card className="border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-2xs hover:border-[#84cc16]/60 dark:hover:border-[#b4f031]/60 transition-all rounded-md">
                         <CardHeader className="flex flex-row items-center justify-between pb-1 space-y-0 px-4 pt-3">
                             <span className="text-[11px] font-medium text-slate-500 dark:text-slate-400">
                                 Total Sesi Evaluasi DPA
@@ -349,7 +348,7 @@ export default function Dashboard({
                     </Card>
 
                     {/* Total Deviations Detected */}
-                    <Card className="border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-2xs hover:border-[#84cc16]/60 dark:hover:border-[#b4f031]/60 transition-all rounded-lg">
+                    <Card className="border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-2xs hover:border-[#84cc16]/60 dark:hover:border-[#b4f031]/60 transition-all rounded-md">
                         <CardHeader className="flex flex-row items-center justify-between pb-1 space-y-0 px-4 pt-3">
                             <span className="text-[11px] font-medium text-slate-500 dark:text-slate-400">
                                 Temuan Deviasi Gerak
@@ -372,7 +371,7 @@ export default function Dashboard({
                     </Card>
 
                     {/* Corrective Exercise Library */}
-                    <Card className="border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-2xs hover:border-[#84cc16]/60 dark:hover:border-[#b4f031]/60 transition-all rounded-lg">
+                    <Card className="border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-2xs hover:border-[#84cc16]/60 dark:hover:border-[#b4f031]/60 transition-all rounded-md">
                         <CardHeader className="flex flex-row items-center justify-between pb-1 space-y-0 px-4 pt-3">
                             <span className="text-[11px] font-medium text-slate-500 dark:text-slate-400">
                                 Bank Latihan Korektif
@@ -395,61 +394,26 @@ export default function Dashboard({
                     </Card>
                 </div>
 
-                {/* ─── 2. CHARTS ROW 1: MONTHLY AREA CHART (LEFT) & SESSION TIMELINE LINE CHART (RIGHT) ─── */}
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
-                    {/* Chart 1: Monthly Trend Activity (6 cols) - Area Chart with Gradient */}
-                    <Card className="lg:col-span-6 border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-2xs rounded-lg">
-                        <CardHeader className="flex flex-col sm:flex-row sm:items-center sm:justify-between pb-2 pt-3.5 px-4 gap-2 border-b border-slate-100 dark:border-slate-800/80">
+                {/* ─── 2. CHARTS ANALYTICS GRID (3-COLUMN RESPONSIVE GRID) ─── */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                    {/* Card 1: Tren Aktivitas Evaluasi (Area Chart) */}
+                    <Card className="border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-2xs rounded-md flex flex-col justify-between">
+                        <CardHeader className="flex flex-row items-center justify-between pb-2 pt-3 px-4 border-b border-slate-100 dark:border-slate-800/80">
                             <div>
                                 <CardTitle className="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
                                     <TrendingUp className="h-3.5 w-3.5 text-[#84cc16]" />
-                                    <span>Tren Aktivitas Evaluasi (6 Bulan Terakhir)</span>
+                                    <span>Tren Aktivitas Evaluasi</span>
                                 </CardTitle>
-                                <CardDescription className="text-[10.5px] mt-0.5 text-slate-500">
-                                    Grafik area volume asesmen &amp; total deviasi berkala
+                                <CardDescription className="text-[10px] mt-0.5 text-slate-500">
+                                    Volume sesi &amp; deviasi 6 bln terakhir
                                 </CardDescription>
                             </div>
-
-                            {/* Metric Filter */}
-                            <div className="flex items-center p-0.5 bg-slate-100 dark:bg-slate-800 rounded-md text-[9.5px] font-semibold">
-                                <button
-                                    type="button"
-                                    onClick={() => setMonthlyMetric('both')}
-                                    className={`px-1.5 py-0.5 rounded transition-colors cursor-pointer ${
-                                        monthlyMetric === 'both'
-                                            ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-2xs'
-                                            : 'text-slate-500 hover:text-slate-900 dark:hover:text-white'
-                                    }`}
-                                >
-                                    Gabungan
-                                </button>
-                                <button
-                                    type="button"
-                                    onClick={() => setMonthlyMetric('assessments')}
-                                    className={`px-1.5 py-0.5 rounded transition-colors cursor-pointer ${
-                                        monthlyMetric === 'assessments'
-                                            ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-2xs'
-                                            : 'text-slate-500 hover:text-slate-900 dark:hover:text-white'
-                                    }`}
-                                >
-                                    Sesi
-                                </button>
-                                <button
-                                    type="button"
-                                    onClick={() => setMonthlyMetric('deviations')}
-                                    className={`px-1.5 py-0.5 rounded transition-colors cursor-pointer ${
-                                        monthlyMetric === 'deviations'
-                                            ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-2xs'
-                                            : 'text-slate-500 hover:text-slate-900 dark:hover:text-white'
-                                    }`}
-                                >
-                                    Deviasi
-                                </button>
-                            </div>
+                            <Badge variant="outline" className="text-[9.5px] font-semibold py-0 px-1.5 border-[#84cc16]/40 text-[#84cc16]">
+                                6 Bulan
+                            </Badge>
                         </CardHeader>
-
-                        <CardContent className="pt-3 px-4 pb-3">
-                            <div className="h-56 w-full">
+                        <CardContent className="pt-3 px-3 pb-3 flex-1 flex flex-col justify-end">
+                            <div className="h-48 w-full">
                                 <ResponsiveContainer width="100%" height="100%">
                                     <AreaChart data={monthlyTrends} margin={{ top: 10, right: 10, left: -25, bottom: 0 }}>
                                         <defs>
@@ -476,62 +440,57 @@ export default function Dashboard({
                                             allowDecimals={false}
                                         />
                                         <Tooltip content={<CustomTooltip />} cursor={{ stroke: '#94a3b8', strokeWidth: 1, strokeDasharray: '3 3', strokeOpacity: 0.3 }} />
-                                        {(monthlyMetric === 'both' || monthlyMetric === 'assessments') && (
-                                             <Area
-                                                type="monotone"
-                                                dataKey="assessments"
-                                                name="Sesi Asesmen"
-                                                stroke="#84cc16"
-                                                strokeWidth={2}
-                                                fillOpacity={1}
-                                                fill="url(#colorAssessmentsMonthly)"
-                                            />
-                                        )}
-                                        {(monthlyMetric === 'both' || monthlyMetric === 'deviations') && (
-                                            <Area
-                                                type="monotone"
-                                                dataKey="deviations"
-                                                name="Temuan Deviasi"
-                                                stroke="#f59e0b"
-                                                strokeWidth={2}
-                                                fillOpacity={1}
-                                                fill="url(#colorDeviationsMonthly)"
-                                            />
-                                        )}
+                                        <Area
+                                            type="monotone"
+                                            dataKey="assessments"
+                                            name="Sesi Asesmen"
+                                            stroke="#84cc16"
+                                            strokeWidth={2}
+                                            fillOpacity={1}
+                                            fill="url(#colorAssessmentsMonthly)"
+                                        />
+                                        <Area
+                                            type="monotone"
+                                            dataKey="deviations"
+                                            name="Temuan Deviasi"
+                                            stroke="#f59e0b"
+                                            strokeWidth={2}
+                                            fillOpacity={1}
+                                            fill="url(#colorDeviationsMonthly)"
+                                        />
                                     </AreaChart>
                                 </ResponsiveContainer>
                             </div>
                         </CardContent>
                     </Card>
 
-                    {/* Chart 2: Session Timeline (6 cols) - Dedicated Point & Line Chart with Risk Reference Lines */}
-                    <Card className="lg:col-span-6 border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-2xs rounded-lg">
-                        <CardHeader className="flex flex-row items-center justify-between pb-2 pt-3.5 px-4 border-b border-slate-100 dark:border-slate-800/80">
+                    {/* Card 2: Timeline Skor Sesi Atlet (Line Chart) */}
+                    <Card className="border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-2xs rounded-md flex flex-col justify-between">
+                        <CardHeader className="flex flex-row items-center justify-between pb-2 pt-3 px-4 border-b border-slate-100 dark:border-slate-800/80">
                             <div>
                                 <CardTitle className="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
                                     <Activity className="h-3.5 w-3.5 text-emerald-500" />
-                                    <span>Timeline Skor Deviasi Per Sesi Atlet</span>
+                                    <span>Timeline Skor Sesi Atlet</span>
                                 </CardTitle>
-                                <CardDescription className="text-[10.5px] mt-0.5 text-slate-500">
-                                    Grafik garis &amp; titik riwayat skor deviasi dengan batas risiko
+                                <CardDescription className="text-[10px] mt-0.5 text-slate-500">
+                                    Riwayat deviasi &amp; batas risiko
                                 </CardDescription>
                             </div>
                             <Badge variant="outline" className="text-[9.5px] font-semibold py-0 px-1.5">
-                                {assessmentTimeline.length} Sesi Terdata
+                                {assessmentTimeline.length} Sesi
                             </Badge>
                         </CardHeader>
-
-                        <CardContent className="pt-3 px-4 pb-3">
-                            <div className="h-56 w-full">
+                        <CardContent className="pt-3 px-3 pb-3 flex-1 flex flex-col justify-end">
+                            <div className="h-48 w-full">
                                 {assessmentTimeline.length === 0 ? (
                                     <div className="h-full flex items-center justify-center text-[11px] text-slate-400 italic">
-                                        Belum ada riwayat sesi asesmen yang tercatat.
+                                        Belum ada riwayat sesi asesmen.
                                     </div>
                                 ) : (
                                     <ResponsiveContainer width="100%" height="100%">
                                         <LineChart
                                             data={assessmentTimeline}
-                                            margin={{ top: 15, right: 30, left: -25, bottom: 0 }}
+                                            margin={{ top: 15, right: 25, left: -25, bottom: 0 }}
                                         >
                                             <CartesianGrid strokeDasharray="3 3" stroke="currentColor" className="stroke-slate-200/50 dark:stroke-slate-800/35" />
                                             <XAxis
@@ -552,13 +511,13 @@ export default function Dashboard({
                                                 y={5}
                                                 stroke="#f43f5e"
                                                 strokeDasharray="3 3"
-                                                label={{ value: 'Tinggi (≥5)', fill: '#f43f5e', fontSize: 8.5, position: 'right' }}
+                                                label={{ value: 'Tinggi (≥5)', fill: '#f43f5e', fontSize: 8, position: 'right' }}
                                             />
                                             <ReferenceLine
                                                 y={3}
                                                 stroke="#f59e0b"
                                                 strokeDasharray="3 3"
-                                                label={{ value: 'Sedang (3)', fill: '#f59e0b', fontSize: 8.5, position: 'right' }}
+                                                label={{ value: 'Sedang (3)', fill: '#f59e0b', fontSize: 8, position: 'right' }}
                                             />
                                             <Line
                                                 type="monotone"
@@ -566,8 +525,8 @@ export default function Dashboard({
                                                 name="Temuan Deviasi"
                                                 stroke="#10b981"
                                                 strokeWidth={2}
-                                                dot={{ r: 4, fill: '#10b981', strokeWidth: 1.5, stroke: '#ffffff' }}
-                                                activeDot={{ r: 6, stroke: '#10b981', strokeWidth: 1.5 }}
+                                                dot={{ r: 3.5, fill: '#10b981', strokeWidth: 1.5, stroke: '#ffffff' }}
+                                                activeDot={{ r: 5.5, stroke: '#10b981', strokeWidth: 1.5 }}
                                             />
                                         </LineChart>
                                     </ResponsiveContainer>
@@ -575,158 +534,175 @@ export default function Dashboard({
                             </div>
                         </CardContent>
                     </Card>
-                </div>
 
-                {/* ─── 3. CHARTS ROW 2: RISK SEVERITY DONUT (4 COLS) & MUSCLE IMBALANCES SPECTRUM (8 COLS) ─── */}
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
-                    {/* Left: Risk Severity Donut Chart (4 cols) */}
-                    <Card className="lg:col-span-4 border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-2xs rounded-lg">
-                        <CardHeader className="pb-2 pt-3.5 px-4 border-b border-slate-100 dark:border-slate-800/80">
-                            <CardTitle className="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
-                                <PieChartIcon className="h-3.5 w-3.5 text-amber-500" />
-                                <span>Distribusi Tingkat Risiko Atlet</span>
-                            </CardTitle>
-                            <CardDescription className="text-[10.5px] text-slate-500">
-                                Klasifikasi keparahan kompensasi biomekanik
-                            </CardDescription>
-                        </CardHeader>
-                        <CardContent className="pt-3 px-4 pb-3">
-                            <div className="h-40 w-full flex items-center justify-center relative">
-                                {totalRisksCount === 0 ? (
-                                    <div className="text-[11px] text-slate-400 italic">Belum ada data evaluasi.</div>
-                                ) : (
-                                    <ResponsiveContainer width="100%" height="100%">
-                                        <PieChart>
-                                            <Pie
-                                                data={riskDistribution}
-                                                cx="50%"
-                                                cy="50%"
-                                                innerRadius={42}
-                                                outerRadius={62}
-                                                paddingAngle={4}
-                                                dataKey="count"
-                                            >
-                                                {riskDistribution.map((entry, index) => (
-                                                    <Cell key={`cell-${index}`} fill={entry.color} />
-                                                ))}
-                                            </Pie>
-                                            <Tooltip content={<CustomTooltip />} />
-                                        </PieChart>
-                                    </ResponsiveContainer>
-                                )}
-                            </div>
-
-                            {/* Custom Legend Cards */}
-                            <div className="space-y-1 mt-2 pt-2 border-t border-slate-100 dark:border-slate-800 text-[10.5px]">
-                                {riskDistribution.map((item, idx) => (
-                                    <div
-                                        key={idx}
-                                        className="flex items-center justify-between py-0.5 px-2 rounded bg-slate-50 dark:bg-slate-800/40"
-                                    >
-                                        <div className="flex items-center gap-1.5">
-                                            <span
-                                                className="w-1.5 h-1.5 rounded-full shrink-0"
-                                                style={{ backgroundColor: item.color }}
-                                            />
-                                            <span className="font-medium text-slate-700 dark:text-slate-300">
-                                                {item.name}
-                                            </span>
-                                        </div>
-                                        <span className="font-bold text-slate-900 dark:text-white">
-                                            {item.count} Sesi
-                                        </span>
-                                    </div>
-                                ))}
-                            </div>
-                        </CardContent>
-                    </Card>
-
-                    {/* Right: Dual Comparative Bar Chart: Overactive (Rose) vs Underactive (Emerald) (8 cols) */}
-                    <Card className="lg:col-span-8 border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-2xs rounded-lg">
-                        <CardHeader className="pb-2 pt-3.5 px-4 border-b border-slate-100 dark:border-slate-800/80 flex flex-row items-center justify-between">
+                    {/* Card 3: Distribusi Risiko & Skrining (Interactive Donut) */}
+                    <Card className="border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-2xs rounded-md flex flex-col justify-between">
+                        <CardHeader className="pb-2 pt-3 px-4 border-b border-slate-100 dark:border-slate-800/80 flex flex-row items-center justify-between">
                             <div>
                                 <CardTitle className="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
-                                    <Flame className="h-3.5 w-3.5 text-rose-500" />
-                                    <span>Spektrum Ketidakseimbangan Otot (Grafik Komparatif)</span>
+                                    <PieChartIcon className="h-3.5 w-3.5 text-amber-500" />
+                                    <span>{distributionTab === 'risk' ? 'Distribusi Tingkat Risiko' : 'Cakupan Skrining & Gender'}</span>
                                 </CardTitle>
-                                <CardDescription className="text-[10.5px] mt-0.5 text-slate-500">
-                                    Frekuensi temuan otot Overactive (Tegang) vs Underactive (Lemah) pada seluruh asesmen
+                                <CardDescription className="text-[10px] text-slate-500">
+                                    {distributionTab === 'risk' ? 'Tingkat keparahan kompensasi atlet' : 'Kesiapan skrining di roster'}
                                 </CardDescription>
                             </div>
-                        </CardHeader>
-                        <CardContent className="pt-3 px-4 pb-3">
-                            <div className="h-56 sm:h-60 w-full">
-                                {combinedMuscleData.length === 0 ? (
-                                    <div className="h-full flex items-center justify-center text-[11px] text-slate-400 italic">
-                                        Belum ada temuan ketidakseimbangan otot.
-                                    </div>
-                                ) : (
-                                    <ResponsiveContainer width="100%" height="100%">
-                                        <BarChart
-                                            data={combinedMuscleData}
-                                            margin={{ top: 10, right: 10, left: -25, bottom: 20 }}
-                                        >
-                                            <CartesianGrid strokeDasharray="3 3" stroke="currentColor" className="stroke-slate-200/50 dark:stroke-slate-800/35" />
-                                            <XAxis
-                                                dataKey="name"
-                                                tick={{ fontSize: 9, fill: '#64748b' }}
-                                                interval={0}
-                                                angle={-15}
-                                                textAnchor="end"
-                                            />
-                                            <YAxis tick={{ fontSize: 9, fill: '#64748b' }} allowDecimals={false} />
-                                            <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(148, 163, 184, 0.08)' }} />
-                                            <Legend
-                                                wrapperStyle={{ fontSize: '9.5px', paddingTop: '6px' }}
-                                                formatter={(value) => (
-                                                    <span className="text-slate-700 dark:text-slate-300 font-semibold">{value}</span>
-                                                )}
-                                            />
-                                            <Bar dataKey="overactive" name="Overactive (Tegang)" fill="#f43f5e" radius={[2.5, 2.5, 0, 0]} />
-                                            <Bar dataKey="underactive" name="Underactive (Lemah)" fill="#10b981" radius={[2.5, 2.5, 0, 0]} />
-                                        </BarChart>
-                                    </ResponsiveContainer>
-                                )}
+                            <div className="flex items-center p-0.5 bg-slate-100 dark:bg-slate-800 rounded-md text-[9.5px] font-semibold">
+                                <button
+                                    type="button"
+                                    onClick={() => setDistributionTab('risk')}
+                                    className={`px-1.5 py-0.5 rounded transition-colors cursor-pointer ${
+                                        distributionTab === 'risk'
+                                            ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-2xs'
+                                            : 'text-slate-500 hover:text-slate-900 dark:hover:text-white'
+                                    }`}
+                                >
+                                    Risiko
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={() => setDistributionTab('screening')}
+                                    className={`px-1.5 py-0.5 rounded transition-colors cursor-pointer ${
+                                        distributionTab === 'screening'
+                                            ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-2xs'
+                                            : 'text-slate-500 hover:text-slate-900 dark:hover:text-white'
+                                    }`}
+                                >
+                                    Skrining
+                                </button>
                             </div>
+                        </CardHeader>
+                        <CardContent className="pt-2 px-3 pb-3 flex-1 flex flex-col justify-between">
+                            {distributionTab === 'risk' ? (
+                                <>
+                                    <div className="h-28 w-full flex items-center justify-center relative">
+                                        {totalRisksCount === 0 ? (
+                                            <div className="text-[10.5px] text-slate-400 italic">Belum ada data evaluasi.</div>
+                                        ) : (
+                                            <ResponsiveContainer width="100%" height="100%">
+                                                <PieChart>
+                                                    <Pie
+                                                        data={riskDistribution}
+                                                        cx="50%"
+                                                        cy="50%"
+                                                        innerRadius={28}
+                                                        outerRadius={46}
+                                                        paddingAngle={4}
+                                                        dataKey="count"
+                                                    >
+                                                        {riskDistribution.map((entry, index) => (
+                                                            <Cell key={`cell-risk-${index}`} fill={entry.color} />
+                                                        ))}
+                                                    </Pie>
+                                                    <Tooltip content={<CustomTooltip />} />
+                                                </PieChart>
+                                            </ResponsiveContainer>
+                                        )}
+                                    </div>
+                                    <div className="space-y-1 mt-1 pt-1.5 border-t border-slate-100 dark:border-slate-800 text-[10px]">
+                                        {riskDistribution.map((item, idx) => (
+                                            <div
+                                                key={idx}
+                                                className="flex items-center justify-between py-0.5 px-2 rounded bg-slate-50 dark:bg-slate-800/40"
+                                            >
+                                                <div className="flex items-center gap-1.5">
+                                                    <span
+                                                        className="w-1.5 h-1.5 rounded-full shrink-0"
+                                                        style={{ backgroundColor: item.color }}
+                                                    />
+                                                    <span className="font-medium text-slate-700 dark:text-slate-300">
+                                                        {item.name}
+                                                    </span>
+                                                </div>
+                                                <span className="font-bold text-slate-900 dark:text-white">
+                                                    {item.count} Sesi
+                                                </span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </>
+                            ) : (
+                                <>
+                                    <div className="h-28 w-full flex items-center justify-center relative">
+                                        <ResponsiveContainer width="100%" height="100%">
+                                            <PieChart>
+                                                <Pie
+                                                    data={screeningStatusData}
+                                                    cx="50%"
+                                                    cy="50%"
+                                                    innerRadius={28}
+                                                    outerRadius={46}
+                                                    paddingAngle={4}
+                                                    dataKey="count"
+                                                >
+                                                    {screeningStatusData.map((entry, index) => (
+                                                        <Cell key={`cell-sc-${index}`} fill={entry.color} />
+                                                    ))}
+                                                </Pie>
+                                                <Tooltip content={<CustomTooltip />} />
+                                            </PieChart>
+                                        </ResponsiveContainer>
+                                    </div>
+                                    <div className="space-y-1 mt-1 pt-1.5 border-t border-slate-100 dark:border-slate-800 text-[10px]">
+                                        <div className="flex items-center justify-between py-0.5 px-2 rounded bg-slate-50 dark:bg-slate-800/40">
+                                            <span className="text-slate-600 dark:text-slate-300 font-medium">
+                                                Cakupan Skrining
+                                            </span>
+                                            <span className="font-bold text-[#84cc16] dark:text-[#b4f031]">
+                                                {stats.screeningCoverageRate}% Selesai
+                                            </span>
+                                        </div>
+                                        {genderDistribution.map((g, idx) => (
+                                            <div
+                                                key={idx}
+                                                className="flex items-center justify-between py-0.5 px-2 rounded bg-slate-50 dark:bg-slate-800/40"
+                                            >
+                                                <div className="flex items-center gap-1.5">
+                                                    <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: g.color }} />
+                                                    <span className="text-slate-700 dark:text-slate-300 font-medium">{g.gender}</span>
+                                                </div>
+                                                <span className="font-bold text-slate-900 dark:text-white">{g.count} Atlet</span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </>
+                            )}
                         </CardContent>
                     </Card>
-                </div>
 
-                {/* ─── 4. CHARTS ROW 3: TOP COMPENSATIONS BAR CHART & DEMOGRAPHICS DONUT ─── */}
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
-                    {/* Left: Top Compensations Ranking Bar Chart (8 cols) */}
-                    <Card className="lg:col-span-8 border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-2xs rounded-lg">
-                        <CardHeader className="pb-2 pt-3.5 px-4 border-b border-slate-100 dark:border-slate-800/80 flex flex-row items-center justify-between">
+                    {/* Card 4: Top Compensations Ranking Bar Chart */}
+                    <Card className="border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-2xs rounded-md flex flex-col justify-between">
+                        <CardHeader className="pb-2 pt-3 px-4 border-b border-slate-100 dark:border-slate-800/80 flex flex-row items-center justify-between">
                             <div>
                                 <CardTitle className="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
                                     <Target className="h-3.5 w-3.5 text-[#84cc16]" />
-                                    <span>Grafik Pola Kompensasi Gerak Terbanyak</span>
+                                    <span>Pola Kompensasi Terbanyak</span>
                                 </CardTitle>
-                                <CardDescription className="text-[10.5px] mt-0.5 text-slate-500">
-                                    Prevalensi deviasi postur dan dampaknya pada performa atlet
+                                <CardDescription className="text-[10px] mt-0.5 text-slate-500">
+                                    Prevalensi deviasi postur atlet teratas
                                 </CardDescription>
                             </div>
                         </CardHeader>
-                        <CardContent className="pt-3 px-4 pb-3">
-                            <div className="h-56 sm:h-60 w-full">
+                        <CardContent className="pt-3 px-3 pb-3 flex-1 flex flex-col justify-end">
+                            <div className="h-48 w-full">
                                 {topCompChartData.length === 0 ? (
                                     <div className="h-full flex items-center justify-center text-[11px] text-slate-400 italic">
-                                        Belum ada data kompensasi yang tercatat.
+                                        Belum ada data kompensasi.
                                     </div>
                                 ) : (
                                     <ResponsiveContainer width="100%" height="100%">
                                         <BarChart
                                             data={topCompChartData}
                                             layout="vertical"
-                                            margin={{ top: 5, right: 25, left: 5, bottom: 5 }}
+                                            margin={{ top: 5, right: 15, left: -10, bottom: 5 }}
                                         >
                                             <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="currentColor" className="stroke-slate-200/50 dark:stroke-slate-800/35" />
                                             <XAxis type="number" tick={{ fontSize: 9, fill: '#64748b' }} allowDecimals={false} />
                                             <YAxis
                                                 dataKey="name"
                                                 type="category"
-                                                tick={{ fontSize: 9, fill: '#64748b' }}
-                                                width={110}
+                                                tick={{ fontSize: 8.5, fill: '#64748b' }}
+                                                width={90}
                                             />
                                             <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(148, 163, 184, 0.08)' }} />
                                             <Bar dataKey="kasus" name="Jumlah Kasus" fill="#84cc16" radius={[0, 3, 3, 0]}>
@@ -734,7 +710,7 @@ export default function Dashboard({
                                                     <Cell
                                                         key={`cell-top-${index}`}
                                                         fill={
-                                                             index === 0
+                                                            index === 0
                                                                 ? '#84cc16'
                                                                 : index === 1
                                                                 ? '#a3e635'
@@ -754,230 +730,115 @@ export default function Dashboard({
                         </CardContent>
                     </Card>
 
-                    {/* Right: Athlete Screening & Gender Demographics (4 cols) */}
-                    <Card className="lg:col-span-4 border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-2xs rounded-lg">
-                        <CardHeader className="pb-2 pt-3.5 px-4 border-b border-slate-100 dark:border-slate-800/80">
-                            <CardTitle className="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
-                                <Compass className="h-3.5 w-3.5 text-blue-500" />
-                                <span>Cakupan Skrining &amp; Gender</span>
-                            </CardTitle>
-                            <CardDescription className="text-[10.5px] text-slate-500">
-                                Kesiapan evaluasi postur atlet di seluruh roster
-                            </CardDescription>
-                        </CardHeader>
-                        <CardContent className="pt-3 px-4 pb-3 space-y-2.5">
-                            {/* Screening Donut */}
-                            <div className="h-28 w-full flex items-center justify-center relative">
-                                <ResponsiveContainer width="100%" height="100%">
-                                    <PieChart>
-                                        <Pie
-                                            data={screeningStatusData}
-                                            cx="50%"
-                                            cy="50%"
-                                            innerRadius={30}
-                                            outerRadius={48}
-                                            paddingAngle={4}
-                                            dataKey="count"
-                                        >
-                                            {screeningStatusData.map((entry, index) => (
-                                                <Cell key={`cell-sc-${index}`} fill={entry.color} />
-                                            ))}
-                                        </Pie>
-                                        <Tooltip content={<CustomTooltip />} />
-                                    </PieChart>
-                                </ResponsiveContainer>
+                    {/* Card 5: Dual Comparative Bar Chart: Overactive vs Underactive */}
+                    <Card className="border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-2xs rounded-md flex flex-col justify-between">
+                        <CardHeader className="pb-2 pt-3 px-4 border-b border-slate-100 dark:border-slate-800/80 flex flex-row items-center justify-between">
+                            <div>
+                                <CardTitle className="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+                                    <Flame className="h-3.5 w-3.5 text-rose-500" />
+                                    <span>Ketidakseimbangan Otot</span>
+                                </CardTitle>
+                                <CardDescription className="text-[10px] mt-0.5 text-slate-500">
+                                    Overactive (Tegang) vs Underactive (Lemah)
+                                </CardDescription>
                             </div>
-
-                            {/* Gender & Readiness Breakdown */}
-                            <div className="space-y-1 pt-1 border-t border-slate-100 dark:border-slate-800 text-[10.5px]">
-                                <div className="flex items-center justify-between py-0.5 px-2 rounded bg-slate-50 dark:bg-slate-800/40">
-                                    <span className="text-slate-600 dark:text-slate-300 font-medium">
-                                        Cakupan Skrining
-                                    </span>
-                                    <span className="font-bold text-[#84cc16] dark:text-[#b4f031]">
-                                        {stats.screeningCoverageRate}% Selesai
-                                    </span>
-                                </div>
-
-                                {genderDistribution.map((g, idx) => (
-                                    <div
-                                        key={idx}
-                                        className="flex items-center justify-between py-0.5 px-2 rounded bg-slate-50 dark:bg-slate-800/40"
-                                    >
-                                        <div className="flex items-center gap-1.5">
-                                            <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: g.color }} />
-                                            <span className="text-slate-700 dark:text-slate-300 font-medium">{g.gender}</span>
-                                        </div>
-                                        <span className="font-bold text-slate-900 dark:text-white">{g.count} Atlet</span>
+                        </CardHeader>
+                        <CardContent className="pt-3 px-3 pb-3 flex-1 flex flex-col justify-end">
+                            <div className="h-48 w-full">
+                                {combinedMuscleData.length === 0 ? (
+                                    <div className="h-full flex items-center justify-center text-[11px] text-slate-400 italic">
+                                        Belum ada data otot.
                                     </div>
-                                ))}
+                                ) : (
+                                    <ResponsiveContainer width="100%" height="100%">
+                                        <BarChart
+                                            data={combinedMuscleData}
+                                            margin={{ top: 10, right: 10, left: -25, bottom: 15 }}
+                                        >
+                                            <CartesianGrid strokeDasharray="3 3" stroke="currentColor" className="stroke-slate-200/50 dark:stroke-slate-800/35" />
+                                            <XAxis
+                                                dataKey="name"
+                                                tick={{ fontSize: 8, fill: '#64748b' }}
+                                                interval={0}
+                                                angle={-15}
+                                                textAnchor="end"
+                                            />
+                                            <YAxis tick={{ fontSize: 9, fill: '#64748b' }} allowDecimals={false} />
+                                            <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(148, 163, 184, 0.08)' }} />
+                                            <Legend
+                                                wrapperStyle={{ fontSize: '8.5px', paddingTop: '4px' }}
+                                                formatter={(value) => (
+                                                    <span className="text-slate-700 dark:text-slate-300 font-semibold">{value}</span>
+                                                )}
+                                            />
+                                            <Bar dataKey="overactive" name="Overactive" fill="#f43f5e" radius={[2.5, 2.5, 0, 0]} />
+                                            <Bar dataKey="underactive" name="Underactive" fill="#10b981" radius={[2.5, 2.5, 0, 0]} />
+                                        </BarChart>
+                                    </ResponsiveContainer>
+                                )}
+                            </div>
+                        </CardContent>
+                    </Card>
+
+                    {/* Card 6: Checkpoints Breakdown Bar Chart */}
+                    <Card className="border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-2xs rounded-md flex flex-col justify-between">
+                        <CardHeader className="pb-2 pt-3 px-4 border-b border-slate-100 dark:border-slate-800/80 flex flex-row items-center justify-between">
+                            <div>
+                                <CardTitle className="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+                                    <Layers className="h-3.5 w-3.5 text-[#84cc16]" />
+                                    <span>Sebaran Checkpoint Kinetik</span>
+                                </CardTitle>
+                                <CardDescription className="text-[10px] mt-0.5 text-slate-500">
+                                    5 area rantai kinetik utama (NASM)
+                                </CardDescription>
+                            </div>
+                        </CardHeader>
+                        <CardContent className="pt-3 px-3 pb-3 flex-1 flex flex-col justify-end">
+                            <div className="h-48 w-full">
+                                <ResponsiveContainer width="100%" height="100%">
+                                    <BarChart
+                                        data={checkpointDistribution}
+                                        layout="vertical"
+                                        margin={{ top: 5, right: 15, left: -10, bottom: 5 }}
+                                    >
+                                        <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="currentColor" className="stroke-slate-200/50 dark:stroke-slate-800/35" />
+                                        <XAxis type="number" tick={{ fontSize: 9, fill: '#64748b' }} allowDecimals={false} />
+                                        <YAxis
+                                            dataKey="checkpoint"
+                                            type="category"
+                                            tick={{ fontSize: 8.5, fill: '#64748b' }}
+                                            width={85}
+                                        />
+                                        <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(148, 163, 184, 0.08)' }} />
+                                        <Bar
+                                            dataKey="count"
+                                            name="Kasus Deviasi"
+                                            fill="#84cc16"
+                                            radius={[0, 3, 3, 0]}
+                                        >
+                                            {checkpointDistribution.map((entry, index) => (
+                                                <Cell
+                                                    key={`cell-cp-${index}`}
+                                                    fill={
+                                                        index === 0
+                                                            ? '#84cc16'
+                                                            : index === 1
+                                                            ? '#a3e635'
+                                                            : index === 2
+                                                            ? '#bef264'
+                                                            : index === 3
+                                                            ? '#d9f99d'
+                                                            : '#65a30d'
+                                                    }
+                                                />
+                                            ))}
+                                        </Bar>
+                                    </BarChart>
+                                </ResponsiveContainer>
                             </div>
                         </CardContent>
                     </Card>
                 </div>
-
-                {/* ─── 5. CHECKPOINTS BREAKDOWN HORIZONTAL CARD ─── */}
-                <Card className="border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-2xs rounded-lg">
-                    <CardHeader className="pb-2 pt-3.5 px-4 border-b border-slate-100 dark:border-slate-800/80">
-                        <CardTitle className="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
-                            <Layers className="h-3.5 w-3.5 text-[#84cc16]" />
-                            <span>Sebaran Deviasi per Checkpoint Kinetik (NASM)</span>
-                        </CardTitle>
-                        <CardDescription className="text-[10.5px] text-slate-500">
-                            5 area rantai kinetik utama pengamatan postur dinamis
-                        </CardDescription>
-                    </CardHeader>
-                    <CardContent className="pt-3 px-4 pb-3">
-                        <div className="h-52 w-full">
-                            <ResponsiveContainer width="100%" height="100%">
-                                <BarChart
-                                    data={checkpointDistribution}
-                                    layout="vertical"
-                                    margin={{ top: 5, right: 20, left: 25, bottom: 5 }}
-                                >
-                                    <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="currentColor" className="stroke-slate-200/50 dark:stroke-slate-800/35" />
-                                    <XAxis type="number" tick={{ fontSize: 9, fill: '#64748b' }} allowDecimals={false} />
-                                    <YAxis
-                                        dataKey="checkpoint"
-                                        type="category"
-                                        tick={{ fontSize: 9, fill: '#64748b' }}
-                                        width={90}
-                                    />
-                                    <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(148, 163, 184, 0.08)' }} />
-                                    <Bar
-                                        dataKey="count"
-                                        name="Kasus Deviasi"
-                                        fill="#84cc16"
-                                        radius={[0, 3, 3, 0]}
-                                    >
-                                        {checkpointDistribution.map((entry, index) => (
-                                            <Cell
-                                                key={`cell-cp-${index}`}
-                                                fill={
-                                                    index === 0
-                                                        ? '#84cc16'
-                                                        : index === 1
-                                                        ? '#a3e635'
-                                                        : index === 2
-                                                        ? '#bef264'
-                                                        : index === 3
-                                                        ? '#d9f99d'
-                                                        : '#65a30d'
-                                                }
-                                            />
-                                        ))}
-                                    </Bar>
-                                </BarChart>
-                            </ResponsiveContainer>
-                        </div>
-                    </CardContent>
-                </Card>
-
-                {/* ─── 6. BOTTOM SECTION: RECENT ASSESSMENTS TABLE ─── */}
-                <Card className="border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-2xs rounded-lg overflow-hidden">
-                    <CardHeader className="flex flex-row items-center justify-between py-2 px-4 bg-slate-50 dark:bg-slate-800/50 border-b border-slate-100 dark:border-slate-800/80 rounded-t-lg">
-                        <div>
-                            <CardTitle className="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
-                                <Activity className="h-3.5 w-3.5 text-[#84cc16]" />
-                                <span>Sesi Asesmen DPA Terkini</span>
-                            </CardTitle>
-                            <CardDescription className="text-[10px] mt-0.5 text-slate-500">
-                                Log hasil evaluasi postur terbaru atlet di PKO Unesa x Olympus Training Surabaya
-                            </CardDescription>
-                        </div>
-                        <Link href={route('dpa.index')}>
-                            <Button variant="ghost" size="sm" className="h-6 text-[10px] gap-1 text-slate-900 dark:text-[#b4f031] px-2">
-                                <span>Lihat Semua Sesi</span>
-                                <ArrowRight className="h-3 w-3" />
-                            </Button>
-                        </Link>
-                    </CardHeader>
-
-                    <CardContent className="p-0">
-                        {recentAssessments.length === 0 ? (
-                            <div className="text-center py-6 text-[10px] text-slate-500">
-                                Belum ada riwayat sesi asesmen yang tercatat.
-                            </div>
-                        ) : (
-                            <div className="overflow-x-auto">
-                                <table className="w-full text-[10px] text-left">
-                                    <thead className="bg-slate-50/80 dark:bg-slate-900/50 border-b border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 font-semibold uppercase text-[9px]">
-                                        <tr>
-                                            <th className="px-3 py-2">Atlet</th>
-                                            <th className="px-3 py-2">Gender / Usia</th>
-                                            <th className="px-3 py-2">Tanggal</th>
-                                            <th className="px-3 py-2">Tingkat Risiko</th>
-                                            <th className="px-3 py-2 text-right">Aksi</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody className="divide-y divide-slate-100 dark:divide-slate-800/80">
-                                        {recentAssessments.map((a) => {
-                                            const count = a.details_count;
-                                            let riskBadge = (
-                                                <Badge variant="brand" className="text-[9px] py-0 px-1.5 font-semibold">
-                                                    Rendah ({count} Deviasi)
-                                                </Badge>
-                                            );
-                                            if (count >= 5) {
-                                                riskBadge = (
-                                                    <Badge variant="destructive" className="text-[9px] py-0 px-1.5 font-semibold">
-                                                        Tinggi ({count} Deviasi)
-                                                    </Badge>
-                                                );
-                                            } else if (count >= 3) {
-                                                riskBadge = (
-                                                    <Badge variant="warning" className="text-[9px] py-0 px-1.5 font-semibold">
-                                                        Sedang ({count} Deviasi)
-                                                    </Badge>
-                                                );
-                                            }
-
-                                            return (
-                                                <tr
-                                                    key={a.id}
-                                                    className="hover:bg-slate-50/80 dark:hover:bg-slate-800/50 transition-colors"
-                                                >
-                                                    <td className="px-3 py-2">
-                                                        <div className="font-bold text-slate-900 dark:text-white text-[10.5px]">
-                                                            {a.athlete.full_name}
-                                                        </div>
-                                                        <div className="text-[9px] text-slate-400 font-medium">
-                                                            {a.athlete.athlete_code}
-                                                        </div>
-                                                    </td>
-                                                    <td className="px-3 py-2">
-                                                        <span className="px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-medium text-[9.5px]">
-                                                            {a.athlete.gender === 'Male' || a.athlete.gender === 'L' ? 'Laki-laki' : 'Perempuan'}
-                                                            {a.athlete.age ? `, ${a.athlete.age} th` : ''}
-                                                        </span>
-                                                    </td>
-                                                    <td className="px-3 py-2 text-slate-600 dark:text-slate-400 font-medium text-[9.5px]">
-                                                        {new Date(a.assessment_date).toLocaleDateString('id-ID', {
-                                                            day: 'numeric',
-                                                            month: 'short',
-                                                            year: 'numeric',
-                                                        })}
-                                                    </td>
-                                                    <td className="px-3 py-2">
-                                                        {riskBadge}
-                                                    </td>
-                                                    <td className="px-3 py-2 text-right">
-                                                        <Link href={route('dpa.athletes.show', a.athlete.athlete_code || a.athlete.id)}>
-                                                            <Button variant="outline" size="sm" className="h-5.5 px-2 text-[9.5px] gap-1">
-                                                                <span>Laporan</span>
-                                                                <ChevronRight className="h-2.5 w-2.5" />
-                                                            </Button>
-                                                        </Link>
-                                                    </td>
-                                                </tr>
-                                            );
-                                        })}
-                                    </tbody>
-                                </table>
-                            </div>
-                        )}
-                    </CardContent>
-                </Card>
             </div>
         </AuthenticatedLayout>
     );

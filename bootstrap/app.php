@@ -25,15 +25,21 @@ return Application::configure(basePath: dirname(__DIR__))
         );
 
         $exceptions->respond(function (\Symfony\Component\HttpFoundation\Response $response, \Throwable $exception, Request $request) {
-            if (!app()->environment(['local', 'testing']) && in_array($response->getStatusCode(), [500, 503, 404, 403, 419])) {
+            $status = $response->getStatusCode();
+
+            $shouldRenderInertiaError = in_array($status, [400, 401, 403, 404, 405, 419, 429, 502, 503, 504])
+                || ($status === 500 && !app()->hasDebugModeEnabled());
+
+            if ($shouldRenderInertiaError && !$request->is('api/*') && !$request->expectsJson()) {
                 return \Inertia\Inertia::render('Error', [
-                    'status' => $response->getStatusCode(),
-                ])->toResponse($request)->setStatusCode($response->getStatusCode());
+                    'status' => $status,
+                    'message' => $exception->getMessage() ?: null,
+                ])->toResponse($request)->setStatusCode($status);
             }
 
-            if ($response->getStatusCode() === 419) {
+            if ($status === 419) {
                 return back()->with([
-                    'message' => 'The page expired, please try again.',
+                    'message' => 'Sesi kedaluwarsa, silakan muat ulang halaman.',
                 ]);
             }
 

@@ -6,7 +6,6 @@ use App\Models\Athlete;
 use App\Models\DpaAssessment;
 use App\Models\DpaAssessmentDetail;
 use App\Models\DpaCompensation;
-use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
@@ -92,6 +91,9 @@ class DpaAssessmentController extends Controller
             'compensations.*' => 'exists:dpa_compensations,id',
             'step_photos' => 'nullable|array',
             'step_photos.*' => 'nullable|image|max:10240',
+            'step_annotated_photos' => 'nullable|array',
+            'step_annotated_photos.*' => 'nullable|image|max:10240',
+            'step_metadata' => 'nullable',
         ]);
 
         DB::transaction(function () use ($validated, $athlete, $request) {
@@ -111,26 +113,54 @@ class DpaAssessmentController extends Controller
                 }
             }
 
-            // Save test photos to AthleteGallery
-            if ($request->hasFile('step_photos')) {
-                foreach ($request->file('step_photos') as $viewKey => $file) {
-                    if ($file && $file->isValid()) {
-                        $path = $file->store('athletes/' . $athlete->id . '/postures', 'public');
-                        \App\Models\AthleteGallery::create([
-                            'athlete_id' => $athlete->id,
-                            'image_path' => $path,
-                            'notes' => "Hasil Tes Postur DPA ({$viewKey}) - " . \Carbon\Carbon::parse($assessment->assessment_date)->isoFormat('D MMMM Y'),
-                            'meta' => [
-                                'view_category' => $viewKey,
-                                'assessment_id' => $assessment->id,
-                            ],
-                        ]);
+            // Save test photos (both raw and annotated versions) + metadata to AthleteGallery
+            $stepMetadata = [];
+            if ($request->filled('step_metadata')) {
+                $metaInput = $request->input('step_metadata');
+                $stepMetadata = is_string($metaInput) ? json_decode($metaInput, true) : (array)$metaInput;
+            }
+
+            $allViews = ['Anterior View', 'Lateral View', 'Posterior View', 'Single Leg'];
+            $rawFiles = $request->file('step_photos', []);
+            $annotatedFiles = $request->file('step_annotated_photos', []);
+
+            foreach ($allViews as $viewKey) {
+                $rawFile = $rawFiles[$viewKey] ?? null;
+                $annotatedFile = $annotatedFiles[$viewKey] ?? null;
+                $viewMeta = $stepMetadata[$viewKey] ?? null;
+
+                if ($rawFile && $rawFile->isValid()) {
+                    $rawStored = $rawFile->store('athletes/' . $athlete->id . '/postures', 'public');
+                    $rawPath = '/storage/' . $rawStored;
+                    $annotatedPath = $rawPath;
+
+                    if ($annotatedFile && $annotatedFile->isValid()) {
+                        $annotatedStored = $annotatedFile->store('athletes/' . $athlete->id . '/postures', 'public');
+                        $annotatedPath = '/storage/' . $annotatedStored;
                     }
+
+                    $galleryMeta = [
+                        'view_category' => $viewKey,
+                        'assessment_id' => $assessment->id,
+                        'has_annotations' => true,
+                        'landmarks' => $viewMeta['landmarks'] ?? [],
+                        'show_goniometer' => $viewMeta['showGoniometer'] ?? true,
+                        'detected_compensations' => $viewMeta['detectedCompensations'] ?? [],
+                    ];
+
+                    \App\Models\AthleteGallery::create([
+                        'athlete_id' => $athlete->id,
+                        'image_path' => $annotatedPath,
+                        'original_image_path' => $rawPath,
+                        'annotations' => $viewMeta['landmarks'] ?? null,
+                        'meta' => $galleryMeta,
+                        'notes' => "Hasil Analisis Postur DPA ({$viewKey}) - " . \Carbon\Carbon::parse($assessment->assessment_date)->isoFormat('D MMMM Y'),
+                    ]);
                 }
             }
         });
 
-        return redirect()->back()->with('success', 'Data evaluasi DPA dan foto hasil tes berhasil disimpan ke galeri.');
+        return redirect()->back()->with('success', 'Data evaluasi DPA, visualisasi garis postur, dan metadata koordinat berhasil disimpan.');
     }
 
     /**
@@ -147,6 +177,9 @@ class DpaAssessmentController extends Controller
             'compensations.*' => 'exists:dpa_compensations,id',
             'step_photos' => 'nullable|array',
             'step_photos.*' => 'nullable|image|max:10240',
+            'step_annotated_photos' => 'nullable|array',
+            'step_annotated_photos.*' => 'nullable|image|max:10240',
+            'step_metadata' => 'nullable',
         ]);
 
         DB::transaction(function () use ($validated, $dpaAssessment, $request) {
@@ -168,27 +201,93 @@ class DpaAssessmentController extends Controller
                 }
             }
 
-            // Save any newly uploaded test photos to AthleteGallery
-            if ($request->hasFile('step_photos')) {
-                $athlete = $dpaAssessment->athlete;
-                foreach ($request->file('step_photos') as $viewKey => $file) {
-                    if ($file && $file->isValid()) {
-                        $path = $file->store('athletes/' . $athlete->id . '/postures', 'public');
+            // Sync/Update posture gallery photos & landmarks
+            $athlete = $dpaAssessment->athlete;
+            $stepMetadata = [];
+            if ($request->filled('step_metadata')) {
+                $metaInput = $request->input('step_metadata');
+                $stepMetadata = is_string($metaInput) ? json_decode($metaInput, true) : (array)$metaInput;
+            }
+
+            $allViews = ['Anterior View', 'Lateral View', 'Posterior View', 'Single Leg'];
+            $rawFiles = $request->file('step_photos', []);
+            $annotatedFiles = $request->file('step_annotated_photos', []);
+
+            foreach ($allViews as $viewKey) {
+                $rawFile = $rawFiles[$viewKey] ?? null;
+                $annotatedFile = $annotatedFiles[$viewKey] ?? null;
+                $viewMeta = $stepMetadata[$viewKey] ?? null;
+
+                $existingGallery = \App\Models\AthleteGallery::where('athlete_id', $athlete->id)
+                    ->where('meta->assessment_id', $dpaAssessment->id)
+                    ->where('meta->view_category', $viewKey)
+                    ->first();
+
+                if ($rawFile && $rawFile->isValid()) {
+                    $rawStored = $rawFile->store('athletes/' . $athlete->id . '/postures', 'public');
+                    $rawPath = '/storage/' . $rawStored;
+                    $annotatedPath = $rawPath;
+
+                    if ($annotatedFile && $annotatedFile->isValid()) {
+                        $annotatedStored = $annotatedFile->store('athletes/' . $athlete->id . '/postures', 'public');
+                        $annotatedPath = '/storage/' . $annotatedStored;
+                    }
+
+                    $galleryMeta = [
+                        'view_category' => $viewKey,
+                        'assessment_id' => $dpaAssessment->id,
+                        'has_annotations' => true,
+                        'landmarks' => $viewMeta['landmarks'] ?? [],
+                        'show_goniometer' => $viewMeta['showGoniometer'] ?? true,
+                        'detected_compensations' => $viewMeta['detectedCompensations'] ?? [],
+                    ];
+
+                    if ($existingGallery) {
+                        $existingGallery->update([
+                            'image_path' => $annotatedPath,
+                            'original_image_path' => $rawPath,
+                            'annotations' => $viewMeta['landmarks'] ?? null,
+                            'meta' => $galleryMeta,
+                        ]);
+                    } else {
                         \App\Models\AthleteGallery::create([
                             'athlete_id' => $athlete->id,
-                            'image_path' => $path,
-                            'notes' => "Hasil Tes Postur DPA ({$viewKey}) - " . \Carbon\Carbon::parse($dpaAssessment->assessment_date)->isoFormat('D MMMM Y'),
-                            'meta' => [
-                                'view_category' => $viewKey,
-                                'assessment_id' => $dpaAssessment->id,
-                            ],
+                            'image_path' => $annotatedPath,
+                            'original_image_path' => $rawPath,
+                            'annotations' => $viewMeta['landmarks'] ?? null,
+                            'meta' => $galleryMeta,
+                            'notes' => "Hasil Analisis Postur DPA ({$viewKey}) - " . \Carbon\Carbon::parse($dpaAssessment->assessment_date)->isoFormat('D MMMM Y'),
                         ]);
                     }
+                } elseif ($annotatedFile && $annotatedFile->isValid() && $existingGallery) {
+                    $annotatedStored = $annotatedFile->store('athletes/' . $athlete->id . '/postures', 'public');
+                    $annotatedPath = '/storage/' . $annotatedStored;
+
+                    $galleryMeta = array_merge($existingGallery->meta ?? [], [
+                        'landmarks' => $viewMeta['landmarks'] ?? ($existingGallery->meta['landmarks'] ?? []),
+                        'show_goniometer' => $viewMeta['showGoniometer'] ?? ($existingGallery->meta['show_goniometer'] ?? true),
+                    ]);
+
+                    $existingGallery->update([
+                        'image_path' => $annotatedPath,
+                        'annotations' => $viewMeta['landmarks'] ?? $existingGallery->annotations,
+                        'meta' => $galleryMeta,
+                    ]);
+                } elseif ($viewMeta && $existingGallery) {
+                    $galleryMeta = array_merge($existingGallery->meta ?? [], [
+                        'landmarks' => $viewMeta['landmarks'] ?? ($existingGallery->meta['landmarks'] ?? []),
+                        'show_goniometer' => $viewMeta['showGoniometer'] ?? ($existingGallery->meta['show_goniometer'] ?? true),
+                    ]);
+
+                    $existingGallery->update([
+                        'annotations' => $viewMeta['landmarks'] ?? $existingGallery->annotations,
+                        'meta' => $galleryMeta,
+                    ]);
                 }
             }
         });
 
-        return redirect()->back()->with('success', 'Data evaluasi DPA berhasil diperbarui.');
+        return redirect()->back()->with('success', 'Data evaluasi DPA dan garis visualisasi postur berhasil diperbarui.');
     }
 
     /**
@@ -198,78 +297,5 @@ class DpaAssessmentController extends Controller
     {
         $dpaAssessment->delete();
         return redirect()->back()->with('success', 'Data evaluasi DPA berhasil dihapus.');
-    }
-
-    /**
-     * Export DPA assessment report to PDF.
-     */
-    public function exportPdf(Request $request, Athlete $athlete)
-    {
-        ini_set('memory_limit', '512M');
-        ini_set('max_execution_time', '300');
-
-        $exportData = json_decode($request->input('table_data', '[]'), true);
-        $customTitle = trim($request->input('title', ''));
-        $note = $request->input('note');
-
-        $defaultTitle = "DPA ASSESSMENT REPORT - " . strtoupper($athlete->full_name);
-        $title = !empty($customTitle) ? $customTitle : $defaultTitle;
-
-        $latest = $exportData['latest'] ?? null;
-        if (!$latest) {
-            $latestAssessment = $athlete->dpaAssessments()->with(['details.compensation'])->latest('assessment_date')->first();
-            if ($latestAssessment) {
-                $latest = $latestAssessment->toArray();
-            }
-        }
-
-        $analysis = [
-            'overactive' => [],
-            'underactive' => [],
-            'injuries' => [],
-            'smr' => [],
-            'stretching' => [],
-            'isometrics' => [],
-            'integrated' => [],
-        ];
-
-        if ($latest && isset($latest['details'])) {
-            $addItems = function ($sourceStr, &$targetArray) {
-                if (!$sourceStr) return;
-                $items = array_filter(array_map('trim', preg_split('/[\n,]/', $sourceStr)));
-                foreach ($items as $item) {
-                    $clean = ltrim($item, '- ');
-                    if (!in_array($clean, $targetArray)) {
-                        $targetArray[] = $clean;
-                    }
-                }
-            };
-
-            foreach ($latest['details'] as $detail) {
-                if (isset($detail['compensation'])) {
-                    $c = $detail['compensation'];
-                    $addItems($c['overactive_muscles'] ?? '', $analysis['overactive']);
-                    $addItems($c['underactive_muscles'] ?? '', $analysis['underactive']);
-                    $addItems($c['possible_injuries'] ?? '', $analysis['injuries']);
-                    $addItems($c['exercises_smr'] ?? '', $analysis['smr']);
-                    $addItems($c['exercises_stretching'] ?? '', $analysis['stretching']);
-                    $addItems($c['exercises_isometrics'] ?? '', $analysis['isometrics']);
-                    $addItems($c['exercises_integrated'] ?? '', $analysis['integrated']);
-                }
-            }
-        }
-
-        $pdf = Pdf::loadView('exports.dpa_pdf', [
-            'athlete' => $athlete,
-            'latest' => $latest,
-            'analysis' => $analysis,
-            'title' => $title,
-            'note' => $note,
-        ])->setPaper('a4', 'portrait');
-
-        $cleanName = preg_replace('/[^A-Za-z0-9_\-]/', '_', $athlete->full_name);
-        $filename = 'DPA_Report_' . $cleanName . '_' . date('Ymd') . '.pdf';
-
-        return $pdf->download($filename);
     }
 }

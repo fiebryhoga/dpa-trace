@@ -17,7 +17,6 @@ import {
     Flame,
     CheckCircle2,
     Camera,
-    Printer,
     User,
     Calendar,
     ArrowLeft,
@@ -51,7 +50,7 @@ export default function DpaShow({
     const [activeTab, setActiveTab] = useState<'analysis' | 'gallery' | 'input'>('analysis');
     const [isEditMode, setIsEditMode] = useState(false);
     const [editId, setEditId] = useState<number | null>(null);
-    const [isExporting, setIsExporting] = useState(false);
+    const [initialStepData, setInitialStepData] = useState<Record<string, any>>({});
     const [expandedCompVisualId, setExpandedCompVisualId] = useState<number | null>(null);
 
     const { data, setData, post, put, processing, reset } = useForm<{
@@ -61,6 +60,8 @@ export default function DpaShow({
         current_weight_kg?: string | number;
         compensations: number[];
         step_photos?: Record<string, File>;
+        step_annotated_photos?: Record<string, File>;
+        step_metadata?: Record<string, any>;
     }>({
         assessment_date: new Date().toISOString().split('T')[0],
         notes: '',
@@ -68,6 +69,8 @@ export default function DpaShow({
         current_weight_kg: athlete.weight_kg || '',
         compensations: [],
         step_photos: {},
+        step_annotated_photos: {},
+        step_metadata: {},
     });
 
     const handleEdit = (item: DpaAssessment) => {
@@ -79,7 +82,31 @@ export default function DpaShow({
             current_height_cm: item.current_height_cm || athlete.height_cm || '',
             current_weight_kg: item.current_weight_kg || athlete.weight_kg || '',
             compensations: (item.details || []).map((d) => d.dpa_compensation_id),
+            step_photos: {},
+            step_annotated_photos: {},
+            step_metadata: {},
         });
+
+        // Extract posture photos and saved landmarks linked to this assessment
+        const linkedGalleries = galleries.filter((g) => g.meta?.assessment_id === item.id);
+        const stepDataMap: Record<string, any> = {};
+
+        linkedGalleries.forEach((g) => {
+            const viewCat = g.meta?.view_category;
+            if (viewCat) {
+                stepDataMap[viewCat] = {
+                    imagePath: g.original_image_path || g.image_path,
+                    originalImagePath: g.original_image_path || g.image_path,
+                    landmarks: g.annotations || g.meta?.landmarks || [],
+                    showGoniometer: g.meta?.show_goniometer ?? true,
+                    scanResults: g.meta?.detected_compensations
+                        ? { detected_compensations: g.meta.detected_compensations }
+                        : null,
+                };
+            }
+        });
+
+        setInitialStepData(stepDataMap);
         setActiveTab('input');
     };
 
@@ -92,6 +119,7 @@ export default function DpaShow({
     const cancelEdit = () => {
         setIsEditMode(false);
         setEditId(null);
+        setInitialStepData({});
         reset();
         setActiveTab('analysis');
     };
@@ -154,39 +182,7 @@ export default function DpaShow({
             .filter(Boolean);
     };
 
-    // PDF Export Trigger
-    const handleExportPdf = () => {
-        setIsExporting(true);
-        const form = document.createElement('form');
-        form.method = 'POST';
-        form.action = route('dpa.export-pdf', athlete.id);
 
-        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
-        if (csrfToken) {
-            const csrfInput = document.createElement('input');
-            csrfInput.type = 'hidden';
-            csrfInput.name = '_token';
-            csrfInput.value = csrfToken;
-            form.appendChild(csrfInput);
-        }
-
-        const tableDataInput = document.createElement('input');
-        tableDataInput.type = 'hidden';
-        tableDataInput.name = 'table_data';
-        tableDataInput.value = JSON.stringify({ latest });
-        form.appendChild(tableDataInput);
-
-        const noteInput = document.createElement('input');
-        noteInput.type = 'hidden';
-        noteInput.name = 'note';
-        noteInput.value = latest?.notes || '';
-        form.appendChild(noteInput);
-
-        document.body.appendChild(form);
-        form.submit();
-        document.body.removeChild(form);
-        setTimeout(() => setIsExporting(false), 2000);
-    };
 
     const initials = athlete.full_name
         .split(' ')
@@ -241,17 +237,6 @@ export default function DpaShow({
                     }
                     actions={
                         <div className="flex items-center gap-2 flex-wrap">
-                            {latest && (
-                                <button
-                                    type="button"
-                                    onClick={handleExportPdf}
-                                    disabled={isExporting}
-                                    className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700/80 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 rounded-md text-xs font-semibold shadow-2xs transition-colors cursor-pointer"
-                                >
-                                    <Printer size={14} className="text-[#65a30d] dark:text-[#b4f031]" />
-                                    <span>{isExporting ? 'Memproses PDF...' : 'Cetak PDF'}</span>
-                                </button>
-                            )}
 
                             {activeTab !== 'input' ? (
                                 <button
@@ -890,6 +875,7 @@ export default function DpaShow({
                             athleteGender={athlete.gender}
                             compensations={compensations}
                             galleryPhotos={galleries}
+                            initialStepData={initialStepData}
                             data={data}
                             setData={setData}
                             submit={submit}

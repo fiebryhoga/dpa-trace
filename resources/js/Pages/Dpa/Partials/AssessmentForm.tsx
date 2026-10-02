@@ -21,6 +21,7 @@ interface AssessmentFormProps {
     athleteGender?: string;
     compensations: DpaCompensation[];
     galleryPhotos?: AthleteGallery[];
+    initialStepData?: Record<string, any>;
     data: {
         assessment_date: string;
         notes: string;
@@ -28,6 +29,8 @@ interface AssessmentFormProps {
         current_weight_kg?: string | number;
         compensations: number[];
         step_photos?: Record<string, File>;
+        step_annotated_photos?: Record<string, File>;
+        step_metadata?: Record<string, any>;
     };
     setData: (key: any, value: any) => void;
     submit: (e: React.FormEvent) => void;
@@ -41,6 +44,7 @@ export default function AssessmentForm({
     athleteGender,
     compensations = [],
     galleryPhotos = [],
+    initialStepData = {},
     data,
     setData,
     submit,
@@ -75,6 +79,14 @@ export default function AssessmentForm({
         setData('step_photos', photos);
     };
 
+    const handleStepAnnotatedPhotosChange = (annotated: Record<string, File>) => {
+        setData('step_annotated_photos', annotated);
+    };
+
+    const handleStepMetadataChange = (metadata: Record<string, any>) => {
+        setData('step_metadata', metadata);
+    };
+
     const selectedItems = useMemo(() => {
         return compensations.filter((c) => data.compensations?.includes(c.id));
     }, [compensations, data.compensations]);
@@ -90,8 +102,11 @@ export default function AssessmentForm({
                 availableCompensations={compensations}
                 galleryPhotos={galleryPhotos}
                 selectedCompensationIds={data.compensations || []}
+                initialStepData={initialStepData}
                 onApplyCompensations={handleApplyScannedCompensations}
                 onStepPhotosChange={handleStepPhotosChange}
+                onStepAnnotatedPhotosChange={handleStepAnnotatedPhotosChange}
+                onStepMetadataChange={handleStepMetadataChange}
             />
 
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">

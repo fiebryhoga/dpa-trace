@@ -21,7 +21,7 @@ import {
     ChevronRight,
     ExternalLink
 } from 'lucide-react';
-import PostureImageEditorModal from './PostureImageEditorModal';
+import { AthleteGallery as AthleteGalleryType } from '@/types';
 
 interface AthleteGalleryProps {
     athlete: any;
@@ -44,7 +44,6 @@ export default function AthleteGallery({
     const [viewer, setViewer] = useState({ isOpen: false, photo: null });
     const [editModal, setEditModal] = useState({ isOpen: false, photo: null });
     const [editPreview, setEditPreview] = useState(null);
-    const [editorState, setEditorState] = useState({ isOpen: false, photo: null });
     
     // State Form Upload
     const { 
@@ -70,12 +69,12 @@ export default function AthleteGallery({
 
     // Kunci Scroll Body saat Modal Apapun Terbuka
     useEffect(() => {
-        if (isUploadModalOpen || viewer.isOpen || editModal.isOpen || editorState.isOpen) {
+        if (isUploadModalOpen || viewer.isOpen || editModal.isOpen) {
             document.body.style.overflow = 'hidden';
         } else {
             document.body.style.overflow = 'unset';
         }
-    }, [isUploadModalOpen, viewer.isOpen, editModal.isOpen, editorState.isOpen]);
+    }, [isUploadModalOpen, viewer.isOpen, editModal.isOpen]);
 
     // Keyboard Navigation untuk Viewer Modal
     useEffect(() => {
@@ -352,16 +351,7 @@ export default function AthleteGallery({
                                         <Maximize2 className="w-3.5 h-3.5"/>
                                     </button>
                                     
-                                    {canManage && (
-                                        <button 
-                                            type="button"
-                                            onClick={() => setEditorState({ isOpen: true, photo: item })} 
-                                            title="Anotasi & Ukur Postur" 
-                                            className="p-1.5 text-slate-400 hover:bg-[#84cc16]/10 hover:text-[#84cc16] dark:hover:text-[#b4f031] rounded-md transition-colors cursor-pointer touch-manipulation"
-                                        >
-                                            <Pencil className="w-3.5 h-3.5"/>
-                                        </button>
-                                    )}
+
 
                                     <button 
                                         type="button"
@@ -580,20 +570,7 @@ export default function AthleteGallery({
 
                                 {/* Action Buttons */}
                                 <div className="pt-3 space-y-2 border-t border-slate-100 dark:border-slate-800">
-                                    {canManage && (
-                                        <button
-                                            type="button"
-                                            onClick={() => {
-                                                const currentPhoto = curPhoto;
-                                                setViewer({ isOpen: false, photo: null });
-                                                setEditorState({ isOpen: true, photo: currentPhoto });
-                                            }}
-                                            className="w-full py-2.5 px-4 rounded-md bg-[#84cc16] hover:bg-[#65a30d] dark:bg-[#b4f031] dark:hover:bg-[#84cc16] text-slate-950 font-bold text-xs shadow-xs hover:shadow-sm transition-all flex items-center justify-center gap-2 active:scale-95 cursor-pointer"
-                                        >
-                                            <Pencil size={13} />
-                                            <span>Anotasi &amp; Ukur Postur</span>
-                                        </button>
-                                    )}
+
 
                                     <button
                                         type="button"
@@ -949,21 +926,7 @@ export default function AthleteGallery({
                 </div>
             )}
 
-            {/* =========================================
-                MODAL 4: POSTURE IMAGE EDITOR (CANVAS)
-            ========================================= */}
-            <PostureImageEditorModal
-                isOpen={editorState.isOpen}
-                onClose={() => setEditorState({ isOpen: false, photo: null })}
-                imageSrc={editorState.photo ? getPhotoUrl(editorState.photo.image_path) : null}
-                originalImageSrc={editorState.photo ? getPhotoUrl(editorState.photo.original_image_path || editorState.photo.image_path) : null}
-                initialAnnotations={editorState.photo?.annotations || null}
-                initialMeta={editorState.photo?.meta || null}
-                galleryId={editorState.photo?.id || null}
-                athleteId={athlete?.id || null}
-                athleteName={athlete?.name || ''}
-                onSaved={() => router.reload({ preserveScroll: true })}
-            />
+
         </div>
     );
 }
