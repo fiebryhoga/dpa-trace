@@ -25,7 +25,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/athletes/gallery/{gallery}', [AthleteController::class, 'updateGallery'])->name('athletes.gallery.update');
     Route::delete('/athletes/gallery/{gallery}', [AthleteController::class, 'destroyGallery'])->name('athletes.gallery.destroy');
 
-    // Dynamic Posture Assessment (DPA)
+    // Postural & Movement Assessment (PMA)
     Route::get('/dpa', [DpaAssessmentController::class, 'index'])->name('dpa.index');
     Route::get('/dpa/athletes/{athlete}', [DpaAssessmentController::class, 'showAthlete'])->name('dpa.athletes.show');
     Route::post('/dpa/athletes/{athlete}', [DpaAssessmentController::class, 'store'])->name('dpa.store');

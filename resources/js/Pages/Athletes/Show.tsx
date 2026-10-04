@@ -1,5 +1,5 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link, router } from '@inertiajs/react';
 import PageHeader from '@/Components/PageHeader';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/Components/ui/Card';
 import { Button } from '@/Components/ui/Button';
@@ -13,6 +13,7 @@ import {
     ChevronRight,
     AlertCircle,
     User,
+    Trash2,
 } from 'lucide-react';
 
 interface Compensation {
@@ -61,9 +62,15 @@ interface Athlete {
 }
 
 export default function AthleteShow({ athlete }: { athlete: Athlete }) {
+    const handleDelete = () => {
+        if (confirm(`Apakah Anda yakin ingin menghapus data atlet "${athlete.full_name}" (${athlete.athlete_code}) beserta seluruh riwayat asesmen PMA miliknya?`)) {
+            router.delete(route('athletes.destroy', athlete.athlete_code || athlete.id));
+        }
+    };
+
     return (
         <AuthenticatedLayout>
-            <Head title={`Athlete Profile: ${athlete.full_name} - Athlete DPA`} />
+            <Head title={`Athlete Profile: ${athlete.full_name} - Athlete PMA`} />
 
             <div className="space-y-6">
                 <PageHeader
@@ -81,7 +88,16 @@ export default function AthleteShow({ athlete }: { athlete: Athlete }) {
                         </span>
                     }
                     actions={
-                        <>
+                        <div className="flex items-center gap-2">
+                            <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={handleDelete}
+                                className="gap-1.5 text-xs text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/30 hover:border-rose-300 dark:hover:border-rose-800 rounded-md"
+                            >
+                                <Trash2 className="h-3.5 w-3.5" />
+                                <span>Hapus Atlet</span>
+                            </Button>
                             <Link href={route('athletes.edit', athlete.athlete_code || athlete.id)}>
                                 <Button variant="outline" size="sm" className="gap-1.5 text-xs rounded-md">
                                     <Edit3 className="h-3.5 w-3.5" />
@@ -91,10 +107,10 @@ export default function AthleteShow({ athlete }: { athlete: Athlete }) {
                             <Link href={route('dpa.athletes.show', athlete.athlete_code || athlete.id)}>
                                 <Button size="sm" className="gap-1.5 text-xs font-bold bg-[#b4f031] text-slate-950 hover:bg-[#a2dd26] rounded-md">
                                     <Activity className="h-3.5 w-3.5" />
-                                    <span>Buka Analisis DPA</span>
+                                    <span>Buka Analisis PMA</span>
                                 </Button>
                             </Link>
-                        </>
+                        </div>
                     }
                 />
 
@@ -169,13 +185,13 @@ export default function AthleteShow({ athlete }: { athlete: Athlete }) {
                         </Card>
                     </div>
 
-                    {/* Right Column: DPA Assessment History */}
+                    {/* Right Column: PMA Assessment History */}
                     <div className="lg:col-span-8 space-y-4">
                         <Card className="border-slate-200/90 dark:border-slate-800 bg-white dark:bg-[#0E1526] shadow-sm">
                             <CardHeader className="flex flex-row items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800/80">
                                 <div>
                                     <CardTitle className="text-base font-bold text-slate-900 dark:text-white">
-                                        Dynamic Posture Assessment History
+                                        Postural & Movement Assessment History
                                     </CardTitle>
                                     <CardDescription className="text-xs mt-0.5">
                                         Recorded kinetic chain evaluations and corrective exercise regimens
@@ -184,7 +200,7 @@ export default function AthleteShow({ athlete }: { athlete: Athlete }) {
                                 <Link href={route('dpa.athletes.show', athlete.athlete_code || athlete.id)}>
                                     <Button size="sm" className="h-8 text-xs gap-1.5 font-bold bg-[#b4f031] text-slate-950 hover:bg-[#a2dd26] shadow-brand">
                                         <PlusCircle className="h-3.5 w-3.5" />
-                                        <span>Buka Evaluasi DPA</span>
+                                        <span>Buka Evaluasi PMA</span>
                                     </Button>
                                 </Link>
                             </CardHeader>
@@ -194,7 +210,7 @@ export default function AthleteShow({ athlete }: { athlete: Athlete }) {
                                     <div className="text-center py-10 space-y-2 border border-dashed border-[#b4f031]/30 rounded-lg bg-[#b4f031]/5">
                                         <Activity className="h-8 w-8 text-[#84cc16] dark:text-[#b4f031] mx-auto" />
                                         <p className="text-xs text-slate-500">
-                                            Belum ada sesi evaluasi DPA yang tercatat untuk atlet ini.
+                                            Belum ada sesi evaluasi PMA yang tercatat untuk atlet ini.
                                         </p>
                                         <Link href={route('dpa.athletes.show', athlete.athlete_code || athlete.id)}>
                                             <Button size="sm" variant="outline" className="text-xs">

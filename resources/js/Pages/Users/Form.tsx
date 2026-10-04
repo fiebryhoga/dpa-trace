@@ -59,7 +59,7 @@ export default function UserForm({
                     title={isEdit ? 'Edit Akun Administrator' : 'Tambah Administrator Baru'}
                     description={
                         isEdit
-                            ? 'Perbarui kredensial dan detail akun administrator Athlete DPA.'
+                            ? 'Perbarui kredensial dan detail akun administrator Athlete PMA.'
                             : 'Buat akun login baru untuk administrator atau penguji biomekanika.'
                     }
                     actions={

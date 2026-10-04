@@ -57,7 +57,7 @@ class DpaAiAnalysisController extends Controller
             ?: config('services.gemini.api_key', env('GEMINI_API_KEY'));
 
         $geminiResult = null;
-        $engineName = 'Athlete DPA Biomechanics Rule Engine (Goniometric Calibration)';
+        $engineName = 'Athlete PMA Biomechanics Rule Engine (Goniometric Calibration)';
 
         if ($apiKey && $base64Image) {
             try {
@@ -103,7 +103,7 @@ class DpaAiAnalysisController extends Controller
         })->values()->toArray();
 
         $prompt = <<<PROMPT
-You are a World-Class Sports Biomechanist and Master NASM (National Academy of Sports Medicine) Evaluator performing an exact Dynamic Posture Assessment (Overhead Squat / Single Leg Squat).
+You are a World-Class Sports Biomechanist and Master NASM (National Academy of Sports Medicine) Evaluator performing an exact Postural & Movement Assessment (PMA) (Overhead Squat / Single Leg Squat).
 
 Assessed View Angle: {$viewCategory}
 
@@ -112,10 +112,10 @@ Registered Compensations in Database for this View Angle:
 
 EXACT NASM BIOMECHANICAL VISUAL CLUES & MARKERS:
 1. ANTERIOR VIEW:
-   - "Foot - Feet Turn Out": Look at feet progression angle. Feet rotating laterally outwards > 12-15° (like an open triangle relative to sagittal line).
+   - "Foot - Feet Turn Out": Look at feet progression angle. Feet opening or rotating laterally outwards even slightly (any outward flare relative to straight sagittal line) MUST be detected and flagged as Feet Turn Out.
    - "Foot - Foot Flattens (Pronation)": Medial longitudinal arch collapses inward toward the floor; eversion of foot.
    - "Knee - Move Inward (Valgus)": Femur adducts & internally rotates; the line connecting hip-to-knee-to-ankle bends inwards toward midline (patella collapses medial past 2nd toe).
-   - "Knee - Move Outward": Femur abducts; knee line bows outward laterally (genu varum).
+   - "Knee - Move Outward": Femur abducts; knee line bows or moves outward laterally (genu varum) away from the 2nd toe progression axis (even slight lateral movement/bowing should be flagged as Knee Move Outward).
 
 2. LATERAL VIEW:
    - "LPHC - Excessive Forward Lean": Compare the torso line (hip to shoulder) with the tibia line (ankle to knee). If the torso is significantly more angled forward than the tibia (non-parallel lines crossing), flag this.
@@ -247,8 +247,8 @@ PROMPT;
                 'summary' => 'Sistem goniometer biomekanika aktif. Titik pin landmark anatomi (ASIS, Patella, Malleolus, Foot) telah disiapkan pada foto untuk kalibrasi sudut Q-Angle dan Foot Turnout.',
                 'detected_compensations' => [],
                 'landmarks' => [
-                    ['name' => 'Left ASIS', 'x' => 43.0, 'y' => 48.0, 'status' => 'Normal'],
-                    ['name' => 'Right ASIS', 'x' => 57.0, 'y' => 48.0, 'status' => 'Normal'],
+                    ['name' => 'Left ASIS', 'x' => 43.0, 'y' => 39.0, 'status' => 'Normal'],
+                    ['name' => 'Right ASIS', 'x' => 57.0, 'y' => 39.0, 'status' => 'Normal'],
                     ['name' => 'Left Knee (Patella)', 'x' => 44.0, 'y' => 68.0, 'status' => 'Normal'],
                     ['name' => 'Right Knee (Patella)', 'x' => 56.0, 'y' => 68.0, 'status' => 'Normal'],
                     ['name' => 'Left Ankle (Malleolus)', 'x' => 43.0, 'y' => 88.0, 'status' => 'Normal'],

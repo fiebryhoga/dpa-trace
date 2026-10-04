@@ -264,14 +264,14 @@ export default function Dashboard({
 
     return (
         <AuthenticatedLayout>
-            <Head title="Dashboard Analitik - Dynamic Posture Assessment" />
+            <Head title="Dashboard Analitik - Postural & Movement Assessment" />
 
             <div className="space-y-5 pb-8">
                 {/* Header with Quick Actions */}
                 <PageHeader
                     title={
                         <>
-                            Dynamic Posture <span className="text-[#84cc16] dark:text-[#b4f031]">Assessment Analytics</span>
+                            Postural & Movement <span className="text-[#84cc16] dark:text-[#b4f031]">Assessment Analytics (PMA)</span>
                         </>
                     }
                     description="Pusat pemantauan biomekanik atlet, evaluasi rantai kinetik & program latihan korektif • PKO Unesa x Olympus Training Surabaya"
@@ -286,7 +286,7 @@ export default function Dashboard({
                             <Link href={route('dpa.index')}>
                                 <Button size="sm" className="h-7 gap-1 text-[11px] font-bold bg-[#b4f031] text-slate-950 hover:bg-[#a2dd26] rounded-md px-2.5 shadow-xs">
                                     <PlusCircle className="h-3 w-3" />
-                                    <span>Analisis DPA Baru</span>
+                                    <span>Analisis PMA Baru</span>
                                 </Button>
                             </Link>
                         </div>
@@ -321,11 +321,11 @@ export default function Dashboard({
                         </CardContent>
                     </Card>
 
-                    {/* Total DPA Sessions */}
+                    {/* Total PMA Sessions */}
                     <Card className="border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-2xs hover:border-[#84cc16]/60 dark:hover:border-[#b4f031]/60 transition-all rounded-md">
                         <CardHeader className="flex flex-row items-center justify-between pb-1 space-y-0 px-4 pt-3">
                             <span className="text-[11px] font-medium text-slate-500 dark:text-slate-400">
-                                Total Sesi Evaluasi DPA
+                                Total Sesi Evaluasi PMA
                             </span>
                             <div className="p-1 rounded-md bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
                                 <Activity className="h-3.5 w-3.5" />

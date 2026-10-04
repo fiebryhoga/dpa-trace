@@ -182,7 +182,7 @@ export default function ExerciseIndex({
 
     return (
         <AuthenticatedLayout>
-            <Head title="Master Data Latihan - Athlete DPA" />
+            <Head title="Master Data Latihan - Athlete PMA" />
 
             <div className="space-y-4 pb-12" ref={formTopRef}>
                 {/* ─── PAGE HEADER WITH SEARCH BAR IN ACTIONS ─── */}
@@ -361,7 +361,7 @@ export default function ExerciseIndex({
                                     htmlFor="exercise-is-active"
                                     className="text-xs font-medium text-slate-700 dark:text-slate-300 cursor-pointer"
                                 >
-                                    Latihan aktif (dapat dihubungkan ke DPA)
+                                    Latihan aktif (dapat dihubungkan ke PMA)
                                 </label>
                             </div>
 

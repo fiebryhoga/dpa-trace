@@ -24,6 +24,7 @@ import {
     ChevronRight,
     Check,
     Upload,
+    UploadCloud,
     Trash2,
     Image as ImageIcon,
     Lock,
@@ -236,6 +237,7 @@ export default function SmartPostureScanner({
     const [checkedResults, setCheckedResults] = useState<number[]>([]);
     const [showGalleryPicker, setShowGalleryPicker] = useState(false);
     const [errorMsg, setErrorMsg] = useState<string | null>(null);
+    const [isDraggingOver, setIsDraggingOver] = useState(false);
     const [analysisTab, setAnalysisTab] = useState<'list' | 'visual'>('list');
 
     // Multi-step cache to retain each step's photo and results across transitions
@@ -327,23 +329,6 @@ export default function SmartPostureScanner({
 
             const targetIdx = ASSESSMENT_STEPS.findIndex((s) => s.view === targetView);
             const currentIdx = ASSESSMENT_STEPS.findIndex((s) => s.view === selectedView);
-            const hasCurrentPhoto = Boolean(imagePreview || imageFile || selectedGalleryPhoto);
-
-            // Block proceeding to future steps if current step or any prior step lacks a photo
-            if (targetIdx > currentIdx) {
-                for (let i = 0; i < targetIdx; i++) {
-                    const s = ASSESSMENT_STEPS[i];
-                    const isCur = s.view === selectedView;
-                    const hasPhoto = isCur
-                        ? Boolean(imagePreview || imageFile || selectedGalleryPhoto)
-                        : Boolean(stepCache[s.view]?.imagePreview || stepCache[s.view]?.imageFile || stepCache[s.view]?.selectedGalleryPhoto);
-
-                    if (!hasPhoto) {
-                        setErrorMsg(`Wajib unggah atau pilih foto untuk ${s.title} (${s.subtitle}) terlebih dahulu sebelum melanjutkan.`);
-                        return;
-                    }
-                }
-            }
 
             // 1. Save current active step state into stepCache
             setStepCache((prev) => ({
@@ -393,10 +378,6 @@ export default function SmartPostureScanner({
     };
 
     const goToNextStep = () => {
-        if (!hasActivePhoto) {
-            setErrorMsg(`Wajib unggah foto untuk ${currentStep.title} (${currentStep.subtitle}) terlebih dahulu.`);
-            return;
-        }
         if (hasNextStep && nextStep) {
             handleSwitchStep(nextStep.view);
         }
@@ -462,8 +443,8 @@ export default function SmartPostureScanner({
     const getDefaultLandmarksForManual = useCallback((view: ViewType): LandmarkPoint[] => {
         if (view === 'Anterior View') {
             return [
-                { id: 'r_asis', name: 'Right ASIS', x: 42, y: 46, color: '#38bdf8' },
-                { id: 'l_asis', name: 'Left ASIS', x: 58, y: 46, color: '#38bdf8' },
+                { id: 'r_asis', name: 'Right ASIS', x: 42, y: 38, color: '#38bdf8' },
+                { id: 'l_asis', name: 'Left ASIS', x: 58, y: 38, color: '#38bdf8' },
                 { id: 'r_knee', name: 'Right Knee', x: 43, y: 68, color: '#ef4444' },
                 { id: 'l_knee', name: 'Left Knee', x: 57, y: 68, color: '#ef4444' },
                 { id: 'r_ankle', name: 'Right Ankle', x: 42, y: 88, color: '#84cc16' },
@@ -477,7 +458,7 @@ export default function SmartPostureScanner({
                 { id: 'ear', name: 'Ear', x: 48, y: 15, color: '#a855f7' },
                 { id: 'shoulder', name: 'Shoulder', x: 46, y: 28, color: '#38bdf8' },
                 { id: 'wrist', name: 'Wrist', x: 70, y: 30, color: '#ef4444' },
-                { id: 'hip', name: 'Hip', x: 40, y: 52, color: '#ef4444' },
+                { id: 'hip', name: 'Hip', x: 40, y: 48, color: '#ef4444' },
                 { id: 'knee', name: 'Knee', x: 54, y: 70, color: '#ef4444' },
                 { id: 'ankle', name: 'Ankle', x: 48, y: 88, color: '#84cc16' },
             ];
@@ -485,8 +466,8 @@ export default function SmartPostureScanner({
         if (view === 'Posterior View') {
             return [
                 { id: 'c7', name: 'C7 (Spine Midline)', x: 50, y: 22, color: '#ef4444' },
-                { id: 'l_psis', name: 'Left PSIS (Pelvis)', x: 44, y: 48, color: '#ef4444' },
-                { id: 'r_psis', name: 'Right PSIS (Pelvis)', x: 56, y: 48, color: '#ef4444' },
+                { id: 'l_psis', name: 'Left PSIS (Pelvis)', x: 44, y: 40, color: '#ef4444' },
+                { id: 'r_psis', name: 'Right PSIS (Pelvis)', x: 56, y: 40, color: '#ef4444' },
                 { id: 'l_calf', name: 'Left Calf', x: 44, y: 72, color: '#ef4444' },
                 { id: 'r_calf', name: 'Right Calf', x: 56, y: 72, color: '#ef4444' },
                 { id: 'l_ankle', name: 'Left Ankle', x: 43.5, y: 86, color: '#84cc16' },
@@ -497,8 +478,8 @@ export default function SmartPostureScanner({
         }
         // Single Leg
         return [
-            { id: 'st_asis', name: 'Stance ASIS', x: 46, y: 48, color: '#ef4444' },
-            { id: 'fl_asis', name: 'Floating ASIS', x: 55, y: 50, color: '#ef4444' },
+            { id: 'st_asis', name: 'Stance ASIS', x: 46, y: 40, color: '#ef4444' },
+            { id: 'fl_asis', name: 'Floating ASIS', x: 55, y: 42, color: '#ef4444' },
             { id: 'st_knee', name: 'Stance Knee', x: 46, y: 69, color: '#ef4444' },
             { id: 'st_ankle', name: 'Stance Ankle', x: 46, y: 88, color: '#84cc16' },
             { id: 'l_shoulder', name: 'Left Shoulder', x: 42, y: 26, color: '#ef4444' },
@@ -592,25 +573,67 @@ export default function SmartPostureScanner({
         syncStepAnnotatedPhoto,
     ]);
 
+    const handleProcessFile = (file: File) => {
+        if (!file.type.startsWith('image/')) {
+            setErrorMsg('Format file harus berupa gambar (JPG, PNG, atau WebP).');
+            return;
+        }
+        if (file.size > 10 * 1024 * 1024) {
+            setErrorMsg('Ukuran file foto melebihi batas 10MB.');
+            return;
+        }
+
+        setImageFile(file);
+        setSelectedGalleryPhoto(null);
+        setImagePreview(URL.createObjectURL(file));
+        setScanResults(null);
+        setErrorMsg(null);
+        setActiveLandmarks([]);
+        setShowGoniometer(false);
+
+        const updated = {
+            ...stepPhotos,
+            [selectedView]: file,
+        };
+        setStepPhotos(updated);
+        if (onStepPhotosChange) {
+            onStepPhotosChange(updated);
+        }
+    };
+
     const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file) {
-            setImageFile(file);
-            setSelectedGalleryPhoto(null);
-            setImagePreview(URL.createObjectURL(file));
-            setScanResults(null);
-            setErrorMsg(null);
-            setActiveLandmarks([]);
-            setShowGoniometer(false);
+            handleProcessFile(file);
+        }
+    };
 
-            const updated = {
-                ...stepPhotos,
-                [selectedView]: file,
-            };
-            setStepPhotos(updated);
-            if (onStepPhotosChange) {
-                onStepPhotosChange(updated);
-            }
+    const handleDragOver = (e: React.DragEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+        if (!isDraggingOver) setIsDraggingOver(true);
+    };
+
+    const handleDragEnter = (e: React.DragEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setIsDraggingOver(true);
+    };
+
+    const handleDragLeave = (e: React.DragEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+        if (e.currentTarget.contains(e.relatedTarget as Node)) return;
+        setIsDraggingOver(false);
+    };
+
+    const handleDrop = (e: React.DragEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setIsDraggingOver(false);
+        const file = e.dataTransfer.files?.[0];
+        if (file) {
+            handleProcessFile(file);
         }
     };
 
@@ -713,9 +736,9 @@ export default function SmartPostureScanner({
                     const isLeftValgus = lMedialDisplacement >= 2.5 && lValgusKinkAngle >= 6.0;
                     const isRightValgus = rMedialDisplacement >= 2.5 && rValgusKinkAngle >= 6.0;
 
-                    // Varus (Move Outward): Knee bows excessively outward past natural squat tracking
-                    const isLeftVarus = lMedialDisplacement <= -6.0 && lValgusKinkAngle <= -14.0;
-                    const isRightVarus = rMedialDisplacement <= -6.0 && rValgusKinkAngle <= -14.0;
+                    // Varus (Move Outward): Requires knee to genuinely bow outward laterally beyond normal tracking
+                    const isLeftVarus = lMedialDisplacement <= -2.5 && lValgusKinkAngle <= -5.0;
+                    const isRightVarus = rMedialDisplacement <= -2.5 && rValgusKinkAngle <= -5.0;
 
                     if (isLeftValgus || isRightValgus) {
                         const comp = availableCompensations.find(
@@ -750,15 +773,20 @@ export default function SmartPostureScanner({
                                 c.name.toLowerCase().includes('move outward')
                         );
                         if (comp) {
+                            const minVarusKink = Math.min(
+                                isLeftVarus ? lValgusKinkAngle : 0,
+                                isRightVarus ? rValgusKinkAngle : 0
+                            );
+                            const deg = Math.abs(minVarusKink).toFixed(1);
                             detected.push({
                                 compensation_id: comp.id,
                                 name: comp.name,
                                 checkpoint: comp.checkpoint || 'Lutut (Knee)',
-                                confidence: 91,
-                                severity: 'Moderate',
+                                confidence: 94,
+                                severity: Number(deg) > 10 ? 'Severe' : Number(deg) > 6 ? 'Moderate' : 'Mild',
                                 side: isLeftVarus && isRightVarus ? 'Bilateral' : isLeftVarus ? 'Left' : 'Right',
-                                angle_metric: `Genu Varum Lateral`,
-                                clinical_rationale: `Lutut bergerak ke lateral keluar dari sumbu kaki akibat ketegangan piriformis dan gluteus minimus.`,
+                                angle_metric: `Genu Varum Lateral ${deg}°`,
+                                clinical_rationale: `Lutut bergerak/terbuka ke arah lateral keluar dari sumbu kaki akibat ketegangan piriformis, TFL, dan gluteus minimus.`,
                                 overactive_muscles: comp.overactive_muscles,
                                 underactive_muscles: comp.underactive_muscles,
                                 possible_injuries: comp.possible_injuries,
@@ -771,7 +799,11 @@ export default function SmartPostureScanner({
                     const lTurnoutAngle = Math.atan2(lToe.x - lAnkle.x, Math.max(1, lToe.y - lAnkle.y)) * (180 / Math.PI);
                     const rTurnoutAngle = Math.atan2(rAnkle.x - rToe.x, Math.max(1, rToe.y - rAnkle.y)) * (180 / Math.PI);
 
-                    if (lTurnoutAngle > 12.0 || rTurnoutAngle > 12.0) {
+                    // Feet Turn Out: Standard neutral foot tolerance is 0°-6.5°. Trigger when flaring >= 7.0°
+                    const isLeftTurnout = lTurnoutAngle >= 7.0;
+                    const isRightTurnout = rTurnoutAngle >= 7.0;
+
+                    if (isLeftTurnout || isRightTurnout) {
                         const comp = availableCompensations.find(
                             (c) =>
                                 c.category === 'Anterior View' &&
@@ -783,11 +815,11 @@ export default function SmartPostureScanner({
                                 compensation_id: comp.id,
                                 name: comp.name,
                                 checkpoint: comp.checkpoint || 'Kaki & Ankle',
-                                confidence: 93,
-                                severity: Number(deg) > 20 ? 'Severe' : 'Moderate',
-                                side: lTurnoutAngle > 12.0 && rTurnoutAngle > 12.0 ? 'Bilateral' : lTurnoutAngle > 12.0 ? 'Left' : 'Right',
+                                confidence: 95,
+                                severity: Number(deg) > 12 ? 'Severe' : Number(deg) > 6 ? 'Moderate' : 'Mild',
+                                side: isLeftTurnout && isRightTurnout ? 'Bilateral' : isLeftTurnout ? 'Left' : 'Right',
                                 angle_metric: `Rotasi Eksternal ${deg}°`,
-                                clinical_rationale: `Jari kaki berotasi ke arah lateral keluar melewati batas netral 12-15° akibat ketegangan gastrocnemius lateral dan soleus.`,
+                                clinical_rationale: `Jari kaki terbuka/berotasi ke arah lateral keluar (Feet Turn Out) akibat ketegangan gastrocnemius lateral, soleus, dan biceps femoris.`,
                                 overactive_muscles: comp.overactive_muscles,
                                 underactive_muscles: comp.underactive_muscles,
                                 possible_injuries: comp.possible_injuries,
@@ -1329,9 +1361,14 @@ export default function SmartPostureScanner({
                     const flHipIdx = isLeftStance ? 24 : 23;
                     const stKneeIdx = isLeftStance ? 25 : 26;
 
+                    const stTorsoHeight = Math.abs(mp[stHipIdx].y - mp[11].y) || 0.35;
+                    const flTorsoHeight = Math.abs(mp[flHipIdx].y - mp[12].y) || 0.35;
+                    const stAsisY = Math.max(0, mp[stHipIdx].y - stTorsoHeight * 0.16) * 100;
+                    const flAsisY = Math.max(0, mp[flHipIdx].y - flTorsoHeight * 0.16) * 100;
+
                     mappedPins = [
-                        { id: 'st_asis', name: 'Stance ASIS', x: mp[stHipIdx].x * 100, y: mp[stHipIdx].y * 100, color: '#ef4444' },
-                        { id: 'fl_asis', name: 'Floating ASIS', x: mp[flHipIdx].x * 100, y: mp[flHipIdx].y * 100, color: '#ef4444' },
+                        { id: 'st_asis', name: 'Stance ASIS', x: mp[stHipIdx].x * 100, y: stAsisY, color: '#ef4444' },
+                        { id: 'fl_asis', name: 'Floating ASIS', x: mp[flHipIdx].x * 100, y: flAsisY, color: '#ef4444' },
                         { id: 'st_knee', name: 'Stance Knee', x: mp[stKneeIdx].x * 100, y: mp[stKneeIdx].y * 100, color: '#ef4444' },
                         { id: 'st_ankle', name: 'Stance Ankle', x: mp[stIdx].x * 100, y: mp[stIdx].y * 100, color: '#84cc16' },
                         { id: 'l_shoulder', name: 'Left Shoulder', x: mp[11].x * 100, y: mp[11].y * 100, color: '#ef4444' },
@@ -1374,10 +1411,15 @@ export default function SmartPostureScanner({
                         { id: 'ankle', name: 'Ankle', x: mp[akIdx].x * 100, y: mp[akIdx].y * 100, color: '#84cc16' },
                     ];
                 } else if (activeViewToUse === 'Posterior View') {
+                    const lTorsoHeight = Math.abs(mp[23].y - mp[11].y) || 0.35;
+                    const rTorsoHeight = Math.abs(mp[24].y - mp[12].y) || 0.35;
+                    const lPsisY = Math.max(0, mp[23].y - lTorsoHeight * 0.16) * 100;
+                    const rPsisY = Math.max(0, mp[24].y - rTorsoHeight * 0.16) * 100;
+
                     mappedPins = [
                         { id: 'c7', name: 'C7 (Spine Midline)', x: ((mp[11].x + mp[12].x) / 2) * 100, y: ((mp[11].y + mp[12].y) / 2) * 100, color: '#ef4444' },
-                        { id: 'l_psis', name: 'Left PSIS', x: mp[23].x * 100, y: mp[23].y * 100, color: '#ef4444' },
-                        { id: 'r_psis', name: 'Right PSIS', x: mp[24].x * 100, y: mp[24].y * 100, color: '#ef4444' },
+                        { id: 'l_psis', name: 'Left PSIS', x: mp[23].x * 100, y: lPsisY, color: '#ef4444' },
+                        { id: 'r_psis', name: 'Right PSIS', x: mp[24].x * 100, y: rPsisY, color: '#ef4444' },
                         { id: 'l_calf', name: 'Left Calf', x: (mp[25].x * 0.25 + mp[27].x * 0.75) * 100, y: (mp[25].y * 0.25 + mp[27].y * 0.75) * 100, color: '#ef4444' },
                         { id: 'r_calf', name: 'Right Calf', x: (mp[26].x * 0.25 + mp[28].x * 0.75) * 100, y: (mp[26].y * 0.25 + mp[28].y * 0.75) * 100, color: '#ef4444' },
                         { id: 'l_ankle', name: 'Left Ankle', x: mp[27].x * 100, y: mp[27].y * 100, color: '#84cc16' },
@@ -1386,10 +1428,15 @@ export default function SmartPostureScanner({
                         { id: 'r_calcaneus', name: 'Right Calcaneus', x: mp[30].x * 100, y: mp[30].y * 100, color: '#ef4444' },
                     ];
                 } else {
-                    // Anterior View
+                    // Anterior View: calculate ASIS located superior to the hip joint at the iliac crest (above thigh/pinggul)
+                    const lTorsoHeight = Math.abs(mp[23].y - mp[11].y) || 0.35;
+                    const rTorsoHeight = Math.abs(mp[24].y - mp[12].y) || 0.35;
+                    const lAsisY = Math.max(0, mp[23].y - lTorsoHeight * 0.16) * 100;
+                    const rAsisY = Math.max(0, mp[24].y - rTorsoHeight * 0.16) * 100;
+
                     mappedPins = [
-                        { id: 'l_asis', name: 'Left ASIS', x: mp[23].x * 100, y: mp[23].y * 100, color: '#38bdf8' },
-                        { id: 'r_asis', name: 'Right ASIS', x: mp[24].x * 100, y: mp[24].y * 100, color: '#38bdf8' },
+                        { id: 'l_asis', name: 'Left ASIS', x: mp[23].x * 100, y: lAsisY, color: '#38bdf8' },
+                        { id: 'r_asis', name: 'Right ASIS', x: mp[24].x * 100, y: rAsisY, color: '#38bdf8' },
                         { id: 'l_knee', name: 'Left Knee', x: mp[25].x * 100, y: mp[25].y * 100, color: '#ef4444' },
                         { id: 'r_knee', name: 'Right Knee', x: mp[26].x * 100, y: mp[26].y * 100, color: '#ef4444' },
                         { id: 'l_ankle', name: 'Left Ankle', x: mp[27].x * 100, y: mp[27].y * 100, color: '#84cc16' },
@@ -1558,37 +1605,17 @@ export default function SmartPostureScanner({
                         ? scanResults?.detected_compensations.length
                         : cached?.scanResults?.detected_compensations.length;
 
-                    // Locked if prior steps don't have photos
-                    let isLocked = false;
-                    if (idx > currentStepIndex) {
-                        for (let i = 0; i < idx; i++) {
-                            const s = ASSESSMENT_STEPS[i];
-                            const isCur = s.view === selectedView;
-                            const hasPhoto = isCur
-                                ? Boolean(imagePreview || imageFile || selectedGalleryPhoto)
-                                : Boolean(stepCache[s.view]?.imagePreview || stepCache[s.view]?.imageFile || stepCache[s.view]?.selectedGalleryPhoto);
-                            if (!hasPhoto) {
-                                isLocked = true;
-                                break;
-                            }
-                        }
-                    }
-
                     return (
                         <button
                             key={step.view}
                             type="button"
                             onClick={() => handleSwitchStep(step.view)}
-                            disabled={isLocked}
-                            title={isLocked ? `Langkah ${step.stepNumber} terkunci: Lengkapi foto langkah sebelumnya terlebih dahulu` : undefined}
-                            className={`py-2 px-3 rounded-md text-left transition-all flex items-center justify-between gap-2 ${
+                            className={`py-2 px-3 rounded-md text-left transition-all flex items-center justify-between gap-2 cursor-pointer ${
                                 isActive
                                     ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-xs font-semibold border border-slate-200/60 dark:border-slate-700'
-                                    : isLocked
-                                    ? 'text-slate-400 dark:text-slate-600 cursor-not-allowed opacity-50 bg-slate-50/50 dark:bg-slate-900/30'
                                     : isCompleted
-                                    ? 'text-emerald-700 dark:text-emerald-400 hover:bg-white/50 dark:hover:bg-slate-800/50 cursor-pointer'
-                                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-white/40 dark:hover:bg-slate-800/40 cursor-pointer'
+                                    ? 'text-emerald-700 dark:text-emerald-400 hover:bg-white/50 dark:hover:bg-slate-800/50'
+                                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-white/40 dark:hover:bg-slate-800/40'
                             }`}
                         >
                             <div className="flex items-center gap-2 min-w-0">
@@ -1598,12 +1625,10 @@ export default function SmartPostureScanner({
                                             ? 'bg-[#84cc16] text-slate-950 font-bold'
                                             : isActive
                                             ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-900'
-                                            : isLocked
-                                            ? 'bg-slate-100 dark:bg-slate-800/50 text-slate-400 dark:text-slate-600'
                                             : 'bg-slate-200 dark:bg-slate-800 text-slate-500'
                                     }`}
                                 >
-                                    {isLocked ? <Lock size={10} /> : hasStepPhoto ? <Check size={11} /> : step.stepNumber}
+                                    {hasStepPhoto ? <Check size={11} /> : step.stepNumber}
                                 </span>
                                 <div className="min-w-0">
                                     <div className="text-xs truncate">{step.title}</div>
@@ -1624,14 +1649,9 @@ export default function SmartPostureScanner({
                                                 : 'Foto Siap'}
                                         </span>
                                     </span>
-                                ) : isLocked ? (
-                                    <span className="text-[9px] font-medium px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-500 flex items-center gap-0.5">
-                                        <Lock size={8} />
-                                        <span>Terkunci</span>
-                                    </span>
                                 ) : (
-                                    <span className="text-[9px] font-medium px-1.5 py-0.5 rounded bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400">
-                                        Wajib Foto
+                                    <span className="text-[9px] font-medium px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400">
+                                        Opsional
                                     </span>
                                 )}
                             </div>
@@ -1661,10 +1681,20 @@ export default function SmartPostureScanner({
                                 onMouseMove={handleMouseMove}
                                 onMouseUp={handleMouseUp}
                                 onMouseLeave={handleMouseUp}
+                                onDragOver={handleDragOver}
+                                onDragEnter={handleDragEnter}
+                                onDragLeave={handleDragLeave}
+                                onDrop={handleDrop}
                                 className={`flex justify-center items-center bg-slate-950 rounded-lg p-2 border border-slate-200 dark:border-slate-800 min-h-[340px] max-h-[500px] overflow-hidden relative select-none ${
                                     zoomLevel > 1 ? (isPanning ? 'cursor-grabbing' : 'cursor-grab') : 'cursor-default'
                                 }`}
                             >
+                                {isDraggingOver && (
+                                    <div className="absolute inset-0 z-30 bg-[#84cc16]/20 dark:bg-[#b4f031]/20 border-2 border-dashed border-[#84cc16] dark:border-[#b4f031] backdrop-blur-xs flex flex-col items-center justify-center text-slate-950 dark:text-white rounded-lg animate-in fade-in duration-150">
+                                        <UploadCloud size={32} className="text-[#84cc16] dark:text-[#b4f031] animate-bounce mb-1.5" />
+                                        <span className="text-xs font-bold bg-slate-900/80 text-white px-3 py-1 rounded-md">Lepaskan untuk ganti foto {selectedView}</span>
+                                    </div>
+                                )}
                                 <div
                                     ref={imageContainerRef}
                                     style={{
@@ -1700,6 +1730,67 @@ export default function SmartPostureScanner({
 
                                             {selectedView === 'Anterior View' && (
                                                 <>
+                                                    {/* --- IDEAL REFERENCE LINES (Green Dashed) --- */}
+                                                    {/* 1. Ideal Straight-Down Kinetic Chain (ASIS -> Ankle) */}
+                                                    {lAsis && lAnkle && (
+                                                        <line
+                                                            x1={`${lAsis.x}%`}
+                                                            y1={`${lAsis.y}%`}
+                                                            x2={`${lAnkle.x}%`}
+                                                            y2={`${lAnkle.y}%`}
+                                                            stroke="#22c55e"
+                                                            strokeWidth={(2.0 / Math.sqrt(zoomLevel)).toFixed(2)}
+                                                            strokeDasharray="5 3"
+                                                        />
+                                                    )}
+                                                    {rAsis && rAnkle && (
+                                                        <line
+                                                            x1={`${rAsis.x}%`}
+                                                            y1={`${rAsis.y}%`}
+                                                            x2={`${rAnkle.x}%`}
+                                                            y2={`${rAnkle.y}%`}
+                                                            stroke="#22c55e"
+                                                            strokeWidth={(2.0 / Math.sqrt(zoomLevel)).toFixed(2)}
+                                                            strokeDasharray="5 3"
+                                                        />
+                                                    )}
+                                                    {/* 2. Ideal Foot Straight-Forward Axis (Ankle -> straight forward) */}
+                                                    {lAnkle && lToe && (
+                                                        <line
+                                                            x1={`${lAnkle.x}%`}
+                                                            y1={`${lAnkle.y}%`}
+                                                            x2={`${lAnkle.x}%`}
+                                                            y2={`${lToe.y}%`}
+                                                            stroke="#22c55e"
+                                                            strokeWidth={(2.0 / Math.sqrt(zoomLevel)).toFixed(2)}
+                                                            strokeDasharray="4 3"
+                                                        />
+                                                    )}
+                                                    {rAnkle && rToe && (
+                                                        <line
+                                                            x1={`${rAnkle.x}%`}
+                                                            y1={`${rAnkle.y}%`}
+                                                            x2={`${rAnkle.x}%`}
+                                                            y2={`${rToe.y}%`}
+                                                            stroke="#22c55e"
+                                                            strokeWidth={(2.0 / Math.sqrt(zoomLevel)).toFixed(2)}
+                                                            strokeDasharray="4 3"
+                                                        />
+                                                    )}
+                                                    {/* 3. Ideal Level Pelvis Horizontal Line */}
+                                                    {lAsis && rAsis && (
+                                                        <line
+                                                            x1={`${lAsis.x - (rAsis.x - lAsis.x) * 0.15}%`}
+                                                            y1={`${(lAsis.y + rAsis.y) / 2}%`}
+                                                            x2={`${rAsis.x + (rAsis.x - lAsis.x) * 0.15}%`}
+                                                            y2={`${(lAsis.y + rAsis.y) / 2}%`}
+                                                            stroke="#22c55e"
+                                                            strokeWidth={(1.8 / Math.sqrt(zoomLevel)).toFixed(2)}
+                                                            strokeDasharray="4 3"
+                                                        />
+                                                    )}
+
+                                                    {/* --- ACTUAL SKELETAL LINES (Red Solid) --- */}
                                                     {lAsis && lKnee && (
                                                         <line
                                                             x1={`${lAsis.x}%`}
@@ -1765,6 +1856,33 @@ export default function SmartPostureScanner({
 
                                             {selectedView === 'Lateral View' && (
                                                 <>
+                                                    {/* --- IDEAL REFERENCE LINES (Green Dashed) --- */}
+                                                    {/* 1. Ideal Plumbline (Vertical Reference through lateral malleolus) */}
+                                                    {ankleLat && (
+                                                        <line
+                                                            x1={`${ankleLat.x}%`}
+                                                            y1="5%"
+                                                            x2={`${ankleLat.x}%`}
+                                                            y2="95%"
+                                                            stroke="#22c55e"
+                                                            strokeWidth={(1.8 / Math.sqrt(zoomLevel)).toFixed(2)}
+                                                            strokeDasharray="6 4"
+                                                        />
+                                                    )}
+                                                    {/* 2. Ideal Torso Parallelism (Parallel to Tibia slope from hip) */}
+                                                    {hip && kneeLat && ankleLat && shoulder && (
+                                                        <line
+                                                            x1={`${hip.x}%`}
+                                                            y1={`${hip.y}%`}
+                                                            x2={`${hip.x + (kneeLat.x - ankleLat.x) * 1.8}%`}
+                                                            y2={`${hip.y - Math.abs(shoulder.y - hip.y)}%`}
+                                                            stroke="#22c55e"
+                                                            strokeWidth={(2.0 / Math.sqrt(zoomLevel)).toFixed(2)}
+                                                            strokeDasharray="5 3"
+                                                        />
+                                                    )}
+
+                                                    {/* --- ACTUAL SKELETAL LINES (Red Solid) --- */}
                                                     {/* Torso Spine Line: Hip -> Lumbar -> Shoulder */}
                                                     {lumbar ? (
                                                         <>
@@ -1838,6 +1956,44 @@ export default function SmartPostureScanner({
 
                                             {selectedView === 'Posterior View' && (
                                                 <>
+                                                    {/* --- IDEAL REFERENCE LINES (Green Dashed) --- */}
+                                                    {/* 1. Ideal Vertical Achilles Tendon Lines (Straight down to heel) */}
+                                                    {(lCalf || lKnee) && lCalc && (
+                                                        <line
+                                                            x1={`${(lCalf || lKnee)!.x}%`}
+                                                            y1={`${(lCalf || lKnee)!.y}%`}
+                                                            x2={`${(lCalf || lKnee)!.x}%`}
+                                                            y2={`${lCalc.y}%`}
+                                                            stroke="#22c55e"
+                                                            strokeWidth={(2.0 / Math.sqrt(zoomLevel)).toFixed(2)}
+                                                            strokeDasharray="5 3"
+                                                        />
+                                                    )}
+                                                    {(rCalf || rKnee) && rCalc && (
+                                                        <line
+                                                            x1={`${(rCalf || rKnee)!.x}%`}
+                                                            y1={`${(rCalf || rKnee)!.y}%`}
+                                                            x2={`${(rCalf || rKnee)!.x}%`}
+                                                            y2={`${rCalc.y}%`}
+                                                            stroke="#22c55e"
+                                                            strokeWidth={(2.0 / Math.sqrt(zoomLevel)).toFixed(2)}
+                                                            strokeDasharray="5 3"
+                                                        />
+                                                    )}
+                                                    {/* 2. Ideal Level Pelvis Horizontal Line */}
+                                                    {lPsis && rPsis && (
+                                                        <line
+                                                            x1={`${lPsis.x - (rPsis.x - lPsis.x) * 0.4}%`}
+                                                            y1={`${(lPsis.y + rPsis.y) / 2}%`}
+                                                            x2={`${rPsis.x + (rPsis.x - lPsis.x) * 0.4}%`}
+                                                            y2={`${(lPsis.y + rPsis.y) / 2}%`}
+                                                            stroke="#22c55e"
+                                                            strokeWidth={(1.8 / Math.sqrt(zoomLevel)).toFixed(2)}
+                                                            strokeDasharray="5 3"
+                                                        />
+                                                    )}
+
+                                                    {/* --- ACTUAL SKELETAL LINES (Red Solid) --- */}
                                                     {/* 1. Asymmetrical Weight Shift: Vertical C7 Plumbline */}
                                                     {c7 && (
                                                         <line
@@ -1950,6 +2106,45 @@ export default function SmartPostureScanner({
 
                                             {selectedView === 'Single Leg' && (
                                                 <>
+                                                    {/* --- IDEAL REFERENCE LINES (Green Dashed) --- */}
+                                                    {/* 1. Ideal Stance Leg Alignment (ASIS directly to Ankle straight) */}
+                                                    {stAsis && stAnkle && (
+                                                        <line
+                                                            x1={`${stAsis.x}%`}
+                                                            y1={`${stAsis.y}%`}
+                                                            x2={`${stAnkle.x}%`}
+                                                            y2={`${stAnkle.y}%`}
+                                                            stroke="#22c55e"
+                                                            strokeWidth={(2.0 / Math.sqrt(zoomLevel)).toFixed(2)}
+                                                            strokeDasharray="6 4"
+                                                        />
+                                                    )}
+                                                    {/* 2. Ideal Level Pelvis Horizontal Line */}
+                                                    {stAsis && flAsis && (
+                                                        <line
+                                                            x1={`${stAsis.x - 8}%`}
+                                                            y1={`${stAsis.y}%`}
+                                                            x2={`${flAsis.x + 8}%`}
+                                                            y2={`${stAsis.y}%`}
+                                                            stroke="#22c55e"
+                                                            strokeWidth={(1.8 / Math.sqrt(zoomLevel)).toFixed(2)}
+                                                            strokeDasharray="5 3"
+                                                        />
+                                                    )}
+                                                    {/* 3. Ideal Shoulder Level Line */}
+                                                    {lShoulder && rShoulder && (
+                                                        <line
+                                                            x1={`${lShoulder.x - 5}%`}
+                                                            y1={`${(lShoulder.y + rShoulder.y) / 2}%`}
+                                                            x2={`${rShoulder.x + 5}%`}
+                                                            y2={`${(lShoulder.y + rShoulder.y) / 2}%`}
+                                                            stroke="#22c55e"
+                                                            strokeWidth={(1.8 / Math.sqrt(zoomLevel)).toFixed(2)}
+                                                            strokeDasharray="5 3"
+                                                        />
+                                                    )}
+
+                                                    {/* --- ACTUAL SKELETAL LINES (Red Solid) --- */}
                                                     {stAsis && flAsis && (
                                                         <line
                                                             x1={`${stAsis.x - 8}%`}
@@ -2044,9 +2239,23 @@ export default function SmartPostureScanner({
 
                                 </div>
 
-                                {/* Floating View Badge overlay */}
-                                <div className="absolute top-2 left-2 px-2 py-0.5 rounded bg-black/75 backdrop-blur-xs text-[10px] font-bold text-white border border-white/20 z-30">
-                                    {selectedView}
+                                {/* Floating View & Visual Line Legend Badge overlay */}
+                                <div className="absolute top-2 left-2 flex flex-col gap-1 z-30 pointer-events-none">
+                                    <div className="px-2 py-0.5 rounded bg-black/80 backdrop-blur-xs text-[10px] font-bold text-white border border-white/20 self-start">
+                                        {selectedView}
+                                    </div>
+                                    {showGoniometer && activeLandmarks.length > 0 && (
+                                        <div className="px-2 py-1 rounded bg-black/85 backdrop-blur-xs text-[9px] text-white border border-white/20 flex items-center gap-2.5 shadow-xs">
+                                            <span className="flex items-center gap-1 font-semibold text-rose-300">
+                                                <span className="w-3 h-0.5 bg-[#ef4444] rounded-full inline-block" />
+                                                Aktual
+                                            </span>
+                                            <span className="flex items-center gap-1 font-semibold text-emerald-300">
+                                                <span className="w-3 h-0.5 border-b-2 border-dashed border-[#22c55e] inline-block" />
+                                                Ideal (Seharusnya)
+                                            </span>
+                                        </div>
+                                    )}
                                 </div>
 
                                 {/* Floating Zoom & Pan Toolbar */}
@@ -2268,16 +2477,28 @@ export default function SmartPostureScanner({
                         <div className="space-y-2">
                             <div
                                 onClick={() => fileInputRef.current?.click()}
-                                className="rounded-lg border-2 border-dashed border-slate-200 dark:border-slate-800 hover:border-[#84cc16] dark:hover:border-[#b4f031] p-6 flex flex-col items-center justify-center text-center cursor-pointer transition-colors group aspect-[4/3] bg-slate-50/50 dark:bg-slate-950/40"
+                                onDragOver={handleDragOver}
+                                onDragEnter={handleDragEnter}
+                                onDragLeave={handleDragLeave}
+                                onDrop={handleDrop}
+                                className={`rounded-lg border-2 border-dashed p-6 flex flex-col items-center justify-center text-center cursor-pointer transition-all group aspect-[4/3] ${
+                                    isDraggingOver
+                                        ? 'border-[#84cc16] dark:border-[#b4f031] bg-[#84cc16]/15 dark:bg-[#b4f031]/15 ring-2 ring-[#84cc16]/40 dark:ring-[#b4f031]/40 scale-[1.01]'
+                                        : 'border-slate-200 dark:border-slate-800 hover:border-[#84cc16] dark:hover:border-[#b4f031] bg-slate-50/50 dark:bg-slate-950/40 hover:bg-[#84cc16]/5'
+                                }`}
                             >
-                                <div className="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-900 flex items-center justify-center text-slate-400 group-hover:text-[#84cc16] dark:group-hover:text-[#b4f031] mb-2 transition-colors">
-                                    <Camera size={18} />
+                                <div className={`w-11 h-11 rounded-full flex items-center justify-center mb-2 transition-all ${
+                                    isDraggingOver
+                                        ? 'bg-[#84cc16] text-slate-950 scale-110 shadow-md'
+                                        : 'bg-slate-100 dark:bg-slate-900 text-slate-400 group-hover:text-[#84cc16] dark:group-hover:text-[#b4f031] group-hover:scale-105'
+                                }`}>
+                                    <UploadCloud size={22} className={isDraggingOver ? 'animate-bounce' : ''} />
                                 </div>
                                 <p className="text-xs font-bold text-slate-800 dark:text-slate-200">
-                                    Klik untuk unggah foto {selectedView}
+                                    {isDraggingOver ? 'Lepaskan foto di sini...' : `Klik atau tarik (drag & drop) foto ${selectedView}`}
                                 </p>
                                 <p className="text-[10.5px] text-slate-400 mt-0.5">
-                                    Wajib foto • Format PNG, JPG, atau WebP (maks. 10MB)
+                                    Opsional • Format PNG, JPG, atau WebP (maks. 10MB)
                                 </p>
                             </div>
 
@@ -2554,13 +2775,7 @@ export default function SmartPostureScanner({
                         <button
                             type="button"
                             onClick={goToNextStep}
-                            disabled={!hasActivePhoto}
-                            className={`px-3.5 py-1.5 rounded-md text-xs font-bold transition-all flex items-center gap-1.5 shadow-xs ${
-                                hasActivePhoto
-                                    ? 'bg-[#84cc16] hover:bg-[#74be09] dark:bg-[#b4f031] dark:hover:bg-[#a3e421] text-slate-950 cursor-pointer'
-                                    : 'bg-slate-100 dark:bg-slate-850 text-slate-400 dark:text-slate-600 border border-slate-200 dark:border-slate-800 cursor-not-allowed opacity-60'
-                            }`}
-                            title={!hasActivePhoto ? `Wajib unggah atau pilih foto untuk ${currentStep.title} (${currentStep.subtitle}) terlebih dahulu sebelum melanjutkan` : undefined}
+                            className="px-3.5 py-1.5 rounded-md text-xs font-bold transition-all flex items-center gap-1.5 shadow-xs bg-[#84cc16] hover:bg-[#74be09] dark:bg-[#b4f031] dark:hover:bg-[#a3e421] text-slate-950 cursor-pointer"
                         >
                             <span>Lanjut ke Langkah {nextStep?.stepNumber}: {nextStep?.title} ({nextStep?.subtitle})</span>
                             <ChevronRight size={14} />
@@ -2621,13 +2836,26 @@ export default function SmartPostureScanner({
                             />
                         </div>
 
-                        <div className="p-3 rounded-md bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs text-slate-600 dark:text-slate-300">
-                            <p className="font-semibold text-slate-800 dark:text-slate-200 mb-1">
-                                Garis Indikator Merah NASM:
+                        <div className="p-3 rounded-md bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs text-slate-600 dark:text-slate-300 space-y-1.5">
+                            <p className="font-semibold text-slate-800 dark:text-slate-200">
+                                Keterangan Garis Biomekanika PMA / NASM:
                             </p>
-                            <p className="text-[11px] leading-relaxed text-slate-500 dark:text-slate-400">
-                                Garis merah pada diagram di atas menunjukkan arah dan sudut deviasi kompensasi. Sistem AI & Goniometer pada aplikasi telah dikalibrasi mengikuti model penandaan garis anatomis ini.
-                            </p>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px]">
+                                <div className="flex items-start gap-1.5">
+                                    <span className="w-3 h-0.5 bg-[#ef4444] rounded-full inline-block mt-1.5 shrink-0" />
+                                    <div>
+                                        <span className="font-bold text-rose-600 dark:text-rose-400">Garis Merah Solid:</span>
+                                        <p className="text-slate-500 dark:text-slate-400">Menunjukkan struktur aktual & arah deviasi gerak atlet.</p>
+                                    </div>
+                                </div>
+                                <div className="flex items-start gap-1.5">
+                                    <span className="w-3 h-0.5 border-b-2 border-dashed border-[#22c55e] inline-block mt-1.5 shrink-0" />
+                                    <div>
+                                        <span className="font-bold text-emerald-600 dark:text-emerald-400">Garis Hijau Putus-putus:</span>
+                                        <p className="text-slate-500 dark:text-slate-400">Menunjukkan alinyemen ideal/netral yang seharusnya dicapai atlet.</p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
                         <div className="flex justify-end pt-1 border-t border-slate-100 dark:border-slate-800">

@@ -13,7 +13,7 @@ export default function Edit({
 }: PageProps<{ mustVerifyEmail: boolean; status?: string }>) {
     return (
         <AuthenticatedLayout>
-            <Head title="Profil Akun - Athlete DPA" />
+            <Head title="Profil Akun - Athlete PMA" />
 
             <div className="space-y-6 pb-12">
                 <PageHeader

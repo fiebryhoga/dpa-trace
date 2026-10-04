@@ -172,7 +172,7 @@ export default function UsersIndex({
 
     return (
         <AuthenticatedLayout>
-            <Head title="Kelola Admin - Athlete DPA" />
+            <Head title="Kelola Admin - Athlete PMA" />
 
             <div className="space-y-5 pb-12 w-full">
                 <PageHeader
@@ -182,7 +182,7 @@ export default function UsersIndex({
                             Kelola Akun <span className="text-[#84cc16] dark:text-[#b4f031]">Admin & Penguji</span>
                         </>
                     }
-                    description="Manajemen hak akses, kredensial pengguna, dan administrator sistem Athlete DPA."
+                    description="Manajemen hak akses, kredensial pengguna, dan administrator sistem Athlete PMA."
                     actions={
                         <div className="relative w-full sm:w-64">
                             <Search className="w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
@@ -329,7 +329,7 @@ export default function UsersIndex({
                                     <input
                                         type="text"
                                         required
-                                        placeholder="admin_dpa"
+                                        placeholder="admin_pma"
                                         value={data.username}
                                         onChange={(e) => setData('username', e.target.value)}
                                         className="w-full pl-8 pr-2.5 py-1.5 bg-slate-50/70 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-md text-xs font-mono text-slate-900 dark:text-slate-100 outline-none focus:border-[#84cc16] dark:focus:border-[#b4f031]"

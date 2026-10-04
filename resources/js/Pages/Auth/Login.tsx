@@ -39,14 +39,14 @@ export default function Login({ status, canResetPassword = true }: LoginProps) {
 
     return (
         <div className="min-h-screen flex flex-col lg:flex-row bg-white text-zinc-900 dark:bg-[#09090B] dark:text-zinc-100 transition-colors duration-200">
-            <Head title="Sign In - Athlete DPA" />
+            <Head title="Sign In - Athlete PMA" />
 
             {/* Left Column: Cinematic Biomechanics Hero Visual (Desktop) */}
             <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden bg-zinc-950 text-white flex-col justify-between p-10 xl:p-14">
                 {/* Full-bleed Cinematic Background Image */}
                 <img
                     src="/images/login-hero.jpg"
-                    alt="Athlete DPA Biomechanics Dynamic Posture Assessment"
+                    alt="Athlete PMA Biomechanics Postural & Movement Assessment"
                     className="absolute inset-0 w-full h-full object-cover object-center opacity-85 scale-105 transition-transform duration-1000 ease-out"
                 />
 
@@ -59,10 +59,10 @@ export default function Login({ status, canResetPassword = true }: LoginProps) {
                     <ApplicationLogo className="h-9 w-9 drop-shadow-md" />
                     <div>
                         <span className="text-base font-bold tracking-tight text-white block leading-tight">
-                            Athlete <span className="text-[#b4f031]">DPA</span>
+                            Athlete <span className="text-[#b4f031]">PMA</span>
                         </span>
                         <span className="text-xs text-zinc-300 leading-none">
-                            Dynamic Posture Assessment
+                            Postural & Movement Assessment
                         </span>
                     </div>
                 </div>
@@ -91,7 +91,7 @@ export default function Login({ status, canResetPassword = true }: LoginProps) {
                     <div className="flex lg:hidden items-center gap-2.5">
                         <ApplicationLogo className="h-8 w-8" />
                         <span className="text-sm font-bold tracking-tight text-zinc-900 dark:text-white">
-                            Athlete <span className="text-[#84cc16] dark:text-[#b4f031]">DPA</span>
+                            Athlete <span className="text-[#84cc16] dark:text-[#b4f031]">PMA</span>
                         </span>
                     </div>
                     <div className="ml-auto">
@@ -106,7 +106,7 @@ export default function Login({ status, canResetPassword = true }: LoginProps) {
                             Welcome back
                         </h1>
                         <p className="text-xs sm:text-sm text-zinc-500 dark:text-zinc-400">
-                            Enter your credentials to access the Athlete DPA portal
+                            Enter your credentials to access the Athlete PMA portal
                         </p>
                     </div>
 
@@ -216,7 +216,7 @@ export default function Login({ status, canResetPassword = true }: LoginProps) {
                             className="w-full h-10 text-xs font-bold gap-2 rounded-lg bg-[#b4f031] text-slate-950 hover:bg-[#a2dd26] shadow-md shadow-[#b4f031]/25 transition-all"
                             isLoading={processing}
                         >
-                            <span>{processing ? 'Signing in...' : 'Sign In to Athlete DPA'}</span>
+                            <span>{processing ? 'Signing in...' : 'Sign In to Athlete PMA'}</span>
                             {!processing && <ArrowRight className="h-3.5 w-3.5" />}
                         </Button>
                     </form>

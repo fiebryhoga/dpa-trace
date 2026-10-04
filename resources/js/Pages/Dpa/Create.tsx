@@ -158,19 +158,19 @@ export default function DpaCreate({
 
     return (
         <AuthenticatedLayout>
-            <Head title="New DPA Assessment - Athlete DPA" />
+            <Head title="New PMA Assessment - Athlete PMA" />
 
             <form onSubmit={submit} className="space-y-6">
                 <PageHeader
                     icon={Activity}
                     backUrl={route('dpa.index')}
-                    backLabel="Kembali ke Analisis DPA"
+                    backLabel="Kembali ke Analisis PMA"
                     title={
                         <>
-                            Lembar Penilaian <span className="text-[#84cc16] dark:text-[#b4f031]">DPA</span>
+                            Lembar Penilaian <span className="text-[#84cc16] dark:text-[#b4f031]">PMA</span>
                         </>
                     }
-                    description="Protokol Standar Athlete DPA • 4-View Kinetic Checkpoints & Overactive/Underactive Muscle Mapping."
+                    description="Protokol Standar Athlete PMA • 4-View Kinetic Checkpoints & Overactive/Underactive Muscle Mapping."
                     actions={
                         <Button type="submit" size="sm" className="gap-1.5 font-bold rounded-md" isLoading={processing}>
                             <Save className="h-4 w-4" />

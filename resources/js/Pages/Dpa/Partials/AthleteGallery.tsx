@@ -66,6 +66,7 @@ export default function AthleteGallery({
 
     const fileInputRef = useRef(null);
     const editFileInputRef = useRef(null);
+    const [isUploadDraggingOver, setIsUploadDraggingOver] = useState(false);
 
     // Kunci Scroll Body saat Modal Apapun Terbuka
     useEffect(() => {
@@ -156,12 +157,12 @@ export default function AthleteGallery({
     // ==========================================
     // HANDLER UPLOAD BARU
     // ==========================================
-    const handleFileSelect = (e) => {
-        const files = Array.from(e.target.files);
-        if (files.length === 0) return;
+    const handleProcessFiles = (files) => {
+        const imageFiles = Array.from(files).filter(file => file.type && file.type.startsWith('image/'));
+        if (imageFiles.length === 0) return;
 
         const todayStr = new Date().toISOString().split('T')[0];
-        const newPhotos = files.map(file => ({
+        const newPhotos = imageFiles.map(file => ({
             file: file, 
             preview: URL.createObjectURL(file), 
             notes: '',
@@ -170,6 +171,12 @@ export default function AthleteGallery({
 
         setUploadData('photos', [...uploadData.photos, ...newPhotos]);
         if (fileInputRef.current) fileInputRef.current.value = '';
+    };
+
+    const handleFileSelect = (e) => {
+        if (e.target.files) {
+            handleProcessFiles(e.target.files);
+        }
     };
 
     const removePhoto = (index) => {
@@ -300,7 +307,7 @@ export default function AthleteGallery({
                                 >
                                     <img 
                                         src={getPhotoUrl(item.image_path)} 
-                                        alt="Postur DPA" 
+                                        alt="Postur PMA" 
                                         className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" 
                                         loading="lazy" 
                                     />
@@ -557,7 +564,7 @@ export default function AthleteGallery({
                                         </div>
                                         <div className="flex items-center justify-between text-xs">
                                             <span className="text-slate-500 dark:text-slate-400">Modul Analisis</span>
-                                            <span className="font-semibold text-[#84cc16] dark:text-[#b4f031]">Dynamic Posture (DPA)</span>
+                                            <span className="font-semibold text-[#84cc16] dark:text-[#b4f031]">Postural & Movement (PMA)</span>
                                         </div>
                                         <div className="flex items-center justify-between text-xs">
                                             <span className="text-slate-500 dark:text-slate-400">Status Anotasi</span>
@@ -651,7 +658,7 @@ export default function AthleteGallery({
                             {/* Area Preview Foto Sekarang / Baru */}
                             <div>
                                 <label className="text-[11px] font-semibold text-slate-700 dark:text-slate-200 mb-1.5 block">
-                                    Gambar Postur DPA
+                                    Gambar Postur PMA
                                 </label>
                                 
                                 <div className="p-2.5 bg-slate-50 dark:bg-slate-950/60 border border-slate-200/90 dark:border-slate-800 rounded-lg space-y-2">
@@ -778,7 +785,7 @@ export default function AthleteGallery({
                             <div>
                                 <h3 className="font-bold text-sm sm:text-base text-slate-900 dark:text-white flex items-center gap-2">
                                     <ImagePlus className="w-4 h-4 text-[#84cc16] dark:text-[#b4f031]" />
-                                    <span>Upload Foto Postur DPA</span>
+                                    <span>Upload Foto Postur PMA</span>
                                 </h3>
                                 <p className="text-[10.5px] text-slate-400 font-medium mt-0.5">
                                     Pilih foto postur atlet (Overhead Squat, Single Leg, dll) dan sertakan analisis.
@@ -798,13 +805,30 @@ export default function AthleteGallery({
                             {uploadData.photos.length === 0 && (
                                 <div 
                                     onClick={() => fileInputRef.current?.click()}
-                                    className="w-full h-44 sm:h-48 border-2 border-dashed border-slate-300 dark:border-slate-700 hover:border-[#84cc16] dark:hover:border-[#b4f031] bg-slate-50/70 dark:bg-slate-950/40 hover:bg-[#84cc16]/5 rounded-lg flex flex-col items-center justify-center cursor-pointer transition-all group p-4 text-center"
+                                    onDragOver={(e) => { e.preventDefault(); e.stopPropagation(); setIsUploadDraggingOver(true); }}
+                                    onDragEnter={(e) => { e.preventDefault(); e.stopPropagation(); setIsUploadDraggingOver(true); }}
+                                    onDragLeave={(e) => { e.preventDefault(); e.stopPropagation(); if (e.currentTarget.contains(e.relatedTarget)) return; setIsUploadDraggingOver(false); }}
+                                    onDrop={(e) => {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                        setIsUploadDraggingOver(false);
+                                        if (e.dataTransfer.files) handleProcessFiles(e.dataTransfer.files);
+                                    }}
+                                    className={`w-full h-44 sm:h-48 border-2 border-dashed rounded-lg flex flex-col items-center justify-center cursor-pointer transition-all group p-4 text-center ${
+                                        isUploadDraggingOver
+                                            ? 'border-[#84cc16] dark:border-[#b4f031] bg-[#84cc16]/15 dark:bg-[#b4f031]/15 ring-2 ring-[#84cc16]/40 scale-[1.01]'
+                                            : 'border-slate-300 dark:border-slate-700 hover:border-[#84cc16] dark:hover:border-[#b4f031] bg-slate-50/70 dark:bg-slate-950/40 hover:bg-[#84cc16]/5'
+                                    }`}
                                 >
-                                    <div className="p-3 bg-white dark:bg-slate-800 rounded-lg shadow-2xs group-hover:scale-110 transition-transform mb-2.5 text-slate-400 group-hover:text-[#84cc16] dark:group-hover:text-[#b4f031] border border-slate-200 dark:border-slate-700">
+                                    <div className={`p-3 rounded-lg shadow-2xs transition-transform mb-2.5 border ${
+                                        isUploadDraggingOver
+                                            ? 'bg-[#84cc16] text-slate-950 scale-110 border-[#84cc16]'
+                                            : 'bg-white dark:bg-slate-800 text-slate-400 group-hover:text-[#84cc16] dark:group-hover:text-[#b4f031] border-slate-200 dark:border-slate-700 group-hover:scale-110'
+                                    }`}>
                                         <ImagePlus className="w-6 h-6" />
                                     </div>
                                     <p className="text-xs sm:text-sm font-bold text-slate-800 dark:text-slate-200 group-hover:text-[#84cc16] dark:group-hover:text-[#b4f031]">
-                                        Pilih Foto Postur dari Komputer
+                                        {isUploadDraggingOver ? 'Lepaskan Foto di Sini' : 'Pilih atau Tarik (Drag & Drop) Foto Postur'}
                                     </p>
                                     <p className="text-[10.5px] text-slate-400 mt-1">
                                         Bisa memilih beberapa foto sekaligus (JPG, PNG, WebP hingga 10MB)

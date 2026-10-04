@@ -67,7 +67,7 @@ const ERROR_CONFIGS: Record<number, ErrorConfig> = {
     404: {
         title: 'Halaman Tidak Ditemukan',
         subtitle: 'Page Not Found (404)',
-        description: 'Data atlet, lembar evaluasi DPA, atau tautan yang Anda cari tidak tersedia, telah dipindahkan, atau dihapus.',
+        description: 'Data atlet, lembar evaluasi PMA, atau tautan yang Anda cari tidak tersedia, telah dipindahkan, atau dihapus.',
         icon: Compass,
         badgeText: 'HTTP 404 • Not Found',
         badgeStyle: 'text-slate-700 bg-slate-100 border-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700',
@@ -121,7 +121,7 @@ const ERROR_CONFIGS: Record<number, ErrorConfig> = {
     503: {
         title: 'Layanan Sedang Pemeliharaan',
         subtitle: 'Service Unavailable (503)',
-        description: 'Sistem Informasi DPA sedang dalam proses pembaruan berkala atau pemeliharaan sistem. Silakan kembali dalam beberapa menit.',
+        description: 'Sistem Informasi PMA sedang dalam proses pembaruan berkala atau pemeliharaan sistem. Silakan kembali dalam beberapa menit.',
         icon: Wrench,
         badgeText: 'HTTP 503 • Under Maintenance',
         badgeStyle: 'text-emerald-700 bg-emerald-50 border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-400 dark:border-emerald-800/60',
@@ -166,7 +166,7 @@ export default function Error({ status = 404, message, description }: ErrorPageP
                     <ApplicationLogo className="h-8 w-8 transition-transform group-hover:scale-105" />
                     <div className="flex flex-col">
                         <span className="text-sm font-bold tracking-tight text-slate-900 dark:text-white leading-tight">
-                            Sistem DPA <span className="text-[#65a30d] dark:text-[#b4f031]">Olympus</span>
+                            Sistem PMA <span className="text-[#65a30d] dark:text-[#b4f031]">Olympus</span>
                         </span>
                         <span className="text-[10px] text-slate-400 dark:text-zinc-500 font-medium">
                             PKO Unesa x Olympus Training

@@ -152,7 +152,7 @@ export default function MuscleIndex({
 
     return (
         <AuthenticatedLayout>
-            <Head title="Master Anatomi Otot - Athlete DPA" />
+            <Head title="Master Anatomi Otot - Athlete PMA" />
 
             <div className="space-y-4 pb-12" ref={formTopRef}>
                 {/* ─── PAGE HEADER WITH SEARCH BAR IN ACTIONS ─── */}
@@ -164,7 +164,7 @@ export default function MuscleIndex({
                             <span className="text-[#84cc16] dark:text-[#b4f031]">Otot Biomekanik</span>
                         </>
                     }
-                    description="Katalog master serabut otot dan pemetaan visualisasi siluet anatomi DPA."
+                    description="Katalog master serabut otot dan pemetaan visualisasi siluet anatomi PMA."
                     actions={
                         <form onSubmit={handleSearchSubmit} className="relative w-full sm:w-72">
                             <Search className="w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />

@@ -71,10 +71,10 @@ export default function Navbar() {
                             <ApplicationLogo className="h-9 w-9 transition-transform group-hover:scale-105" />
                             <div className="flex flex-col">
                                 <span className="text-base font-extrabold tracking-tight text-slate-900 dark:text-white leading-tight">
-                                    Athlete <span className="text-[#84cc16] dark:text-[#b4f031]">DPA</span>
+                                    Athlete <span className="text-[#84cc16] dark:text-[#b4f031]">PMA</span>
                                 </span>
                                 <span className="text-[11px] text-slate-500 dark:text-slate-400 leading-none">
-                                    Dynamic Posture Assessment
+                                    Postural & Movement Assessment
                                 </span>
                             </div>
                         </Link>
@@ -99,7 +99,7 @@ export default function Navbar() {
                                         : 'text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white'
                                 }`}
                             >
-                                Analisis DPA
+                                Analisis PMA
                             </Link>
 
                             {/* Dropdown Konfigurasi (Kelola Atlet, Master Kompensasi, Master Latihan, Master Otot, Master Cedera, Kelola Admin) */}
@@ -311,7 +311,7 @@ export default function Navbar() {
                             href={route('dpa.index')}
                             className="px-3 py-2 rounded-md text-sm font-semibold hover:bg-slate-100 dark:hover:bg-slate-800"
                         >
-                            Analisis DPA
+                            Analisis PMA
                         </Link>
 
                         <div className="pt-2 pb-1 px-3 text-[10px] font-semibold text-slate-400">

@@ -30,7 +30,7 @@ export default function Authenticated({
                 <div className="w-full flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500 dark:text-slate-400">
                     <div className="flex items-center gap-2">
                         <ShieldCheck className="h-4 w-4 text-[#84cc16] dark:text-[#b4f031]" />
-                        <span className="font-bold text-slate-700 dark:text-slate-300">Athlete DPA</span>
+                        <span className="font-bold text-slate-700 dark:text-slate-300">Athlete PMA</span>
                         <span className="hidden sm:inline text-slate-300 dark:text-slate-700">•</span>
                         <span className="hidden sm:inline">PKO Unesa x Olympus Training Surabaya</span>
                     </div>

@@ -3,7 +3,7 @@ import { cn } from '@/lib/utils';
 
 export default function ApplicationLogo({
     className,
-    alt = 'Athlete DPA Logo',
+    alt = 'Athlete PMA Logo',
     src = '/assets/images/logo-dpa.png',
     ...props
 }: ImgHTMLAttributes<HTMLImageElement>) {

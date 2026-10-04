@@ -69,7 +69,7 @@ export default function AthleteEdit({ athlete }: { athlete: Athlete }) {
                         <CardHeader className="pb-4">
                             <CardTitle className="text-base">Athlete Information</CardTitle>
                             <CardDescription className="text-xs">
-                                Updates will be immediately reflected in future DPA reports
+                                Updates will be immediately reflected in future PMA reports
                             </CardDescription>
                         </CardHeader>
 

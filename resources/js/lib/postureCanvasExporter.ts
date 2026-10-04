@@ -110,7 +110,31 @@ export async function generateAnnotatedPostureImage(
             const lToe = getCoord(findPin(['left toe', 'l toe', 'jari kaki kiri', 'kaki kiri']));
             const rToe = getCoord(findPin(['right toe', 'r toe', 'jari kaki kanan', 'kaki kanan']));
 
-            // Front Kinetic Chain Lines
+            // --- IDEAL REFERENCE LINES (Green Dashed) ---
+            // 1. Ideal Straight-Down Kinetic Chain (ASIS -> Ankle)
+            if (lAsis && lAnkle) {
+                drawLine(lAsis, lAnkle, '#22c55e', 2.0 * scale, [6 * scale, 4 * scale]);
+            }
+            if (rAsis && rAnkle) {
+                drawLine(rAsis, rAnkle, '#22c55e', 2.0 * scale, [6 * scale, 4 * scale]);
+            }
+
+            // 2. Ideal Foot Straight-Forward Axis (Ankle -> straight forward to toe depth)
+            if (lAnkle && lToe) {
+                drawLine(lAnkle, { x: lAnkle.x, y: lToe.y }, '#22c55e', 2.0 * scale, [5 * scale, 3 * scale]);
+            }
+            if (rAnkle && rToe) {
+                drawLine(rAnkle, { x: rAnkle.x, y: rToe.y }, '#22c55e', 2.0 * scale, [5 * scale, 3 * scale]);
+            }
+
+            // 3. Ideal Level Pelvis Horizontal Line (Green Dashed)
+            if (lAsis && rAsis) {
+                const avgY = (lAsis.y + rAsis.y) / 2;
+                const extX = (rAsis.x - lAsis.x) * 0.15;
+                drawLine({ x: lAsis.x - extX, y: avgY }, { x: rAsis.x + extX, y: avgY }, '#22c55e', 1.8 * scale, [5 * scale, 3 * scale]);
+            }
+
+            // --- ACTUAL SKELETAL LINES (Red Solid) ---
             drawLine(lAsis, lKnee, '#ef4444', 2.8 * scale);
             drawLine(lKnee, lAnkle, '#ef4444', 2.8 * scale);
             drawLine(lAnkle, lToe, '#ef4444', 2.2 * scale);
@@ -118,11 +142,6 @@ export async function generateAnnotatedPostureImage(
             drawLine(rAsis, rKnee, '#ef4444', 2.8 * scale);
             drawLine(rKnee, rAnkle, '#ef4444', 2.8 * scale);
             drawLine(rAnkle, rToe, '#ef4444', 2.2 * scale);
-
-            // Pelvis Level Line
-            if (lAsis && rAsis) {
-                drawLine(lAsis, rAsis, '#10b981', 2.0 * scale, [4 * scale, 3 * scale]);
-            }
         } else if (normView.includes('lateral')) {
             const ear = getCoord(findPin(['ear', 'telinga', 'tragus']));
             const shoulder = getCoord(findPin(['shoulder', 'bahu', 'acromion']));
@@ -132,6 +151,30 @@ export async function generateAnnotatedPostureImage(
             const ankleLat = getCoord(findPin(['ankle', 'engkel', 'malleolus']));
             const wrist = getCoord(findPin(['wrist', 'tangan', 'pergelangan tangan']));
 
+            // --- IDEAL REFERENCE LINES (Green Dashed) ---
+            // 1. Ideal Plumbline (Vertical Reference through lateral malleolus)
+            if (ankleLat) {
+                drawLine(
+                    { x: ankleLat.x, y: 0.05 * height },
+                    { x: ankleLat.x, y: 0.95 * height },
+                    '#22c55e',
+                    1.8 * scale,
+                    [6 * scale, 4 * scale]
+                );
+            }
+
+            // 2. Ideal Torso Parallelism (Slope matching Tibia slope from hip)
+            if (hip && kneeLat && ankleLat && shoulder) {
+                const tibiaDx = kneeLat.x - ankleLat.x;
+                const tibiaDy = kneeLat.y - ankleLat.y;
+                const tibiaLen = Math.hypot(tibiaDx, tibiaDy) || 1;
+                const torsoLen = Math.hypot(shoulder.x - hip.x, shoulder.y - hip.y) || 0.35 * height;
+                const idealShoulderX = hip.x + (tibiaDx / tibiaLen) * torsoLen;
+                const idealShoulderY = hip.y + (tibiaDy / tibiaLen) * torsoLen;
+                drawLine(hip, { x: idealShoulderX, y: idealShoulderY }, '#22c55e', 2.0 * scale, [5 * scale, 3 * scale]);
+            }
+
+            // --- ACTUAL SKELETAL LINES (Red Solid) ---
             // Torso & Spine Line
             if (lumbar) {
                 drawLine(hip, lumbar, '#ef4444', 2.8 * scale);
@@ -147,19 +190,8 @@ export async function generateAnnotatedPostureImage(
             // Upper Extremity
             drawLine(shoulder, wrist, '#ef4444', 2.2 * scale);
 
-            // Head & Neck Line (Dashed)
+            // Head & Neck Line (Dashed Red)
             drawLine(shoulder, ear, '#ef4444', 2.2 * scale, [4 * scale, 3 * scale]);
-
-            // Vertical Reference Plumbline through lateral malleolus
-            if (ankleLat) {
-                drawLine(
-                    { x: ankleLat.x, y: 0.05 * height },
-                    { x: ankleLat.x, y: 0.95 * height },
-                    '#3b82f6',
-                    1.8 * scale,
-                    [6 * scale, 4 * scale]
-                );
-            }
         } else if (normView.includes('posterior')) {
             const c7 = getCoord(findPin(['c7', 'cervical', 'tengkuk', 'neck']));
             const lPsis = getCoord(findPin(['left psis', 'l psis', 'psis kiri']));
@@ -171,6 +203,29 @@ export async function generateAnnotatedPostureImage(
             const lCalc = getCoord(findPin(['left calcaneus', 'left heel', 'tumit kiri']));
             const rCalc = getCoord(findPin(['right calcaneus', 'right heel', 'tumit kanan']));
 
+            // --- IDEAL REFERENCE LINES (Green Dashed) ---
+            // 1. Ideal Vertical Achilles Tendon Lines (Straight down from calf/knee to heel)
+            if (lCalf && lCalc) {
+                drawLine(lCalf, { x: lCalf.x, y: lCalc.y }, '#22c55e', 2.0 * scale, [5 * scale, 3 * scale]);
+            }
+            if (rCalf && rCalc) {
+                drawLine(rCalf, { x: rCalf.x, y: rCalc.y }, '#22c55e', 2.0 * scale, [5 * scale, 3 * scale]);
+            }
+
+            // 2. Ideal Level Pelvis Horizontal Line (Green Dashed)
+            if (lPsis && rPsis) {
+                const avgY = (lPsis.y + rPsis.y) / 2;
+                const extendX = (rPsis.x - lPsis.x) * 0.4;
+                drawLine(
+                    { x: lPsis.x - extendX, y: avgY },
+                    { x: rPsis.x + extendX, y: avgY },
+                    '#22c55e',
+                    1.8 * scale,
+                    [5 * scale, 3 * scale]
+                );
+            }
+
+            // --- ACTUAL SKELETAL LINES (Red Solid) ---
             // C7 Vertical Plumbline
             if (c7) {
                 drawLine(
@@ -209,6 +264,36 @@ export async function generateAnnotatedPostureImage(
             const lShoulder = getCoord(findPin(['left shoulder', 'l shoulder', 'bahu kiri']));
             const rShoulder = getCoord(findPin(['right shoulder', 'r shoulder', 'bahu kanan']));
 
+            // --- IDEAL REFERENCE LINES (Green Dashed) ---
+            // 1. Ideal Stance Leg Alignment (ASIS directly to Ankle straight)
+            if (stAsis && stAnkle) {
+                drawLine(stAsis, stAnkle, '#22c55e', 2.0 * scale, [6 * scale, 4 * scale]);
+            }
+
+            // 2. Ideal Level Pelvis Horizontal Line (from Stance ASIS)
+            if (stAsis && flAsis) {
+                drawLine(
+                    { x: stAsis.x - 0.08 * width, y: stAsis.y },
+                    { x: flAsis.x + 0.08 * width, y: stAsis.y },
+                    '#22c55e',
+                    1.8 * scale,
+                    [5 * scale, 3 * scale]
+                );
+            }
+
+            // 3. Ideal Shoulder Level Line
+            if (lShoulder && rShoulder) {
+                const avgY = (lShoulder.y + rShoulder.y) / 2;
+                drawLine(
+                    { x: lShoulder.x - 0.05 * width, y: avgY },
+                    { x: rShoulder.x + 0.05 * width, y: avgY },
+                    '#22c55e',
+                    1.8 * scale,
+                    [5 * scale, 3 * scale]
+                );
+            }
+
+            // --- ACTUAL SKELETAL LINES (Red Solid) ---
             // Trendelenburg Pelvic Transverse Line
             if (stAsis && flAsis) {
                 drawLine(
@@ -223,14 +308,13 @@ export async function generateAnnotatedPostureImage(
             drawLine(stAsis, stKnee, '#ef4444', 2.8 * scale);
             drawLine(stKnee, stAnkle, '#ef4444', 2.8 * scale);
 
-            // Shoulder Level Line
+            // Actual Shoulder Level Line
             if (lShoulder && rShoulder) {
                 drawLine(
                     { x: lShoulder.x - 0.05 * width, y: lShoulder.y },
                     { x: rShoulder.x + 0.05 * width, y: rShoulder.y },
-                    '#10b981',
-                    2.0 * scale,
-                    [4 * scale, 3 * scale]
+                    '#ef4444',
+                    2.0 * scale
                 );
             }
         }
@@ -271,19 +355,20 @@ export async function generateAnnotatedPostureImage(
             ctx.restore();
         });
 
-        // 6. Draw Watermark / Assessment Step Badge at Top-Left
+        // 6. Draw Watermark / Assessment Step Badge & Legend at Top-Left
         ctx.save();
-        const badgeText = `${view.toUpperCase()} • DPA POSTURE ANALYSIS`;
+        const badgeText = `${view.toUpperCase()} • PMA POSTURAL ANALYSIS`;
         const fontSize = Math.max(12, Math.round(11 * scale));
         ctx.font = `600 ${fontSize}px sans-serif`;
         const textMetrics = ctx.measureText(badgeText);
         const padding = 6 * scale;
-        const boxWidth = textMetrics.width + padding * 2.5;
-        const boxHeight = fontSize + padding * 1.8;
+        const boxWidth = Math.max(textMetrics.width + padding * 2.5, 230 * scale);
+        const legendHeight = 18 * scale;
+        const boxHeight = fontSize + padding * 1.8 + legendHeight;
 
-        ctx.fillStyle = 'rgba(15, 23, 42, 0.75)';
+        ctx.fillStyle = 'rgba(15, 23, 42, 0.85)';
         ctx.beginPath();
-        ctx.roundRect(14 * scale, 14 * scale, boxWidth, boxHeight, 4 * scale);
+        ctx.roundRect(14 * scale, 14 * scale, boxWidth, boxHeight, 5 * scale);
         ctx.fill();
         ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
         ctx.lineWidth = 1;
@@ -291,6 +376,37 @@ export async function generateAnnotatedPostureImage(
 
         ctx.fillStyle = '#ffffff';
         ctx.fillText(badgeText, 14 * scale + padding * 1.25, 14 * scale + fontSize + padding * 0.4);
+
+        // Sub-legend: Red (Aktual) vs Green Dashed (Ideal Seharusnya)
+        const legendY = 14 * scale + fontSize + padding * 0.4 + 14 * scale;
+        const legendFontSize = Math.max(9, Math.round(9 * scale));
+        ctx.font = `500 ${legendFontSize}px sans-serif`;
+
+        // Red Solid Indicator
+        ctx.strokeStyle = '#ef4444';
+        ctx.lineWidth = 2.2 * scale;
+        ctx.setLineDash([]);
+        ctx.beginPath();
+        ctx.moveTo(14 * scale + padding * 1.25, legendY - 3 * scale);
+        ctx.lineTo(14 * scale + padding * 1.25 + 14 * scale, legendY - 3 * scale);
+        ctx.stroke();
+
+        ctx.fillStyle = '#fca5a5';
+        ctx.fillText('Aktual', 14 * scale + padding * 1.25 + 18 * scale, legendY);
+
+        // Green Dashed Indicator
+        const greenStartX = 14 * scale + padding * 1.25 + 75 * scale;
+        ctx.strokeStyle = '#22c55e';
+        ctx.lineWidth = 2.0 * scale;
+        ctx.setLineDash([3 * scale, 2 * scale]);
+        ctx.beginPath();
+        ctx.moveTo(greenStartX, legendY - 3 * scale);
+        ctx.lineTo(greenStartX + 16 * scale, legendY - 3 * scale);
+        ctx.stroke();
+
+        ctx.fillStyle = '#86efac';
+        ctx.fillText('Ideal (Seharusnya)', greenStartX + 20 * scale, legendY);
+
         ctx.restore();
 
         // 7. Export Canvas as File Blob

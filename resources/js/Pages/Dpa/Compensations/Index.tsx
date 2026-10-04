@@ -245,7 +245,7 @@ export default function CompensationsIndex({
 
     return (
         <AuthenticatedLayout>
-            <Head title="Master Data Kompensasi Postur - Athlete DPA" />
+            <Head title="Master Data Kompensasi Postur - Athlete PMA" />
 
             <div className="space-y-6 pb-16">
                 {/* ─── PAGE HEADER WITH SEARCH BAR ONLY (NO ADD BUTTON) ─── */}
@@ -254,7 +254,7 @@ export default function CompensationsIndex({
                     title={
                         <>
                             Master Data Kompensasi{' '}
-                            <span className="text-[#84cc16] dark:text-[#b4f031]">Postur (DPA)</span>
+                            <span className="text-[#84cc16] dark:text-[#b4f031]">Postur & Gerak (PMA)</span>
                         </>
                     }
                     description="Basis data deviasi kinetik tubuh, pemetaan ketidakseimbangan otot (overactive & underactive), serta protokol 4 fase latihan korektif NASM."

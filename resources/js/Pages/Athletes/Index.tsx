@@ -21,6 +21,7 @@ import {
     Dumbbell,
     Award,
     Eye,
+    Trash2,
 } from 'lucide-react';
 
 interface AthleteItem {
@@ -90,7 +91,7 @@ export default function AthleteIndex({
         remove_photo: boolean;
         is_active: boolean;
     }>({
-        athlete_code: `DPA-${new Date().getFullYear()}-${String(totalCount + 1).padStart(3, '0')}`,
+        athlete_code: `PMA-${new Date().getFullYear()}-${String(totalCount + 1).padStart(3, '0')}`,
         full_name: '',
         gender: 'L',
         age: '20',
@@ -133,7 +134,7 @@ export default function AthleteIndex({
         clearErrors();
         setPhotoPreview(null);
         reset();
-        setData('athlete_code', `DPA-${new Date().getFullYear()}-${String(totalCount + 1).padStart(3, '0')}`);
+        setData('athlete_code', `PMA-${new Date().getFullYear()}-${String(totalCount + 1).padStart(3, '0')}`);
         if (fileInputRef.current) {
             fileInputRef.current.value = '';
         }
@@ -189,6 +190,19 @@ export default function AthleteIndex({
         );
     };
 
+    const handleDelete = (ath: AthleteItem) => {
+        if (confirm(`Apakah Anda yakin ingin menghapus atlet "${ath.full_name}" (${ath.athlete_code}) beserta seluruh riwayat asesmen PMA miliknya?`)) {
+            router.delete(route('athletes.destroy', ath.athlete_code || ath.id), {
+                preserveScroll: true,
+                onSuccess: () => {
+                    if (editingAthlete?.id === ath.id) {
+                        handleCancelEdit();
+                    }
+                },
+            });
+        }
+    };
+
     // Live BMI calculation preview
     const calculatedBmi = () => {
         const h = parseFloat(data.height_cm);
@@ -215,7 +229,7 @@ export default function AthleteIndex({
 
     return (
         <AuthenticatedLayout>
-            <Head title="Kelola Atlet - Athlete DPA" />
+            <Head title="Kelola Atlet - Athlete PMA" />
 
             <div className="space-y-5 pb-12 w-full">
                 <PageHeader
@@ -225,7 +239,7 @@ export default function AthleteIndex({
                             Kelola Data <span className="text-[#84cc16] dark:text-[#b4f031]">Atlet</span>
                         </>
                     }
-                    description="Manajemen profil atlet terpadu, data antropometri, dan riwayat Dynamic Posture Assessment."
+                    description="Manajemen profil atlet terpadu, data antropometri, dan riwayat Postural & Movement Assessment (PMA)."
                     actions={
                         <form onSubmit={handleSearch} className="relative w-full sm:w-64">
                             <Search className="w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
@@ -355,7 +369,7 @@ export default function AthleteIndex({
                                     <input
                                         type="text"
                                         required
-                                        placeholder="DPA-2026-001"
+                                        placeholder="PMA-2026-001"
                                         value={data.athlete_code}
                                         onChange={(e) => setData('athlete_code', e.target.value)}
                                         className="w-full px-2.5 py-1.5 bg-slate-50/70 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-md text-xs font-mono text-slate-900 dark:text-slate-100 outline-none focus:border-[#84cc16] dark:focus:border-[#b4f031]"
@@ -544,7 +558,7 @@ export default function AthleteIndex({
                                     Tidak Ada Data Atlet
                                 </h4>
                                 <p className="text-[11px] text-slate-500 max-w-sm mx-auto">
-                                    Gunakan formulir di sebelah kiri untuk menambahkan atlet baru ke sistem DPA.
+                                    Gunakan formulir di sebelah kiri untuk menambahkan atlet baru ke sistem PMA.
                                 </p>
                             </div>
                         ) : (
@@ -596,18 +610,28 @@ export default function AthleteIndex({
                                                     </div>
                                                 </div>
 
-                                                <button
-                                                    type="button"
-                                                    onClick={() => handleEditClick(ath)}
-                                                    className={`p-1.5 rounded-md transition-colors cursor-pointer shrink-0 ${
-                                                        isBeingEdited
-                                                            ? 'bg-[#84cc16] text-slate-950 font-bold'
-                                                            : 'text-slate-400 hover:text-[#84cc16] dark:hover:text-[#b4f031] hover:bg-[#84cc16]/10 dark:hover:bg-[#b4f031]/10'
-                                                    }`}
-                                                    title="Edit Data Atlet"
-                                                >
-                                                    <Edit2 size={13} />
-                                                </button>
+                                                <div className="flex items-center gap-1 shrink-0">
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => handleEditClick(ath)}
+                                                        className={`p-1.5 rounded-md transition-colors cursor-pointer ${
+                                                            isBeingEdited
+                                                                ? 'bg-[#84cc16] text-slate-950 font-bold'
+                                                                : 'text-slate-400 hover:text-[#84cc16] dark:hover:text-[#b4f031] hover:bg-[#84cc16]/10 dark:hover:bg-[#b4f031]/10'
+                                                        }`}
+                                                        title="Edit Data Atlet"
+                                                    >
+                                                        <Edit2 size={13} />
+                                                    </button>
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => handleDelete(ath)}
+                                                        className="p-1.5 rounded-md text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-500/10 transition-colors cursor-pointer"
+                                                        title="Hapus Data Atlet"
+                                                    >
+                                                        <Trash2 size={13} />
+                                                    </button>
+                                                </div>
                                             </div>
 
                                             {/* Anthropometry & Dominance Metric Box */}
@@ -638,12 +662,12 @@ export default function AthleteIndex({
                                                 </div>
                                             </div>
 
-                                            {/* Footer: Sesi DPA & Action Buttons */}
+                                            {/* Footer: Sesi PMA & Action Buttons */}
                                             <div className="flex items-center justify-between pt-2 border-t border-slate-100 dark:border-slate-800/80 text-[11px]">
                                                 <div className="flex items-center gap-1.5 text-slate-500 dark:text-slate-400">
                                                     <Activity size={12} className={ath.dpa_assessments_count > 0 ? 'text-[#84cc16] dark:text-[#b4f031]' : 'text-slate-400'} />
                                                     <span className="font-semibold text-slate-700 dark:text-slate-300 text-[10.5px]">
-                                                        {ath.dpa_assessments_count} Sesi DPA
+                                                        {ath.dpa_assessments_count} Sesi PMA
                                                     </span>
                                                     {lastAssessment && (
                                                         <span className="text-[9.5px] text-slate-400">
@@ -663,7 +687,7 @@ export default function AthleteIndex({
                                                         href={route('dpa.athletes.show', ath.athlete_code || ath.id)}
                                                         className="px-2.5 py-1 rounded text-[10.5px] font-bold text-white dark:text-slate-950 bg-[#84cc16] hover:bg-[#65a30d] dark:bg-[#b4f031] dark:hover:bg-[#a2dd26] transition-colors shadow-2xs"
                                                     >
-                                                        + Uji DPA
+                                                        + Uji PMA
                                                     </Link>
                                                 </div>
                                             </div>

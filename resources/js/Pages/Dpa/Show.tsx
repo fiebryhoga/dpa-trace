@@ -111,7 +111,7 @@ export default function DpaShow({
     };
 
     const handleDelete = (id: number) => {
-        if (confirm('Apakah Anda yakin ingin menghapus data evaluasi DPA ini?')) {
+        if (confirm('Apakah Anda yakin ingin menghapus data evaluasi PMA ini?')) {
             router.delete(route('dpa.destroy', id), { preserveScroll: true });
         }
     };
@@ -193,7 +193,7 @@ export default function DpaShow({
 
     return (
         <AuthenticatedLayout>
-            <Head title={`Analisis DPA - ${athlete.full_name}`} />
+            <Head title={`Analisis PMA - ${athlete.full_name}`} />
 
             <div className="space-y-5 pb-12">
                 {/* ─── 1. INTEGRATED PAGE HEADER & NAVIGATION TABS ─── */}
@@ -296,7 +296,7 @@ export default function DpaShow({
                                 }`}
                             >
                                 <Camera size={14} className={activeTab === 'gallery' ? 'text-[#65a30d] dark:text-[#b4f031]' : ''} />
-                                <span>Galeri Postur DPA</span>
+                                <span>Galeri Postur PMA</span>
                                 <span className="text-[10px] px-1.5 py-0.2 rounded-md bg-lime-500/15 text-lime-800 dark:text-[#b4f031] font-bold">
                                     {galleries.length}
                                 </span>
@@ -600,7 +600,7 @@ export default function DpaShow({
                                         <AthleteGallery
                                             athlete={athlete}
                                             galleries={galleries}
-                                            title="Dokumentasi &amp; Galeri Postur DPA"
+                                            title="Dokumentasi &amp; Galeri Postur PMA"
                                             subtitle="Foto pengujian postur (Overhead Squat, Single Leg Squat, dll), analisis sudut derajat dan observasi visual."
                                             canManage={true}
                                         />
@@ -835,7 +835,7 @@ export default function DpaShow({
                                 </div>
                                 <div className="space-y-1.5">
                                     <h3 className="font-bold text-sm text-slate-900 dark:text-white">
-                                        Belum Ada Data Asesmen DPA
+                                        Belum Ada Data Asesmen PMA
                                     </h3>
                                     <p className="text-xs text-slate-500 leading-relaxed max-w-sm mx-auto">
                                         Atlet ini belum memiliki data evaluasi postur dinamis. Mulai input temuan kompensasi gerakan sekarang.
@@ -854,13 +854,13 @@ export default function DpaShow({
                     </div>
                 )}
 
-                {/* ─── TAB 2: GALERI POSTUR DPA ─── */}
+                {/* ─── TAB 2: GALERI POSTUR PMA ─── */}
                 {activeTab === 'gallery' && (
                     <div className="space-y-4">
                         <AthleteGallery
                             athlete={athlete}
                             galleries={galleries}
-                            title="Dokumentasi &amp; Galeri Postur DPA"
+                            title="Dokumentasi &amp; Galeri Postur PMA"
                             subtitle="Unggah foto postur atlet, lakukan pengukuran sudut derajat (goniometri digital), dan simpan hasil observasi klinis."
                             canManage={true}
                         />

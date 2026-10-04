@@ -71,7 +71,7 @@ export default function DpaIndex({
 
     return (
         <AuthenticatedLayout>
-            <Head title="Analisis DPA - Dynamic Posture Assessment" />
+            <Head title="Analisis PMA - Postural & Movement Assessment" />
 
             <div className="space-y-5 pb-16">
                 {/* ─── PAGE HEADER WITH SEARCH & SORT ─── */}
@@ -79,7 +79,7 @@ export default function DpaIndex({
                     icon={Activity}
                     title={
                         <>
-                            Analisis Postur <span className="text-[#84cc16] dark:text-[#b4f031]">Dinamis (DPA)</span>
+                            Postural & Movement <span className="text-[#84cc16] dark:text-[#b4f031]">Assessment (PMA)</span>
                         </>
                     }
                     description="Evaluasi pola gerak atlet, identifikasi deviasi kompensasi anatomi (overactive & underactive), dan tentukan protokol korektif berbasis biomekanika."
@@ -221,7 +221,7 @@ export default function DpaIndex({
                                             <div className="shrink-0">
                                                 {totalRecords > 0 ? (
                                                     <span className="inline-flex items-center text-[10px] font-medium px-2 py-0.5 rounded-md bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border border-emerald-200/60 dark:border-emerald-800/40">
-                                                        {totalRecords} Sesi DPA
+                                                        {totalRecords} Sesi PMA
                                                     </span>
                                                 ) : (
                                                     <span className="inline-flex items-center text-[10px] font-medium px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200/60 dark:border-slate-700/60">
@@ -308,7 +308,7 @@ export default function DpaIndex({
                                             {totalRecords > 0 ? 'Lihat riwayat & evaluasi' : 'Mulai analisis awal'}
                                         </span>
                                         <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#84cc16] dark:text-[#b4f031] group-hover:underline group-hover:translate-x-0.5 transition-transform">
-                                            <span>Analisis DPA</span>
+                                            <span>Analisis PMA</span>
                                             <span>→</span>
                                         </span>
                                     </div>

@@ -151,7 +151,7 @@ export default function InjuryIndex({
 
     return (
         <AuthenticatedLayout>
-            <Head title="Master Potensi Risiko Cedera - Athlete DPA" />
+            <Head title="Master Potensi Risiko Cedera - Athlete PMA" />
 
             <div className="space-y-4 pb-12" ref={formTopRef}>
                 {/* ─── PAGE HEADER WITH SEARCH BAR IN ACTIONS ─── */}

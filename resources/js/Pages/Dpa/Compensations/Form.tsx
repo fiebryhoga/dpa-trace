@@ -625,7 +625,7 @@ export default function CompensationForm({
 
     return (
         <AuthenticatedLayout>
-            <Head title={isEdit ? `Edit Kompensasi - ${data.name} - Athlete DPA` : 'Tambah Kompensasi DPA - Athlete DPA'} />
+            <Head title={isEdit ? `Edit Kompensasi - ${data.name} - Athlete PMA` : 'Tambah Kompensasi PMA - Athlete PMA'} />
 
             <div className="space-y-4 pb-12 w-full">
                 {/* ─── PAGE HEADER ─── */}
@@ -640,7 +640,7 @@ export default function CompensationForm({
                             </>
                         ) : (
                             <>
-                                Tambah Master <span className="text-[#84cc16] dark:text-[#b4f031]">Kompensasi DPA</span>
+                                Tambah Master <span className="text-[#84cc16] dark:text-[#b4f031]">Kompensasi PMA</span>
                             </>
                         )
                     }

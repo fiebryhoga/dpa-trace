@@ -17,8 +17,8 @@ class DatabaseSeeder extends Seeder
         User::updateOrCreate(
             ['username' => 'admin'],
             [
-                'name' => 'Athlete DPA Lead Biomechanist',
-                'email' => 'admin@athletedpa.com',
+                'name' => 'Athlete PMA Lead Biomechanist',
+                'email' => 'admin@athletepma.com',
                 'password' => Hash::make('admin123'),
                 'email_verified_at' => now(),
             ]

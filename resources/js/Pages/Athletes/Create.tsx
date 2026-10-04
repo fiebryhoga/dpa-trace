@@ -10,7 +10,7 @@ import { UserPlus, Save } from 'lucide-react';
 
 export default function AthleteCreate() {
     const { data, setData, post, processing, errors } = useForm({
-        athlete_code: `DPA-${new Date().getFullYear()}-${Math.floor(100 + Math.random() * 900)}`,
+        athlete_code: `PMA-${new Date().getFullYear()}-${Math.floor(100 + Math.random() * 900)}`,
         full_name: '',
         gender: 'L' as 'L' | 'P',
         birth_date: '',
@@ -32,7 +32,7 @@ export default function AthleteCreate() {
 
     return (
         <AuthenticatedLayout>
-            <Head title="Tambah Atlet Baru - Athlete DPA" />
+            <Head title="Tambah Atlet Baru - Athlete PMA" />
 
             <div className="w-full space-y-6">
                 <PageHeader
@@ -44,7 +44,7 @@ export default function AthleteCreate() {
                             Tambah <span className="text-[#84cc16] dark:text-[#b4f031]">Atlet Baru</span>
                         </>
                     }
-                    description="Daftarkan profil atlet, data antropometri, dan cabang olahraga untuk penilaian DPA."
+                    description="Daftarkan profil atlet, data antropometri, dan cabang olahraga untuk penilaian PMA."
                 />
 
                 <form onSubmit={submit}>
@@ -52,7 +52,7 @@ export default function AthleteCreate() {
                         <CardHeader className="pb-4">
                             <CardTitle className="text-base">Profile & Biomechanical Biodata</CardTitle>
                             <CardDescription className="text-xs">
-                                All athlete records connect seamlessly to the DPA kinetic assessment module
+                                All athlete records connect seamlessly to the PMA kinetic assessment module
                             </CardDescription>
                         </CardHeader>
 

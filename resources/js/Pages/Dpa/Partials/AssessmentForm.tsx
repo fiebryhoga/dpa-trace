@@ -231,10 +231,10 @@ export default function AssessmentForm({
                                 ) : (
                                     <Calendar size={14} className="text-[#84cc16] dark:text-[#b4f031]" />
                                 )}
-                                <span>{isEditMode ? 'Perbarui Evaluasi DPA' : 'Form Evaluasi Baru'}</span>
+                                <span>{isEditMode ? 'Perbarui Evaluasi PMA' : 'Form Evaluasi Baru'}</span>
                             </h3>
                             <p className="text-[10px] text-slate-500 dark:text-slate-400 font-medium mt-0.5">
-                                {isEditMode ? 'Edit temuan asesmen postur' : 'Simpan catatan evaluasi postur dinamis'}
+                                {isEditMode ? 'Edit temuan asesmen postur' : 'Simpan catatan evaluasi postur & gerak (PMA)'}
                             </p>
                         </div>
 
@@ -353,7 +353,7 @@ export default function AssessmentForm({
                                     className="w-full inline-flex items-center justify-center rounded-md text-xs font-bold bg-[#84cc16] hover:bg-[#65a30d] dark:bg-[#b4f031] dark:hover:bg-[#a3e635] text-slate-950 shadow-2xs h-9 px-4 gap-1.5 cursor-pointer transition-all disabled:opacity-50"
                                 >
                                     <Save size={14} className="stroke-[2.5]" />
-                                    <span>{isEditMode ? 'Perbarui Evaluasi' : 'Simpan Evaluasi DPA'}</span>
+                                    <span>{isEditMode ? 'Perbarui Evaluasi' : 'Simpan Evaluasi PMA'}</span>
                                 </button>
 
                                 {isEditMode && (
