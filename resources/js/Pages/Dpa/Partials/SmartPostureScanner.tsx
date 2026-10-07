@@ -1366,9 +1366,13 @@ export default function SmartPostureScanner({
                     const stAsisY = Math.max(0, mp[stHipIdx].y - stTorsoHeight * 0.16) * 100;
                     const flAsisY = Math.max(0, mp[flHipIdx].y - flTorsoHeight * 0.16) * 100;
 
+                    const midHipX = (mp[23].x + mp[24].x) / 2;
+                    const stAsisX = (midHipX + (mp[stHipIdx].x - midHipX) * 1.35) * 100;
+                    const flAsisX = (midHipX + (mp[flHipIdx].x - midHipX) * 1.35) * 100;
+
                     mappedPins = [
-                        { id: 'st_asis', name: 'Stance ASIS', x: mp[stHipIdx].x * 100, y: stAsisY, color: '#ef4444' },
-                        { id: 'fl_asis', name: 'Floating ASIS', x: mp[flHipIdx].x * 100, y: flAsisY, color: '#ef4444' },
+                        { id: 'st_asis', name: 'Stance ASIS', x: stAsisX, y: stAsisY, color: '#ef4444' },
+                        { id: 'fl_asis', name: 'Floating ASIS', x: flAsisX, y: flAsisY, color: '#ef4444' },
                         { id: 'st_knee', name: 'Stance Knee', x: mp[stKneeIdx].x * 100, y: mp[stKneeIdx].y * 100, color: '#ef4444' },
                         { id: 'st_ankle', name: 'Stance Ankle', x: mp[stIdx].x * 100, y: mp[stIdx].y * 100, color: '#84cc16' },
                         { id: 'l_shoulder', name: 'Left Shoulder', x: mp[11].x * 100, y: mp[11].y * 100, color: '#ef4444' },
@@ -1416,10 +1420,14 @@ export default function SmartPostureScanner({
                     const lPsisY = Math.max(0, mp[23].y - lTorsoHeight * 0.16) * 100;
                     const rPsisY = Math.max(0, mp[24].y - rTorsoHeight * 0.16) * 100;
 
+                    const midHipX = (mp[23].x + mp[24].x) / 2;
+                    const lPsisX = (midHipX + (mp[23].x - midHipX) * 1.25) * 100;
+                    const rPsisX = (midHipX + (mp[24].x - midHipX) * 1.25) * 100;
+
                     mappedPins = [
                         { id: 'c7', name: 'C7 (Spine Midline)', x: ((mp[11].x + mp[12].x) / 2) * 100, y: ((mp[11].y + mp[12].y) / 2) * 100, color: '#ef4444' },
-                        { id: 'l_psis', name: 'Left PSIS', x: mp[23].x * 100, y: lPsisY, color: '#ef4444' },
-                        { id: 'r_psis', name: 'Right PSIS', x: mp[24].x * 100, y: rPsisY, color: '#ef4444' },
+                        { id: 'l_psis', name: 'Left PSIS', x: lPsisX, y: lPsisY, color: '#ef4444' },
+                        { id: 'r_psis', name: 'Right PSIS', x: rPsisX, y: rPsisY, color: '#ef4444' },
                         { id: 'l_calf', name: 'Left Calf', x: (mp[25].x * 0.25 + mp[27].x * 0.75) * 100, y: (mp[25].y * 0.25 + mp[27].y * 0.75) * 100, color: '#ef4444' },
                         { id: 'r_calf', name: 'Right Calf', x: (mp[26].x * 0.25 + mp[28].x * 0.75) * 100, y: (mp[26].y * 0.25 + mp[28].y * 0.75) * 100, color: '#ef4444' },
                         { id: 'l_ankle', name: 'Left Ankle', x: mp[27].x * 100, y: mp[27].y * 100, color: '#84cc16' },
@@ -1428,15 +1436,20 @@ export default function SmartPostureScanner({
                         { id: 'r_calcaneus', name: 'Right Calcaneus', x: mp[30].x * 100, y: mp[30].y * 100, color: '#ef4444' },
                     ];
                 } else {
-                    // Anterior View: calculate ASIS located superior to the hip joint at the iliac crest (above thigh/pinggul)
+                    // Anterior View: calculate ASIS located superior & lateral to the hip joint at the iliac crest (above thigh/pinggul)
                     const lTorsoHeight = Math.abs(mp[23].y - mp[11].y) || 0.35;
                     const rTorsoHeight = Math.abs(mp[24].y - mp[12].y) || 0.35;
                     const lAsisY = Math.max(0, mp[23].y - lTorsoHeight * 0.16) * 100;
                     const rAsisY = Math.max(0, mp[24].y - rTorsoHeight * 0.16) * 100;
 
+                    // Anatomically, ASIS sits ~35% more lateral from the pelvis midline than the medial femoral head
+                    const midHipX = (mp[23].x + mp[24].x) / 2;
+                    const lAsisX = (midHipX + (mp[23].x - midHipX) * 1.35) * 100;
+                    const rAsisX = (midHipX + (mp[24].x - midHipX) * 1.35) * 100;
+
                     mappedPins = [
-                        { id: 'l_asis', name: 'Left ASIS', x: mp[23].x * 100, y: lAsisY, color: '#38bdf8' },
-                        { id: 'r_asis', name: 'Right ASIS', x: mp[24].x * 100, y: rAsisY, color: '#38bdf8' },
+                        { id: 'l_asis', name: 'Left ASIS', x: lAsisX, y: lAsisY, color: '#38bdf8' },
+                        { id: 'r_asis', name: 'Right ASIS', x: rAsisX, y: rAsisY, color: '#38bdf8' },
                         { id: 'l_knee', name: 'Left Knee', x: mp[25].x * 100, y: mp[25].y * 100, color: '#ef4444' },
                         { id: 'r_knee', name: 'Right Knee', x: mp[26].x * 100, y: mp[26].y * 100, color: '#ef4444' },
                         { id: 'l_ankle', name: 'Left Ankle', x: mp[27].x * 100, y: mp[27].y * 100, color: '#84cc16' },
