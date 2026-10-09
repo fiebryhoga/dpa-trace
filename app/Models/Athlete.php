@@ -86,4 +86,9 @@ class Athlete extends Model
     {
         return $this->hasMany(AthleteGallery::class)->latest();
     }
+
+    public function trainingPrograms()
+    {
+        return $this->hasMany(TrainingProgram::class)->latest();
+    }
 }

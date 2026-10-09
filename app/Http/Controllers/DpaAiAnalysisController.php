@@ -129,8 +129,8 @@ EXACT NASM BIOMECHANICAL VISUAL CLUES & MARKERS:
    - "LPHC - Asymmetrical Weight Shift": Compare the vertical center plumbline (spine) with the pelvic horizontal line. If pelvis shifts laterally to the left or right side of the plumbline, flag this with the exact side (Left or Right).
 
 4. SINGLE LEG SQUAT:
-   - "Knee - Move Inward (Valgus) - 1 LEG": Stance knee collapses medially toward the midline.
-   - "LPHC - Hip Hikes - 1 LEG": The non-stance/floating hip hikes UPWARD above horizontal.
+   - "Knee - Move Inward (Valgus) - 1 LEG": Stance knee collapses medially toward the midline (Dynamic Valgus / medial deviation).
+   - "LPHC - Hip Hike - 1 LEG": The non-stance/floating hip hikes UPWARD above horizontal.
    - "LPHC - Hip Drop - 1 LEG": The non-stance/floating hip drops DOWNWARD below horizontal (Trendelenburg sign).
    - "Upper Body - Inward Trunk Rotation - 1 LEG": Shoulders & torso rotate inward toward the stance leg.
    - "Upper Body - Outward Trunk Rotation - 1 LEG": Shoulders & torso rotate outward away from the stance leg.
@@ -218,7 +218,18 @@ PROMPT;
                     foreach ($parsed['detected_compensations'] as &$d) {
                         $comp = $compensationsInView->firstWhere('id', $d['compensation_id']);
                         if (!$comp && isset($d['name'])) {
-                            $comp = $compensationsInView->first(fn($c) => strtolower($c->name) === strtolower($d['name']));
+                            $dName = strtolower(trim($d['name']));
+                            $comp = $compensationsInView->first(function($c) use ($dName) {
+                                $cName = strtolower($c->name);
+                                return $cName === $dName ||
+                                    str_contains($cName, $dName) ||
+                                    str_contains($dName, $cName) ||
+                                    (str_contains($dName, 'hip hike') && str_contains($cName, 'hip hike')) ||
+                                    (str_contains($dName, 'hip drop') && str_contains($cName, 'hip drop')) ||
+                                    (str_contains($dName, 'inward') && str_contains($cName, 'inward') && str_contains($dName, 'trunk') && str_contains($cName, 'trunk')) ||
+                                    (str_contains($dName, 'outward') && str_contains($cName, 'outward') && str_contains($dName, 'trunk') && str_contains($cName, 'trunk')) ||
+                                    ((str_contains($dName, 'valgus') || str_contains($dName, 'inward')) && str_contains($cName, 'inward'));
+                            });
                         }
                         if ($comp) {
                             $d['compensation_id'] = $comp->id;

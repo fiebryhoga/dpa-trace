@@ -147,40 +147,81 @@ export async function generateAnnotatedPostureImage(
             const shoulder = getCoord(findPin(['shoulder', 'bahu', 'acromion']));
             const hip = getCoord(findPin(['hip', 'pinggul', 'trochanter']));
             const lumbar = getCoord(findPin(['lumbar', 'pinggang', 'l3', 'spine']));
-            const kneeLat = getCoord(findPin(['knee', 'lutut', 'epicondyle']));
-            const ankleLat = getCoord(findPin(['ankle', 'engkel', 'malleolus']));
+            const kneeLat = getCoord(findPin(['knee', 'lutut', 'patella', 'depan lutut']));
+            const ankleLat = getCoord(findPin(['ankle', 'engkel', 'tungkai', 'malleolus', 'shank', 'tibia']));
             const wrist = getCoord(findPin(['wrist', 'tangan', 'pergelangan tangan']));
 
-            // --- IDEAL REFERENCE LINES (Green Dashed) ---
-            // 1. Ideal Plumbline (Vertical Reference through lateral malleolus)
+            // --- IDEAL REFERENCE LINES (Green) ---
+            // 1. Extended Tibia Shank Axis (Tungkai ke Depan Lutut ditarik panjang)
+            if (ankleLat && kneeLat) {
+                const tibiaDx = kneeLat.x - ankleLat.x;
+                const tibiaDy = kneeLat.y - ankleLat.y;
+                const startX = ankleLat.x - tibiaDx * 0.45;
+                const startY = ankleLat.y - tibiaDy * 0.45;
+                const endX = kneeLat.x + tibiaDx * 1.6;
+                const endY = kneeLat.y + tibiaDy * 1.6;
+                drawLine({ x: startX, y: startY }, { x: endX, y: endY }, '#22c55e', 2.6 * scale);
+            }
+
+            // 2. Extended Torso Parallel Axis (Garis Sumbu Torso ditarik panjang sejajar)
+            if (hip && shoulder) {
+                const tDx = shoulder.x - hip.x;
+                const tDy = shoulder.y - hip.y;
+                const startX = hip.x - tDx * 0.25;
+                const startY = hip.y - tDy * 0.25;
+                const endX = shoulder.x + tDx * 0.7;
+                const endY = shoulder.y + tDy * 0.7;
+                drawLine({ x: startX, y: startY }, { x: endX, y: endY }, '#22c55e', 2.6 * scale);
+            }
+
+            // 3. Ideal Plumbline (Vertical Reference through lateral malleolus)
             if (ankleLat) {
                 drawLine(
                     { x: ankleLat.x, y: 0.05 * height },
                     { x: ankleLat.x, y: 0.95 * height },
                     '#22c55e',
-                    1.8 * scale,
+                    1.6 * scale,
                     [6 * scale, 4 * scale]
                 );
             }
 
-            // 2. Ideal Torso Parallelism (Slope matching Tibia slope from hip)
-            if (hip && kneeLat && ankleLat && shoulder) {
-                const tibiaDx = kneeLat.x - ankleLat.x;
-                const tibiaDy = kneeLat.y - ankleLat.y;
-                const tibiaLen = Math.hypot(tibiaDx, tibiaDy) || 1;
-                const torsoLen = Math.hypot(shoulder.x - hip.x, shoulder.y - hip.y) || 0.35 * height;
-                const idealShoulderX = hip.x + (tibiaDx / tibiaLen) * torsoLen;
-                const idealShoulderY = hip.y + (tibiaDy / tibiaLen) * torsoLen;
-                drawLine(hip, { x: idealShoulderX, y: idealShoulderY }, '#22c55e', 2.0 * scale, [5 * scale, 3 * scale]);
+            // --- ACTUAL SKELETAL LINES (Red Solid) ---
+            // 1. Main Torso Line (Hip -> Shoulder) - always straight
+            if (hip && shoulder) {
+                drawLine(hip, shoulder, '#ef4444', 2.8 * scale);
             }
 
-            // --- ACTUAL SKELETAL LINES (Red Solid) ---
-            // Torso & Spine Line
-            if (lumbar) {
-                drawLine(hip, lumbar, '#ef4444', 2.8 * scale);
-                drawLine(lumbar, shoulder, '#ef4444', 2.8 * scale);
-            } else {
-                drawLine(hip, shoulder, '#ef4444', 2.8 * scale);
+            // 2. Dedicated Spinal Curvature Arc (Back Arches / Back Rounds)
+            if (hip && shoulder && lumbar) {
+                const ctrlX = 2 * lumbar.x - 0.5 * (hip.x + shoulder.x);
+                const ctrlY = 2 * lumbar.y - 0.5 * (hip.y + shoulder.y);
+
+                const totalYDist = Math.max(1, Math.abs(hip.y - shoulder.y));
+                const lumbarYRatio = Math.max(0, Math.min(1, (hip.y - lumbar.y) / totalYDist));
+                const expectedLumbarX = hip.x + (shoulder.x - hip.x) * lumbarYRatio;
+                const isDeviated = Math.abs(lumbar.x - expectedLumbarX) > 4 * scale;
+
+                ctx.save();
+                ctx.beginPath();
+                ctx.moveTo(hip.x, hip.y);
+                ctx.quadraticCurveTo(ctrlX, ctrlY, shoulder.x, shoulder.y);
+                ctx.strokeStyle = '#f59e0b';
+                ctx.lineWidth = 2.4 * scale;
+                if (!isDeviated) {
+                    ctx.setLineDash([4 * scale, 3 * scale]);
+                }
+                ctx.stroke();
+
+                if (isDeviated) {
+                    ctx.beginPath();
+                    ctx.moveTo(expectedLumbarX, lumbar.y);
+                    ctx.lineTo(lumbar.x, lumbar.y);
+                    ctx.strokeStyle = '#f59e0b';
+                    ctx.lineWidth = 1.6 * scale;
+                    ctx.setLineDash([2 * scale, 2 * scale]);
+                    ctx.stroke();
+                }
+                ctx.restore();
             }
 
             // Lower Extremity
@@ -257,12 +298,12 @@ export async function generateAnnotatedPostureImage(
             drawLine(rCalf, rAnkle, '#ef4444', 2.8 * scale);
             drawLine(rAnkle, rCalc, '#ef4444', 2.8 * scale);
         } else if (normView.includes('single')) {
-            const stAsis = getCoord(findPin(['stance asis', 'st asis', 'asis tumpu', 'left asis']));
-            const flAsis = getCoord(findPin(['floating asis', 'fl asis', 'asis bebas', 'right asis']));
-            const stKnee = getCoord(findPin(['stance knee', 'st knee', 'lutut tumpu']));
-            const stAnkle = getCoord(findPin(['stance ankle', 'st ankle', 'engkel tumpu']));
-            const lShoulder = getCoord(findPin(['left shoulder', 'l shoulder', 'bahu kiri']));
-            const rShoulder = getCoord(findPin(['right shoulder', 'r shoulder', 'bahu kanan']));
+            const stAsis = getCoord(findPin(['stance asis', 'st asis', 'asis tumpu', 'st_asis']));
+            const flAsis = getCoord(findPin(['floating asis', 'fl asis', 'asis bebas', 'fl_asis']));
+            const stKnee = getCoord(findPin(['stance knee', 'st knee', 'lutut tumpu', 'st_knee']));
+            const stAnkle = getCoord(findPin(['stance ankle', 'st ankle', 'engkel tumpu', 'st_ankle']));
+            const lShoulder = getCoord(findPin(['left shoulder', 'l shoulder', 'bahu kiri', 'l_shoulder']));
+            const rShoulder = getCoord(findPin(['right shoulder', 'r shoulder', 'bahu kanan', 'r_shoulder']));
 
             // --- IDEAL REFERENCE LINES (Green Dashed) ---
             // 1. Ideal Stance Leg Alignment (ASIS directly to Ankle straight)
@@ -272,9 +313,12 @@ export async function generateAnnotatedPostureImage(
 
             // 2. Ideal Level Pelvis Horizontal Line (from Stance ASIS)
             if (stAsis && flAsis) {
+                const minX = Math.min(stAsis.x, flAsis.x);
+                const maxX = Math.max(stAsis.x, flAsis.x);
+                const spanX = Math.max(20 * scale, maxX - minX);
                 drawLine(
-                    { x: stAsis.x - 0.08 * width, y: stAsis.y },
-                    { x: flAsis.x + 0.08 * width, y: stAsis.y },
+                    { x: minX - spanX * 0.55, y: stAsis.y },
+                    { x: maxX + spanX * 0.55, y: stAsis.y },
                     '#22c55e',
                     1.8 * scale,
                     [5 * scale, 3 * scale]
@@ -284,9 +328,12 @@ export async function generateAnnotatedPostureImage(
             // 3. Ideal Shoulder Level Line
             if (lShoulder && rShoulder) {
                 const avgY = (lShoulder.y + rShoulder.y) / 2;
+                const minX = Math.min(lShoulder.x, rShoulder.x);
+                const maxX = Math.max(lShoulder.x, rShoulder.x);
+                const spanX = Math.max(20 * scale, maxX - minX);
                 drawLine(
-                    { x: lShoulder.x - 0.05 * width, y: avgY },
-                    { x: rShoulder.x + 0.05 * width, y: avgY },
+                    { x: minX - spanX * 0.55, y: avgY },
+                    { x: maxX + spanX * 0.55, y: avgY },
                     '#22c55e',
                     1.8 * scale,
                     [5 * scale, 3 * scale]
@@ -294,27 +341,35 @@ export async function generateAnnotatedPostureImage(
             }
 
             // --- ACTUAL SKELETAL LINES (Red Solid) ---
-            // Trendelenburg Pelvic Transverse Line
+            // Pelvic Line (Hip Hike / Hip Drop / Trendelenburg)
             if (stAsis && flAsis) {
+                const dx = flAsis.x - stAsis.x;
+                const dy = flAsis.y - stAsis.y;
                 drawLine(
-                    { x: stAsis.x - 0.08 * width, y: stAsis.y },
-                    { x: flAsis.x + 0.08 * width, y: flAsis.y },
+                    { x: stAsis.x - dx * 0.55, y: stAsis.y - dy * 0.55 },
+                    { x: flAsis.x + dx * 0.55, y: flAsis.y + dy * 0.55 },
                     '#ef4444',
                     2.8 * scale
                 );
             }
 
-            // Stance Leg Dynamic Valgus Alignment
-            drawLine(stAsis, stKnee, '#ef4444', 2.8 * scale);
-            drawLine(stKnee, stAnkle, '#ef4444', 2.8 * scale);
+            // Stance Leg Dynamic Valgus Alignment (Knee Moves Inward)
+            if (stAsis && stKnee) {
+                drawLine(stAsis, stKnee, '#ef4444', 2.8 * scale);
+            }
+            if (stKnee && stAnkle) {
+                drawLine(stKnee, stAnkle, '#ef4444', 2.8 * scale);
+            }
 
-            // Actual Shoulder Level Line
+            // Actual Shoulder Level Line (Torso Rotation)
             if (lShoulder && rShoulder) {
+                const sDx = rShoulder.x - lShoulder.x;
+                const sDy = rShoulder.y - lShoulder.y;
                 drawLine(
-                    { x: lShoulder.x - 0.05 * width, y: lShoulder.y },
-                    { x: rShoulder.x + 0.05 * width, y: rShoulder.y },
+                    { x: lShoulder.x - sDx * 0.55, y: lShoulder.y - sDy * 0.55 },
+                    { x: rShoulder.x + sDx * 0.55, y: rShoulder.y + sDy * 0.55 },
                     '#ef4444',
-                    2.0 * scale
+                    2.4 * scale
                 );
             }
         }

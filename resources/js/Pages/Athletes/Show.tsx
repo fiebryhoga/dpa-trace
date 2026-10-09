@@ -16,6 +16,9 @@ import {
     Trash2,
 } from 'lucide-react';
 
+import AthleteTrainingCalendar from '@/Components/AthleteTrainingCalendar';
+import { TrainingProgram } from '@/types';
+
 interface Compensation {
     id: number;
     name: string;
@@ -59,6 +62,7 @@ interface Athlete {
     phone_number?: string;
     is_active: boolean;
     dpa_assessments: Assessment[];
+    training_programs?: TrainingProgram[];
 }
 
 export default function AthleteShow({ athlete }: { athlete: Athlete }) {
@@ -290,6 +294,70 @@ export default function AthleteShow({ athlete }: { athlete: Athlete }) {
                                                 </div>
                                             );
                                         })}
+                                    </div>
+                                )}
+                            </CardContent>
+                        </Card>
+
+                        {/* Athlete Training Program & Calendar Card */}
+                        <Card className="border-slate-200/90 dark:border-slate-800 bg-white dark:bg-[#0E1526] shadow-sm">
+                            <CardHeader className="flex flex-row items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800/80">
+                                <div>
+                                    <CardTitle className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                                        <span>Program &amp; Kalender Latihan Korektif</span>
+                                    </CardTitle>
+                                    <CardDescription className="text-xs mt-0.5">
+                                        Jadwal sesi latihan aktif dan kalender progres kepatuhan atlet
+                                    </CardDescription>
+                                </div>
+                                <Link href={route('training-programs.create', { athlete_id: athlete.id })}>
+                                    <Button size="sm" className="h-8 text-xs gap-1.5 font-bold bg-[#b4f031] text-slate-950 hover:bg-[#a2dd26] shadow-brand">
+                                        <PlusCircle className="h-3.5 w-3.5" />
+                                        <span>Buat Program Baru</span>
+                                    </Button>
+                                </Link>
+                            </CardHeader>
+
+                            <CardContent className="space-y-4 pt-4">
+                                {(!athlete.training_programs || athlete.training_programs.length === 0) ? (
+                                    <div className="text-center py-8 space-y-2 border border-dashed border-[#b4f031]/30 rounded-lg bg-[#b4f031]/5">
+                                        <p className="text-xs text-slate-500">
+                                            Belum ada program latihan aktif untuk atlet ini.
+                                        </p>
+                                        <Link href={route('training-programs.create', { athlete_id: athlete.id })}>
+                                            <Button size="sm" variant="outline" className="text-xs">
+                                                Buat Program Latihan Sekarang
+                                            </Button>
+                                        </Link>
+                                    </div>
+                                ) : (
+                                    <div className="space-y-4">
+                                        {/* Display Active Program with Calendar */}
+                                        {athlete.training_programs.map((tp) => (
+                                            <div key={tp.id} className="space-y-3">
+                                                <div className="flex items-center justify-between">
+                                                    <div>
+                                                        <Link
+                                                            href={route('training-programs.show', tp.slug)}
+                                                            className="text-sm font-bold text-slate-900 dark:text-white hover:text-[#65a30d] dark:hover:text-[#b4f031] hover:underline"
+                                                        >
+                                                            {tp.name}
+                                                        </Link>
+                                                        <div className="text-xs text-slate-400">
+                                                            {tp.start_date ? `🗓️ ${new Date(tp.start_date).toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}` : '-'}
+                                                        </div>
+                                                    </div>
+                                                    <Link
+                                                        href={route('training-programs.show', tp.slug)}
+                                                        className="text-xs font-semibold text-[#65a30d] dark:text-[#b4f031] hover:underline"
+                                                    >
+                                                        Buka Detail Lengkap →
+                                                    </Link>
+                                                </div>
+
+                                                <AthleteTrainingCalendar program={tp} interactive={true} />
+                                            </div>
+                                        ))}
                                     </div>
                                 )}
                             </CardContent>

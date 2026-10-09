@@ -32,6 +32,7 @@ export interface Athlete {
     created_at?: string;
     updated_at?: string;
     dpa_assessments?: DpaAssessment[];
+    training_programs?: TrainingProgram[];
     galleries?: AthleteGallery[];
 }
 
@@ -141,6 +142,57 @@ export interface BiomechanicalAnalysis {
     riskLevel?: 'Low' | 'Moderate' | 'High';
 }
 
+export interface TrainingProgramItem {
+    id?: number | string;
+    training_program_id?: number;
+    exercise_id?: number | null;
+    phase: 'inhibit' | 'lengthen' | 'activate' | 'integrate';
+    exercise_name: string;
+    target_muscle?: string;
+    sets: number;
+    reps?: string;
+    duration_seconds?: number | null;
+    hold_seconds?: number | null;
+    tempo?: string;
+    rest_seconds?: number | null;
+    frequency?: string;
+    intensity?: string;
+    coaching_cues?: string;
+    sort_order?: number;
+    exercise?: Exercise;
+    created_at?: string;
+    updated_at?: string;
+}
+
+export interface TrainingProgram {
+    id: number;
+    athlete_id: number;
+    dpa_assessment_id?: number | null;
+    user_id?: number | null;
+    name: string;
+    slug: string;
+    status: 'draft' | 'active' | 'completed';
+    start_date?: string;
+    end_date?: string;
+    frequency_per_week: number;
+    duration_weeks: number;
+    scheduled_days?: string[];
+    schedule_dates?: string[];
+    completed_dates?: string[];
+    session_notes?: Record<string, string>;
+    description?: string;
+    target_compensations?: string[];
+    target_muscles_overactive?: string[];
+    target_muscles_underactive?: string[];
+    athlete?: Athlete;
+    assessment?: DpaAssessment;
+    creator?: User;
+    items?: TrainingProgramItem[];
+    items_count?: number;
+    created_at?: string;
+    updated_at?: string;
+}
+
 export type PageProps<
     T extends Record<string, unknown> = Record<string, unknown>,
 > = T & {
@@ -153,3 +205,4 @@ export type PageProps<
         message?: string;
     };
 };
+

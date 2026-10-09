@@ -1,6 +1,7 @@
 import { Pose, Results, NormalizedLandmarkList } from '@mediapipe/pose';
 
 let poseInstance: Pose | null = null;
+const poseResultCache = new Map<string, NormalizedLandmarkList>();
 
 export function getPoseDetector(): Pose {
     if (!poseInstance) {
@@ -9,18 +10,31 @@ export function getPoseDetector(): Pose {
         });
 
         poseInstance.setOptions({
-            modelComplexity: 1,
-            smoothLandmarks: false,
+            modelComplexity: 2, // Highest accuracy (Heavy model) for static photo biomechanics
+            smoothLandmarks: false, // Disabled for static photo to prevent inter-frame smoothing artifacts
             enableSegmentation: false,
-            minDetectionConfidence: 0.4,
-            minTrackingConfidence: 0.4,
+            minDetectionConfidence: 0.5,
+            minTrackingConfidence: 0.5,
         });
     }
     return poseInstance;
 }
 
 export async function detectPoseFromImage(imageElement: HTMLImageElement): Promise<NormalizedLandmarkList | null> {
+    const cacheKey = imageElement.src || `${imageElement.naturalWidth}x${imageElement.naturalHeight}_${imageElement.currentSrc}`;
+    if (cacheKey && poseResultCache.has(cacheKey)) {
+        return poseResultCache.get(cacheKey) || null;
+    }
+
     const detector = getPoseDetector();
+    
+    // Clear previous video tracking memory so each scan evaluates static photo from scratch deterministically
+    try {
+        await detector.reset();
+    } catch {
+        // ignore if not supported in environment
+    }
+
     return new Promise((resolve) => {
         let isResolved = false;
 
@@ -29,13 +43,18 @@ export async function detectPoseFromImage(imageElement: HTMLImageElement): Promi
                 isResolved = true;
                 resolve(null);
             }
-        }, 6000);
+        }, 8000);
 
         detector.onResults((results: Results) => {
             if (!isResolved) {
                 isResolved = true;
                 clearTimeout(timeout);
-                resolve(results.poseLandmarks || null);
+                if (results.poseLandmarks) {
+                    if (cacheKey) poseResultCache.set(cacheKey, results.poseLandmarks);
+                    resolve(results.poseLandmarks);
+                } else {
+                    resolve(null);
+                }
             }
         });
 
@@ -48,3 +67,4 @@ export async function detectPoseFromImage(imageElement: HTMLImageElement): Promi
         });
     });
 }
+

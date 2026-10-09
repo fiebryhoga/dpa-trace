@@ -42,7 +42,7 @@ interface DetectedCompensation {
     checkpoint: string;
     confidence: number;
     severity?: 'Mild' | 'Moderate' | 'Severe';
-    side?: 'Bilateral' | 'Left' | 'Right';
+    side?: 'Bilateral' | 'Left' | 'Right' | string;
     angle_metric?: string;
     clinical_rationale?: string;
     overactive_muscles?: string;
@@ -208,6 +208,84 @@ function detectSpineContourOffset(
     } catch {
         return 0;
     }
+}
+
+// Silhouette edge analyzer: Detects local skin edge gradient + squat flexion depth adaptation
+function detectKneeFrontEdge(
+    img: HTMLImageElement,
+    kneeRaw: { x: number; y: number },
+    legHeight: number,
+    isFacingRight: boolean,
+    squatDepthFactor: number = 0.8
+): number {
+    const adaptiveDefaultShift = Math.max(3.2, legHeight * (0.14 + 0.10 * squatDepthFactor));
+
+    try {
+        const canvas = document.createElement('canvas');
+        const width = (canvas.width = 180);
+        const height = (canvas.height = 180);
+        const ctx = canvas.getContext('2d', { willReadFrequently: true });
+        if (!ctx) return adaptiveDefaultShift;
+
+        ctx.drawImage(img, 0, 0, width, height);
+        const imgData = ctx.getImageData(0, 0, width, height).data;
+
+        const centerY = Math.floor((kneeRaw.y * height) / 100);
+        const rawX = Math.floor((kneeRaw.x * width) / 100);
+
+        // Max search distance from joint center: between 2.5% and 8% of frame
+        const maxStepPixels = Math.floor(Math.min(width * 0.08, (legHeight / 100) * height * 0.32));
+        const minStepPixels = Math.floor(Math.max(2, width * 0.02));
+        const step = isFacingRight ? 1 : -1;
+
+        const candidateShifts: number[] = [];
+
+        // Sample at 7 horizontal scan lines across patella zone (-3% to +3% vertical)
+        const yOffsets = [-3, -2, -1, 0, 1, 2, 3];
+
+        for (const dy of yOffsets) {
+            const py = Math.max(0, Math.min(height - 1, centerY + dy));
+
+            let maxGradient = 0;
+            let bestEdgeDist = 0;
+
+            for (let dist = minStepPixels; dist <= maxStepPixels; dist++) {
+                const px = rawX + dist * step;
+                const prevPx = rawX + (dist - 1) * step;
+                if (px < 1 || px >= width - 1) break;
+
+                const idx = (py * width + px) * 4;
+                const prevIdx = (py * width + prevPx) * 4;
+
+                const dr = Math.abs(imgData[idx] - imgData[prevIdx]);
+                const dg = Math.abs(imgData[idx + 1] - imgData[prevIdx + 1]);
+                const db = Math.abs(imgData[idx + 2] - imgData[prevIdx + 2]);
+                const gradient = dr + dg + db;
+
+                if (gradient > maxGradient && gradient > 26) {
+                    maxGradient = gradient;
+                    bestEdgeDist = dist;
+                }
+            }
+
+            if (bestEdgeDist > 0) {
+                candidateShifts.push(bestEdgeDist);
+            }
+        }
+
+        if (candidateShifts.length >= 2) {
+            candidateShifts.sort((a, b) => a - b);
+            const medianDist = candidateShifts[Math.floor(candidateShifts.length / 2)];
+            const shiftPercent = (medianDist / width) * 100;
+            if (shiftPercent >= 2.5 && shiftPercent <= 7.5) {
+                return shiftPercent;
+            }
+        }
+    } catch {
+        // Fallback below
+    }
+
+    return adaptiveDefaultShift;
 }
 
 export default function SmartPostureScanner({
@@ -428,12 +506,16 @@ export default function SmartPostureScanner({
         });
     };
 
-    // Helper to find landmark by keyword
+    // Helper to find landmark by keyword (checks both name and ID)
     const findLandmark = useCallback(
         (keywords: string[]): LandmarkPoint | undefined => {
             return activeLandmarks.find((lm) => {
-                const lower = lm.name.toLowerCase();
-                return keywords.some((k) => lower.includes(k.toLowerCase()));
+                const lowerName = lm.name.toLowerCase();
+                const lowerId = lm.id.toLowerCase();
+                return keywords.some((k) => {
+                    const lk = k.toLowerCase();
+                    return lowerName.includes(lk) || lowerId === lk || lowerId.includes(lk);
+                });
             });
         },
         [activeLandmarks]
@@ -459,15 +541,15 @@ export default function SmartPostureScanner({
                 { id: 'shoulder', name: 'Shoulder', x: 46, y: 28, color: '#38bdf8' },
                 { id: 'wrist', name: 'Wrist', x: 70, y: 30, color: '#ef4444' },
                 { id: 'hip', name: 'Hip', x: 40, y: 48, color: '#ef4444' },
-                { id: 'knee', name: 'Knee', x: 54, y: 70, color: '#ef4444' },
-                { id: 'ankle', name: 'Ankle', x: 48, y: 88, color: '#84cc16' },
+                { id: 'knee', name: 'Knee / Depan Lutut (Patella)', x: 63, y: 70, color: '#ef4444' },
+                { id: 'ankle', name: 'Tungkai Bawah / Subtalar', x: 46.0, y: 94.5, color: '#84cc16' },
             ];
         }
         if (view === 'Posterior View') {
             return [
                 { id: 'c7', name: 'C7 (Spine Midline)', x: 50, y: 22, color: '#ef4444' },
-                { id: 'l_psis', name: 'Left PSIS (Pelvis)', x: 44, y: 40, color: '#ef4444' },
-                { id: 'r_psis', name: 'Right PSIS (Pelvis)', x: 56, y: 40, color: '#ef4444' },
+                { id: 'l_psis', name: 'Left PSIS (Pelvis)', x: 44, y: 36, color: '#ef4444' },
+                { id: 'r_psis', name: 'Right PSIS (Pelvis)', x: 56, y: 36, color: '#ef4444' },
                 { id: 'l_calf', name: 'Left Calf', x: 44, y: 72, color: '#ef4444' },
                 { id: 'r_calf', name: 'Right Calf', x: 56, y: 72, color: '#ef4444' },
                 { id: 'l_ankle', name: 'Left Ankle', x: 43.5, y: 86, color: '#84cc16' },
@@ -690,8 +772,12 @@ export default function SmartPostureScanner({
 
             const findPin = (keywords: string[]): LandmarkPoint | undefined => {
                 return pinsToUse.find((lm) => {
-                    const lower = lm.name.toLowerCase();
-                    return keywords.some((k) => lower.includes(k.toLowerCase()));
+                    const lowerName = lm.name.toLowerCase();
+                    const lowerId = lm.id.toLowerCase();
+                    return keywords.some((k) => {
+                        const lk = k.toLowerCase();
+                        return lowerName.includes(lk) || lowerId === lk || lowerId.includes(lk);
+                    });
                 });
             };
 
@@ -1179,18 +1265,27 @@ export default function SmartPostureScanner({
                 }
             } else {
                 // Single Leg
-                const stAsis = findPin(['stance asis', 'st_asis', 'stance hip']);
-                const flAsis = findPin(['floating asis', 'fl_asis', 'floating hip']);
-                const stKnee = findPin(['stance knee', 'st_knee']);
-                const stAnkle = findPin(['stance ankle', 'st_ankle']);
+                const stAsis = findPin(['stance asis', 'st_asis', 'stance hip', 'asis tumpu']);
+                const flAsis = findPin(['floating asis', 'fl_asis', 'floating hip', 'asis bebas']);
+                const stKnee = findPin(['stance knee', 'st_knee', 'lutut tumpu']);
+                const stAnkle = findPin(['stance ankle', 'st_ankle', 'engkel tumpu']);
+                const lShoulder = findPin(['left shoulder', 'l_shoulder', 'bahu kiri']);
+                const rShoulder = findPin(['right shoulder', 'r_shoulder', 'bahu kanan']);
 
+                // 1. Pelvis / LPHC Deviations: Hip Drop (Trendelenburg) vs Hip Hike
                 if (stAsis && flAsis) {
-                    const pelvicTiltAngle = Math.atan2(flAsis.y - stAsis.y, Math.max(1, Math.abs(flAsis.x - stAsis.x))) * (180 / Math.PI);
-                    if (pelvicTiltAngle > 3.5) {
+                    const isRightStance = stAsis.x < flAsis.x;
+                    const pelvicWidth = Math.max(5, Math.abs(flAsis.x - stAsis.x));
+                    // If floating ASIS drops below stance ASIS (greater Y in screen coords)
+                    const pelvicDropDiff = flAsis.y - stAsis.y;
+                    const pelvicTiltAngle = Math.atan2(pelvicDropDiff, pelvicWidth) * (180 / Math.PI);
+
+                    // Clinical tolerance threshold: requires significant tilt >= 4.5°
+                    if (pelvicTiltAngle >= 4.5) {
                         const comp = availableCompensations.find(
                             (c) =>
                                 c.category === 'Single Leg' &&
-                                c.name.toLowerCase().includes('hip drop')
+                                (c.name.toLowerCase().includes('hip drop') || c.name.toLowerCase().includes('drops'))
                         );
                         if (comp) {
                             const deg = pelvicTiltAngle.toFixed(1);
@@ -1198,32 +1293,33 @@ export default function SmartPostureScanner({
                                 compensation_id: comp.id,
                                 name: comp.name,
                                 checkpoint: comp.checkpoint || 'LPHC',
-                                confidence: 95,
+                                confidence: 96,
                                 severity: Number(deg) > 7 ? 'Severe' : 'Moderate',
-                                side: 'Right',
-                                angle_metric: `Pelvic Drop ${deg}°`,
-                                clinical_rationale: `Panggul kontralateral turun (Trendelenburg sign) menandakan kelemahan gluteus medius pada kaki tumpuan.`,
+                                side: isRightStance ? 'Contralateral Left Drop' : 'Contralateral Right Drop',
+                                angle_metric: `Hip Drop ${deg}°`,
+                                clinical_rationale: `Panggul kontralateral (sisi bebas) turun di bawah garis horizontal (Trendelenburg sign / Hip Drop). Menandakan kelemahan gluteus medius & quadratus lumborum pada kaki tumpuan serta overaktivitas adductor kompleks.`,
                                 overactive_muscles: comp.overactive_muscles,
                                 underactive_muscles: comp.underactive_muscles,
                                 possible_injuries: comp.possible_injuries,
                             });
                         }
-                    } else if (pelvicTiltAngle < -3.5) {
+                    } else if (pelvicTiltAngle <= -4.5) {
                         const comp = availableCompensations.find(
                             (c) =>
                                 c.category === 'Single Leg' &&
-                                c.name.toLowerCase().includes('hip hike')
+                                (c.name.toLowerCase().includes('hip hike') || c.name.toLowerCase().includes('hikes'))
                         );
                         if (comp) {
+                            const deg = Math.abs(pelvicTiltAngle).toFixed(1);
                             detected.push({
                                 compensation_id: comp.id,
                                 name: comp.name,
                                 checkpoint: comp.checkpoint || 'LPHC',
-                                confidence: 92,
-                                severity: 'Moderate',
-                                side: 'Left',
-                                angle_metric: `Hip Hike ${Math.abs(pelvicTiltAngle).toFixed(1)}°`,
-                                clinical_rationale: `Panggul terangkat naik (Hip Hike) akibat overaktivitas quadratus lumborum kontralateral.`,
+                                confidence: 94,
+                                severity: Number(deg) > 7 ? 'Severe' : 'Moderate',
+                                side: isRightStance ? 'Elevated Left Hip' : 'Elevated Right Hip',
+                                angle_metric: `Hip Hike ${deg}°`,
+                                clinical_rationale: `Panggul kontralateral terangkat naik di atas garis horizontal (Hip Hike). Terjadi akibat overaktivitas quadratus lumborum dan TFL sisi kaki tumpuan sebagai kompensasi stabilitas lumbopelvic.`,
                                 overactive_muscles: comp.overactive_muscles,
                                 underactive_muscles: comp.underactive_muscles,
                                 possible_injuries: comp.possible_injuries,
@@ -1232,28 +1328,134 @@ export default function SmartPostureScanner({
                     }
                 }
 
-                if (stKnee && stAnkle) {
-                    const valgusAngle = Math.atan2(stKnee.x - stAnkle.x, Math.max(1, stAnkle.y - stKnee.y)) * (180 / Math.PI);
-                    if (Math.abs(valgusAngle) > 3.5) {
+                // 2. Knee Deviation: Knee Moves Inward (Dynamic Valgus)
+                if (stKnee && stAnkle && stAsis) {
+                    // Stance leg: if stAsis is on viewer's left (smaller X), it is person's RIGHT leg. Medial is +X (moving right towards body midline).
+                    // If stAsis is on viewer's right (larger X), it is person's LEFT leg. Medial is -X (moving left towards body midline).
+                    const isRightStance = !flAsis || stAsis.x < flAsis.x;
+                    const legHeight = Math.max(1, stAnkle.y - stAsis.y);
+                    const t = (stKnee.y - stAsis.y) / legHeight;
+                    const expectedX = stAsis.x + t * (stAnkle.x - stAsis.x);
+                    const devX = stKnee.x - expectedX;
+                    const medialShift = isRightStance ? devX : -devX;
+                    const valgusDeg = (medialShift / legHeight) * 180;
+
+                    // Balanced clinical tolerance: requires noticeable medial inward collapse (>= 1.5% shift & >= 3.0° valgus)
+                    if (medialShift >= 1.5 && valgusDeg >= 3.0) {
                         const comp = availableCompensations.find(
                             (c) =>
                                 c.category === 'Single Leg' &&
-                                (c.name.toLowerCase().includes('valgus') || c.name.toLowerCase().includes('inward'))
+                                (c.name.toLowerCase().includes('valgus') || c.name.toLowerCase().includes('inward') || c.name.toLowerCase().includes('knee'))
                         );
                         if (comp) {
+                            const deg = Math.max(3.0, valgusDeg).toFixed(1);
                             detected.push({
                                 compensation_id: comp.id,
                                 name: comp.name,
-                                checkpoint: comp.checkpoint || 'Lutut (Knee)',
-                                confidence: 96,
-                                severity: 'Severe',
-                                side: 'Left',
-                                angle_metric: `Dynamic Valgus ${Math.abs(valgusAngle * 2.5).toFixed(1)}°`,
-                                clinical_rationale: `Instabilitas frontal plane lutut saat Single Leg Squat, kolaps ke medial akibat defisit stabilisasi hip abductor.`,
+                                checkpoint: comp.checkpoint || 'Knee',
+                                confidence: 95,
+                                severity: Number(deg) > 7 ? 'Severe' : 'Moderate',
+                                side: isRightStance ? 'Right Stance' : 'Left Stance',
+                                angle_metric: `Dynamic Knee Inward ${deg}°`,
+                                clinical_rationale: `Lutut kaki tumpu kolaps bergeser ke arah medial/dalam (Knee Moves Inward / Dynamic Valgus). Mengindikasikan defisit kekuatan gluteus medius/maximus & VMO serta overaktivitas adductor complex, TFL, dan biceps femoris.`,
                                 overactive_muscles: comp.overactive_muscles,
                                 underactive_muscles: comp.underactive_muscles,
                                 possible_injuries: comp.possible_injuries,
                             });
+                        }
+                    }
+                }
+
+                // 3. Trunk / Torso Deviations: Inward vs Outward Trunk Rotation
+                if (lShoulder && rShoulder && stAsis) {
+                    const isRightStance = !flAsis || stAsis.x < (flAsis?.x ?? 50);
+                    const shoulderSpanX = Math.max(5, Math.abs(rShoulder.x - lShoulder.x));
+                    // Directional slope: right shoulder (viewer's left) vs left shoulder (viewer's right)
+                    const shoulderDropY = lShoulder.y - rShoulder.y;
+                    const shoulderAngle = Math.atan2(shoulderDropY, shoulderSpanX) * (180 / Math.PI);
+
+                    // Clinical tolerance threshold: requires significant trunk rotation >= 4.5°
+                    if (isRightStance) {
+                        // Right stance leg (viewer's left)
+                        if (shoulderAngle >= 4.5) {
+                            const comp = availableCompensations.find(
+                                (c) => c.category === 'Single Leg' && c.name.toLowerCase().includes('inward') && c.name.toLowerCase().includes('trunk')
+                            );
+                            if (comp) {
+                                detected.push({
+                                    compensation_id: comp.id,
+                                    name: comp.name,
+                                    checkpoint: comp.checkpoint || 'Upper Body',
+                                    confidence: 93,
+                                    severity: 'Moderate',
+                                    side: 'Inward Rotation',
+                                    angle_metric: `Trunk Inward Rotation ${Math.abs(shoulderAngle).toFixed(1)}°`,
+                                    clinical_rationale: `Torso berotasi ke dalam menuju sisi kaki tumpuan (Inward Trunk Rotation) akibat overaktivitas internal oblique ipsilateral & external oblique kontralateral.`,
+                                    overactive_muscles: comp.overactive_muscles,
+                                    underactive_muscles: comp.underactive_muscles,
+                                    possible_injuries: comp.possible_injuries,
+                                });
+                            }
+                        } else if (shoulderAngle <= -4.5) {
+                            const comp = availableCompensations.find(
+                                (c) => c.category === 'Single Leg' && c.name.toLowerCase().includes('outward') && c.name.toLowerCase().includes('trunk')
+                            );
+                            if (comp) {
+                                detected.push({
+                                    compensation_id: comp.id,
+                                    name: comp.name,
+                                    checkpoint: comp.checkpoint || 'Upper Body',
+                                    confidence: 93,
+                                    severity: 'Moderate',
+                                    side: 'Outward Rotation',
+                                    angle_metric: `Trunk Outward Rotation ${Math.abs(shoulderAngle).toFixed(1)}°`,
+                                    clinical_rationale: `Torso berotasi ke luar menjauhi sisi kaki tumpuan (Outward Trunk Rotation) akibat overaktivitas piriformis dan external oblique ipsilateral.`,
+                                    overactive_muscles: comp.overactive_muscles,
+                                    underactive_muscles: comp.underactive_muscles,
+                                    possible_injuries: comp.possible_injuries,
+                                });
+                            }
+                        }
+                    } else {
+                        // Left stance leg (viewer's right)
+                        if (shoulderAngle <= -4.5) {
+                            const comp = availableCompensations.find(
+                                (c) => c.category === 'Single Leg' && c.name.toLowerCase().includes('inward') && c.name.toLowerCase().includes('trunk')
+                            );
+                            if (comp) {
+                                detected.push({
+                                    compensation_id: comp.id,
+                                    name: comp.name,
+                                    checkpoint: comp.checkpoint || 'Upper Body',
+                                    confidence: 93,
+                                    severity: 'Moderate',
+                                    side: 'Inward Rotation',
+                                    angle_metric: `Trunk Inward Rotation ${Math.abs(shoulderAngle).toFixed(1)}°`,
+                                    clinical_rationale: `Torso berotasi ke dalam menuju sisi kaki tumpuan (Inward Trunk Rotation) akibat overaktivitas internal oblique ipsilateral & external oblique kontralateral.`,
+                                    overactive_muscles: comp.overactive_muscles,
+                                    underactive_muscles: comp.underactive_muscles,
+                                    possible_injuries: comp.possible_injuries,
+                                });
+                            }
+                        } else if (shoulderAngle >= 4.5) {
+                            const comp = availableCompensations.find(
+                                (c) => c.category === 'Single Leg' && c.name.toLowerCase().includes('outward') && c.name.toLowerCase().includes('trunk')
+                            );
+                            if (comp) {
+                                detected.push({
+                                    compensation_id: comp.id,
+                                    name: comp.name,
+                                    checkpoint: comp.checkpoint || 'Upper Body',
+                                    confidence: 93,
+                                    severity: 'Moderate',
+                                    side: 'Outward Rotation',
+                                    angle_metric: `Trunk Outward Rotation ${Math.abs(shoulderAngle).toFixed(1)}°`,
+                                    clinical_rationale: `Torso berotasi ke luar menjauhi sisi kaki tumpuan (Outward Trunk Rotation) akibat overaktivitas piriformis dan external oblique ipsilateral.`,
+                                    overactive_muscles: comp.overactive_muscles,
+                                    underactive_muscles: comp.underactive_muscles,
+                                    possible_injuries: comp.possible_injuries,
+                                });
+                            }
                         }
                     }
                 }
@@ -1343,10 +1545,10 @@ export default function SmartPostureScanner({
             if (mediaPipeLandmarks && mediaPipeLandmarks.length >= 33) {
                 const mp = mediaPipeLandmarks;
 
-                // Auto-detect Single Leg pose if one foot is lifted
-                const leftAnkleY = mp[27].y;
-                const rightAnkleY = mp[28].y;
-                const isSingleLegPose = Math.abs(leftAnkleY - rightAnkleY) > 0.08;
+                // Auto-detect Single Leg pose and accurately detect which leg is lifted
+                const leftFootMaxY = Math.max(mp[27]?.y ?? 0, mp[29]?.y ?? 0, mp[31]?.y ?? 0);
+                const rightFootMaxY = Math.max(mp[28]?.y ?? 0, mp[30]?.y ?? 0, mp[32]?.y ?? 0);
+                const isSingleLegPose = Math.abs(leftFootMaxY - rightFootMaxY) > 0.04;
 
                 if (isSingleLegPose && selectedView === 'Anterior View') {
                     activeViewToUse = 'Single Leg';
@@ -1354,42 +1556,75 @@ export default function SmartPostureScanner({
                 }
 
                 if (activeViewToUse === 'Single Leg' || isSingleLegPose) {
-                    const isLeftStance = leftAnkleY > rightAnkleY;
+                    // Stance leg touches the floor (largest Y in screen coords)
+                    // Lifted / floating leg is held up in the air (smaller Y)
+                    const leftKneeY = mp[25]?.y ?? 0;
+                    const rightKneeY = mp[26]?.y ?? 0;
+                    const isLeftStance = leftFootMaxY > rightFootMaxY || (Math.abs(leftFootMaxY - rightFootMaxY) < 0.02 && leftKneeY > rightKneeY);
+
                     const stIdx = isLeftStance ? 27 : 28;
                     const flIdx = isLeftStance ? 28 : 27;
                     const stHipIdx = isLeftStance ? 23 : 24;
                     const flHipIdx = isLeftStance ? 24 : 23;
                     const stKneeIdx = isLeftStance ? 25 : 26;
 
-                    const stTorsoHeight = Math.abs(mp[stHipIdx].y - mp[11].y) || 0.35;
-                    const flTorsoHeight = Math.abs(mp[flHipIdx].y - mp[12].y) || 0.35;
-                    const stAsisY = Math.max(0, mp[stHipIdx].y - stTorsoHeight * 0.16) * 100;
-                    const flAsisY = Math.max(0, mp[flHipIdx].y - flTorsoHeight * 0.16) * 100;
+                    const stTorsoHeight = Math.abs(mp[stHipIdx].y - mp[isLeftStance ? 11 : 12].y) || 0.35;
+                    const flTorsoHeight = Math.abs(mp[flHipIdx].y - mp[isLeftStance ? 12 : 11].y) || 0.35;
+
+                    // Standard ASIS superior to hip joint (iliac crest)
+                    let stAsisY = Math.max(0, mp[stHipIdx].y - stTorsoHeight * 0.16);
+                    let flAsisY = Math.max(0, mp[flHipIdx].y - flTorsoHeight * 0.16);
+
+                    // NASM Single Leg Protocol: Hands on hips (iliac crests).
+                    // When hands rest on the pelvis, wrists directly pinpoint the true physical iliac crest tilt (Hip Hike / Hip Drop).
+                    const stWristIdx = isLeftStance ? 15 : 16;
+                    const flWristIdx = isLeftStance ? 16 : 15;
+                    const stWrist = mp[stWristIdx];
+                    const flWrist = mp[flWristIdx];
+
+                    if (stWrist && (stWrist.visibility ?? 0) > 0.25 && Math.abs(stWrist.y - mp[stHipIdx].y) < 0.22) {
+                        stAsisY = stWrist.y * 0.70 + stAsisY * 0.30;
+                    }
+                    if (flWrist && (flWrist.visibility ?? 0) > 0.25 && Math.abs(flWrist.y - mp[flHipIdx].y) < 0.22) {
+                        flAsisY = flWrist.y * 0.70 + flAsisY * 0.30;
+                    }
 
                     const midHipX = (mp[23].x + mp[24].x) / 2;
-                    const stAsisX = (midHipX + (mp[stHipIdx].x - midHipX) * 1.35) * 100;
-                    const flAsisX = (midHipX + (mp[flHipIdx].x - midHipX) * 1.35) * 100;
+                    let stAsisX = (midHipX + (mp[stHipIdx].x - midHipX) * 1.35) * 100;
+                    let flAsisX = (midHipX + (mp[flHipIdx].x - midHipX) * 1.35) * 100;
+
+                    if (stWrist && (stWrist.visibility ?? 0) > 0.25 && Math.abs(stWrist.y - mp[stHipIdx].y) < 0.22) {
+                        stAsisX = (stWrist.x * 0.50 + (stAsisX / 100) * 0.50) * 100;
+                    }
+                    if (flWrist && (flWrist.visibility ?? 0) > 0.25 && Math.abs(flWrist.y - mp[flHipIdx].y) < 0.22) {
+                        flAsisX = (flWrist.x * 0.50 + (flAsisX / 100) * 0.50) * 100;
+                    }
 
                     mappedPins = [
-                        { id: 'st_asis', name: 'Stance ASIS', x: stAsisX, y: stAsisY, color: '#ef4444' },
-                        { id: 'fl_asis', name: 'Floating ASIS', x: flAsisX, y: flAsisY, color: '#ef4444' },
+                        { id: 'st_asis', name: 'Stance ASIS', x: stAsisX, y: stAsisY * 100, color: '#ef4444' },
+                        { id: 'fl_asis', name: 'Floating ASIS', x: flAsisX, y: flAsisY * 100, color: '#ef4444' },
                         { id: 'st_knee', name: 'Stance Knee', x: mp[stKneeIdx].x * 100, y: mp[stKneeIdx].y * 100, color: '#ef4444' },
                         { id: 'st_ankle', name: 'Stance Ankle', x: mp[stIdx].x * 100, y: mp[stIdx].y * 100, color: '#84cc16' },
                         { id: 'l_shoulder', name: 'Left Shoulder', x: mp[11].x * 100, y: mp[11].y * 100, color: '#ef4444' },
                         { id: 'r_shoulder', name: 'Right Shoulder', x: mp[12].x * 100, y: mp[12].y * 100, color: '#ef4444' },
                     ];
                 } else if (activeViewToUse === 'Lateral View') {
-                    // Choose most visible side (left or right)
-                    const useLeft = mp[11].visibility >= mp[12].visibility;
+                    // 1. Choose single consistent dominant profile side (Left vs Right) to prevent mixing joints
+                    const leftSideVis = (mp[7]?.visibility ?? 0) + (mp[11]?.visibility ?? 0) + (mp[15]?.visibility ?? 0) + (mp[23]?.visibility ?? 0) + (mp[25]?.visibility ?? 0) + (mp[27]?.visibility ?? 0);
+                    const rightSideVis = (mp[8]?.visibility ?? 0) + (mp[12]?.visibility ?? 0) + (mp[16]?.visibility ?? 0) + (mp[24]?.visibility ?? 0) + (mp[26]?.visibility ?? 0) + (mp[28]?.visibility ?? 0);
+                    const useLeft = leftSideVis >= rightSideVis;
+
+                    const earIdx = useLeft ? 7 : 8;
                     const shIdx = useLeft ? 11 : 12;
                     const wrIdx = useLeft ? 15 : 16;
                     const hpIdx = useLeft ? 23 : 24;
                     const knIdx = useLeft ? 25 : 26;
                     const akIdx = useLeft ? 27 : 28;
-                    const earIdx = useLeft ? 7 : 8;
 
-                    // Determine facing direction
-                    const isFacingRight = (mp[knIdx].x >= mp[akIdx].x) || (mp[shIdx].x >= mp[hpIdx].x);
+                    // 2. Stable Facing Direction relative to hip center
+                    const isFacingRight = mp[0] && mp[hpIdx]
+                        ? mp[0].x >= mp[hpIdx].x
+                        : (mp[knIdx].x >= mp[hpIdx].x || mp[shIdx].x >= mp[hpIdx].x);
 
                     const shPt = { x: mp[shIdx].x * 100, y: mp[shIdx].y * 100 };
                     const hpPt = { x: mp[hpIdx].x * 100, y: mp[hpIdx].y * 100 };
@@ -1402,23 +1637,56 @@ export default function SmartPostureScanner({
                         contourOffset = detectSpineContourOffset(imgElementRef.current, shPt, hpPt, isFacingRight);
                     }
 
-                    // Shift lumbar pin along the detected physical back contour (contourOffset > 0 shifts anteriorly into arch)
+                    // Shift lumbar pin along the detected physical back contour
                     const adjustedLmbX = baseLmbX + (isFacingRight ? contourOffset * 0.8 : -contourOffset * 0.8);
 
+                    // 1. Position Knee landmark firmly at the front apex of the knee (Ujung Depan Tempurung Lutut / Patella Apex)
+                    const ankleRawX = mp[akIdx].x * 100;
+                    const ankleRawY = mp[akIdx].y * 100;
+                    const kneeRawX = mp[knIdx].x * 100;
+                    const kneeRawY = mp[knIdx].y * 100;
+                    const legHeight = Math.abs(ankleRawY - kneeRawY) || 25;
+
+                    // Calculate 2D knee flexion depth factor (Hip -> Knee -> Ankle)
+                    const hipKneeVec = { x: hpPt.x - kneeRawX, y: hpPt.y - kneeRawY };
+                    const ankleKneeVec = { x: ankleRawX - kneeRawX, y: ankleRawY - kneeRawY };
+                    const dot = hipKneeVec.x * ankleKneeVec.x + hipKneeVec.y * ankleKneeVec.y;
+                    const mag1 = Math.sqrt(hipKneeVec.x ** 2 + hipKneeVec.y ** 2) || 1;
+                    const mag2 = Math.sqrt(ankleKneeVec.x ** 2 + ankleKneeVec.y ** 2) || 1;
+                    const kneeAngleRad = Math.acos(Math.max(-1, Math.min(1, dot / (mag1 * mag2))));
+                    const kneeAngleDeg = (kneeAngleRad * 180) / Math.PI;
+                    const squatDepthFactor = Math.max(0.2, Math.min(1.0, (180 - kneeAngleDeg) / 90));
+
+                    // Dynamically scan the image silhouette for the outermost anterior contour of the knee / patella
+                    let kneeShift = Math.max(3.2, legHeight * (0.14 + 0.10 * squatDepthFactor));
+                    if (imgElementRef.current) {
+                        kneeShift = detectKneeFrontEdge(imgElementRef.current, { x: kneeRawX, y: kneeRawY }, legHeight, isFacingRight, squatDepthFactor);
+                    }
+                    const adjustedKneeX = kneeRawX + (isFacingRight ? kneeShift : -kneeShift);
+
+                    // 2. Position lower leg landmark slightly below the lateral malleolus towards subtalar/calcaneus
+                    const hlIdx = useLeft ? 29 : 30;
+                    const heelRawY = mp[hlIdx] && (mp[hlIdx].visibility ?? 0) > 0.25 ? mp[hlIdx].y * 100 : ankleRawY + legHeight * 0.08;
+                    const heelRawX = mp[hlIdx] && (mp[hlIdx].visibility ?? 0) > 0.25 ? mp[hlIdx].x * 100 : ankleRawX - (isFacingRight ? legHeight * 0.06 : -legHeight * 0.06);
+
+                    // Blend: 70% malleolus X + 30% heel X (agak lebih maju ke depan), 25% malleolus Y + 75% heel Y (tetap di ketinggian bawah)
+                    const adjustedAnkleX = ankleRawX * 0.70 + heelRawX * 0.30;
+                    const adjustedAnkleY = ankleRawY * 0.25 + heelRawY * 0.75;
+
                     mappedPins = [
-                        { id: 'ear', name: 'Ear', x: mp[earIdx].x * 100, y: mp[earIdx].y * 100, color: '#a855f7' },
-                        { id: 'shoulder', name: 'Shoulder', x: shPt.x, y: shPt.y, color: '#38bdf8' },
-                        { id: 'wrist', name: 'Wrist', x: mp[wrIdx].x * 100, y: mp[wrIdx].y * 100, color: '#ef4444' },
+                        { id: 'ear', name: 'Ear / Telinga', x: mp[earIdx].x * 100, y: mp[earIdx].y * 100, color: '#a855f7' },
+                        { id: 'shoulder', name: 'Shoulder / Bahu', x: shPt.x, y: shPt.y, color: '#38bdf8' },
+                        { id: 'wrist', name: 'Wrist / Tangan', x: mp[wrIdx].x * 100, y: mp[wrIdx].y * 100, color: '#ef4444' },
                         { id: 'lumbar', name: 'Lumbar Spine (L3-L5)', x: adjustedLmbX, y: baseLmbY, color: '#f59e0b' },
-                        { id: 'hip', name: 'Hip', x: hpPt.x, y: hpPt.y, color: '#ef4444' },
-                        { id: 'knee', name: 'Knee', x: mp[knIdx].x * 100, y: mp[knIdx].y * 100, color: '#ef4444' },
-                        { id: 'ankle', name: 'Ankle', x: mp[akIdx].x * 100, y: mp[akIdx].y * 100, color: '#84cc16' },
+                        { id: 'hip', name: 'Hip / Pinggul', x: hpPt.x, y: hpPt.y, color: '#ef4444' },
+                        { id: 'knee', name: 'Knee / Depan Lutut (Patella)', x: adjustedKneeX, y: kneeRawY, color: '#ef4444' },
+                        { id: 'ankle', name: 'Tungkai Bawah / Subtalar', x: adjustedAnkleX, y: adjustedAnkleY, color: '#84cc16' },
                     ];
                 } else if (activeViewToUse === 'Posterior View') {
                     const lTorsoHeight = Math.abs(mp[23].y - mp[11].y) || 0.35;
                     const rTorsoHeight = Math.abs(mp[24].y - mp[12].y) || 0.35;
-                    const lPsisY = Math.max(0, mp[23].y - lTorsoHeight * 0.16) * 100;
-                    const rPsisY = Math.max(0, mp[24].y - rTorsoHeight * 0.16) * 100;
+                    const lPsisY = Math.max(0, mp[23].y - lTorsoHeight * 0.26) * 100;
+                    const rPsisY = Math.max(0, mp[24].y - rTorsoHeight * 0.26) * 100;
 
                     const midHipX = (mp[23].x + mp[24].x) / 2;
                     const lPsisX = (midHipX + (mp[23].x - midHipX) * 1.25) * 100;
@@ -1483,31 +1751,44 @@ export default function SmartPostureScanner({
 
             if (response.data?.success) {
                 const res = response.data;
+                const serverDetected: DetectedCompensation[] = res.detected_compensations || [];
 
-                // If MediaPipe was used, evaluate angles using real detected coordinates
-                if (mappedPins.length > 0) {
-                    const liveDetected = evaluateGoniometerDeviations(mappedPins, activeViewToUse);
+                // Evaluate angles using real detected coordinates
+                const gonioDetected = mappedPins.length > 0
+                    ? evaluateGoniometerDeviations(mappedPins, activeViewToUse)
+                    : [];
 
-                    setScanResults({
-                        engine: 'Google MediaPipe Computer Vision AI',
-                        summary:
-                            liveDetected.length > 0
-                                ? `Deteksi AI anatomi mendeteksi ${liveDetected.length} deviasi kompensasi pada sudut pandang ${activeViewToUse}.`
-                                : `Deteksi AI anatomi: Persendian atlet berada dalam rentang anatomi normal (tidak ada deviasi signifikan).`,
-                        detected_compensations: liveDetected,
-                    });
-                    if (liveDetected.length > 0) {
-                        const detectedIds = liveDetected.map((d: DetectedCompensation) => d.compensation_id);
-                        onApplyCompensations(Array.from(new Set([...selectedCompensationIds, ...detectedIds])));
+                // Merge server AI and goniometer detections without duplicate IDs
+                const mergedMap = new Map<number, DetectedCompensation>();
+
+                // 1. Add geometric goniometer detections
+                gonioDetected.forEach((d) => mergedMap.set(d.compensation_id, d));
+
+                // 2. Add / complement with neural server AI detections
+                serverDetected.forEach((d) => {
+                    if (!mergedMap.has(d.compensation_id)) {
+                        mergedMap.set(d.compensation_id, d);
                     }
-                } else {
-                    setScanResults(res);
-                    const allIds = (res.detected_compensations || []).map(
-                        (d: DetectedCompensation) => d.compensation_id
-                    );
-                    if (allIds.length > 0) {
-                        onApplyCompensations(Array.from(new Set([...selectedCompensationIds, ...allIds])));
-                    }
+                });
+
+                const finalDetected = Array.from(mergedMap.values());
+
+                setScanResults({
+                    engine: gonioDetected.length > 0 && serverDetected.length > 0
+                        ? 'MediaPipe Vision AI + Gemini Neural'
+                        : gonioDetected.length > 0
+                        ? 'Google MediaPipe Computer Vision AI'
+                        : res.engine || 'Gemini AI Postural Analysis',
+                    summary:
+                        finalDetected.length > 0
+                            ? `Deteksi AI anatomi mendeteksi ${finalDetected.length} deviasi kompensasi pada sudut pandang ${activeViewToUse}.`
+                            : (res.summary || `Deteksi AI anatomi: Persendian atlet berada dalam rentang anatomi normal (tidak ada deviasi signifikan).`),
+                    detected_compensations: finalDetected,
+                });
+
+                const allIds = finalDetected.map((d) => d.compensation_id);
+                if (allIds.length > 0) {
+                    onApplyCompensations(Array.from(new Set([...selectedCompensationIds, ...allIds])));
                 }
             }
         } catch (err: any) {
@@ -1549,8 +1830,8 @@ export default function SmartPostureScanner({
     const wrist = findLandmark(['wrist', 'hand', 'arm']);
     const lumbar = findLandmark(['lumbar', 'low back', 'spine', 'l3', 'l5']);
     const hip = findLandmark(['hip', 'trochanter', 'pelvis']);
-    const kneeLat = findLandmark(['knee']);
-    const ankleLat = findLandmark(['ankle', 'malleolus']);
+    const kneeLat = findLandmark(['knee', 'lutut', 'patella', 'knee_lat']);
+    const ankleLat = findLandmark(['ankle', 'malleolus', 'tungkai', 'shank', 'tibia', 'ankle_lat', 'tumit', 'calcaneus', 'heel']);
 
     const c7 = findLandmark(['c7', 'spine', 'head']);
     const lPsis = findLandmark(['left psis', 'l. psis', 'l_psis']);
@@ -1560,12 +1841,12 @@ export default function SmartPostureScanner({
     const lCalc = findLandmark(['left calcaneus', 'l. calcaneus', 'l_calcaneus', 'left heel']);
     const rCalc = findLandmark(['right calcaneus', 'r. calcaneus', 'r_calcaneus', 'right heel']);
 
-    const stAsis = findLandmark(['stance asis', 'st_asis', 'stance hip']);
-    const flAsis = findLandmark(['floating asis', 'fl_asis', 'floating hip']);
-    const stKnee = findLandmark(['stance knee', 'st_knee']);
-    const stAnkle = findLandmark(['stance ankle', 'st_ankle']);
-    const lShoulder = findLandmark(['left shoulder', 'l_shoulder']);
-    const rShoulder = findLandmark(['right shoulder', 'r_shoulder']);
+    const stAsis = findLandmark(['stance asis', 'st_asis', 'stance hip', 'asis tumpu']);
+    const flAsis = findLandmark(['floating asis', 'fl_asis', 'floating hip', 'asis bebas']);
+    const stKnee = findLandmark(['stance knee', 'st_knee', 'lutut tumpu']);
+    const stAnkle = findLandmark(['stance ankle', 'st_ankle', 'engkel tumpu']);
+    const lShoulder = findLandmark(['left shoulder', 'l_shoulder', 'bahu kiri']);
+    const rShoulder = findLandmark(['right shoulder', 'r_shoulder', 'bahu kanan']);
 
     return (
         <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg p-4 sm:p-5 space-y-4">
@@ -1869,8 +2150,50 @@ export default function SmartPostureScanner({
 
                                             {selectedView === 'Lateral View' && (
                                                 <>
-                                                    {/* --- IDEAL REFERENCE LINES (Green Dashed) --- */}
-                                                    {/* 1. Ideal Plumbline (Vertical Reference through lateral malleolus) */}
+                                                    {/* --- IDEAL REFERENCE LINES (Green) --- */}
+                                                    {/* 1. Extended Tibia Shank Axis (Tungkai ke Depan Lutut ditarik panjang) */}
+                                                    {ankleLat && kneeLat && (() => {
+                                                        const dx = kneeLat.x - ankleLat.x;
+                                                        const dy = kneeLat.y - ankleLat.y;
+                                                        const startX = ankleLat.x - dx * 0.45;
+                                                        const startY = ankleLat.y - dy * 0.45;
+                                                        const endX = kneeLat.x + dx * 1.6;
+                                                        const endY = kneeLat.y + dy * 1.6;
+
+                                                        return (
+                                                            <line
+                                                                x1={`${startX}%`}
+                                                                y1={`${startY}%`}
+                                                                x2={`${endX}%`}
+                                                                y2={`${endY}%`}
+                                                                stroke="#22c55e"
+                                                                strokeWidth={(2.4 / Math.sqrt(zoomLevel)).toFixed(2)}
+                                                            />
+                                                        );
+                                                    })()}
+
+                                                    {/* 2. Extended Torso Parallel Axis (Garis Sumbu Torso ditarik panjang sejajar) */}
+                                                    {hip && shoulder && (() => {
+                                                        const tDx = shoulder.x - hip.x;
+                                                        const tDy = shoulder.y - hip.y;
+                                                        const startX = hip.x - tDx * 0.25;
+                                                        const startY = hip.y - tDy * 0.25;
+                                                        const endX = shoulder.x + tDx * 0.7;
+                                                        const endY = shoulder.y + tDy * 0.7;
+
+                                                        return (
+                                                            <line
+                                                                x1={`${startX}%`}
+                                                                y1={`${startY}%`}
+                                                                x2={`${endX}%`}
+                                                                y2={`${endY}%`}
+                                                                stroke="#22c55e"
+                                                                strokeWidth={(2.4 / Math.sqrt(zoomLevel)).toFixed(2)}
+                                                            />
+                                                        );
+                                                    })()}
+
+                                                    {/* 3. Ideal Plumbline (Vertical Reference through lateral malleolus) */}
                                                     {ankleLat && (
                                                         <line
                                                             x1={`${ankleLat.x}%`}
@@ -1878,60 +2201,61 @@ export default function SmartPostureScanner({
                                                             x2={`${ankleLat.x}%`}
                                                             y2="95%"
                                                             stroke="#22c55e"
-                                                            strokeWidth={(1.8 / Math.sqrt(zoomLevel)).toFixed(2)}
+                                                            strokeWidth={(1.5 / Math.sqrt(zoomLevel)).toFixed(2)}
                                                             strokeDasharray="6 4"
-                                                        />
-                                                    )}
-                                                    {/* 2. Ideal Torso Parallelism (Parallel to Tibia slope from hip) */}
-                                                    {hip && kneeLat && ankleLat && shoulder && (
-                                                        <line
-                                                            x1={`${hip.x}%`}
-                                                            y1={`${hip.y}%`}
-                                                            x2={`${hip.x + (kneeLat.x - ankleLat.x) * 1.8}%`}
-                                                            y2={`${hip.y - Math.abs(shoulder.y - hip.y)}%`}
-                                                            stroke="#22c55e"
-                                                            strokeWidth={(2.0 / Math.sqrt(zoomLevel)).toFixed(2)}
-                                                            strokeDasharray="5 3"
+                                                            opacity="0.75"
                                                         />
                                                     )}
 
                                                     {/* --- ACTUAL SKELETAL LINES (Red Solid) --- */}
-                                                    {/* Torso Spine Line: Hip -> Lumbar -> Shoulder */}
-                                                    {lumbar ? (
-                                                        <>
-                                                            {hip && lumbar && (
-                                                                <line
-                                                                    x1={`${hip.x}%`}
-                                                                    y1={`${hip.y}%`}
-                                                                    x2={`${lumbar.x}%`}
-                                                                    y2={`${lumbar.y}%`}
-                                                                    stroke="#ef4444"
-                                                                    strokeWidth={(2.4 / Math.sqrt(zoomLevel)).toFixed(2)}
-                                                                />
-                                                            )}
-                                                            {lumbar && shoulder && (
-                                                                <line
-                                                                    x1={`${lumbar.x}%`}
-                                                                    y1={`${lumbar.y}%`}
-                                                                    x2={`${shoulder.x}%`}
-                                                                    y2={`${shoulder.y}%`}
-                                                                    stroke="#ef4444"
-                                                                    strokeWidth={(2.4 / Math.sqrt(zoomLevel)).toFixed(2)}
-                                                                />
-                                                            )}
-                                                        </>
-                                                    ) : (
-                                                        hip && shoulder && (
-                                                            <line
-                                                                x1={`${hip.x}%`}
-                                                                y1={`${hip.y}%`}
-                                                                x2={`${shoulder.x}%`}
-                                                                y2={`${shoulder.y}%`}
-                                                                stroke="#ef4444"
-                                                                strokeWidth={(2.4 / Math.sqrt(zoomLevel)).toFixed(2)}
-                                                            />
-                                                        )
+                                                    {/* 1. Main Straight Torso Axis: Hip -> Shoulder */}
+                                                    {hip && shoulder && (
+                                                        <line
+                                                            x1={`${hip.x}%`}
+                                                            y1={`${hip.y}%`}
+                                                            x2={`${shoulder.x}%`}
+                                                            y2={`${shoulder.y}%`}
+                                                            stroke="#ef4444"
+                                                            strokeWidth={(2.4 / Math.sqrt(zoomLevel)).toFixed(2)}
+                                                        />
                                                     )}
+
+                                                    {/* 2. Dedicated Spinal Curvature Arc (Back Arches / Back Rounds) */}
+                                                    {hip && shoulder && lumbar && (() => {
+                                                        const ctrlX = 2 * lumbar.x - 0.5 * (hip.x + shoulder.x);
+                                                        const ctrlY = 2 * lumbar.y - 0.5 * (hip.y + shoulder.y);
+
+                                                        const totalYDist = Math.max(1, Math.abs(hip.y - shoulder.y));
+                                                        const lumbarYRatio = Math.max(0, Math.min(1, (hip.y - lumbar.y) / totalYDist));
+                                                        const expectedLumbarX = hip.x + (shoulder.x - hip.x) * lumbarYRatio;
+                                                        const offsetDiff = Math.abs(lumbar.x - expectedLumbarX);
+                                                        const isDeviated = offsetDiff > 1.0;
+
+                                                        return (
+                                                            <g className="spinal-curvature-arc">
+                                                                {/* Curvature Bezier Arc (Spine Path) */}
+                                                                <path
+                                                                    d={`M ${hip.x} ${hip.y} Q ${ctrlX} ${ctrlY} ${shoulder.x} ${shoulder.y}`}
+                                                                    fill="none"
+                                                                    stroke="#f59e0b"
+                                                                    strokeWidth={(2.4 / Math.sqrt(zoomLevel)).toFixed(2)}
+                                                                    strokeDasharray={isDeviated ? undefined : "4 2"}
+                                                                />
+                                                                {/* Transverse offset indicator between straight body line and lumbar apex */}
+                                                                {isDeviated && (
+                                                                    <line
+                                                                        x1={`${expectedLumbarX}%`}
+                                                                        y1={`${lumbar.y}%`}
+                                                                        x2={`${lumbar.x}%`}
+                                                                        y2={`${lumbar.y}%`}
+                                                                        stroke="#f59e0b"
+                                                                        strokeWidth={(1.6 / Math.sqrt(zoomLevel)).toFixed(2)}
+                                                                        strokeDasharray="2 2"
+                                                                    />
+                                                                )}
+                                                            </g>
+                                                        );
+                                                    })()}
                                                     {ankleLat && kneeLat && (
                                                         <line
                                                             x1={`${ankleLat.x}%`}
@@ -2133,41 +2457,58 @@ export default function SmartPostureScanner({
                                                         />
                                                     )}
                                                     {/* 2. Ideal Level Pelvis Horizontal Line */}
-                                                    {stAsis && flAsis && (
-                                                        <line
-                                                            x1={`${stAsis.x - 8}%`}
-                                                            y1={`${stAsis.y}%`}
-                                                            x2={`${flAsis.x + 8}%`}
-                                                            y2={`${stAsis.y}%`}
-                                                            stroke="#22c55e"
-                                                            strokeWidth={(1.8 / Math.sqrt(zoomLevel)).toFixed(2)}
-                                                            strokeDasharray="5 3"
-                                                        />
-                                                    )}
+                                                    {stAsis && flAsis && (() => {
+                                                        const minX = Math.min(stAsis.x, flAsis.x);
+                                                        const maxX = Math.max(stAsis.x, flAsis.x);
+                                                        const spanX = Math.max(3, maxX - minX);
+                                                        return (
+                                                            <line
+                                                                x1={`${minX - spanX * 0.55}%`}
+                                                                y1={`${stAsis.y}%`}
+                                                                x2={`${maxX + spanX * 0.55}%`}
+                                                                y2={`${stAsis.y}%`}
+                                                                stroke="#22c55e"
+                                                                strokeWidth={(1.8 / Math.sqrt(zoomLevel)).toFixed(2)}
+                                                                strokeDasharray="5 3"
+                                                            />
+                                                        );
+                                                    })()}
                                                     {/* 3. Ideal Shoulder Level Line */}
-                                                    {lShoulder && rShoulder && (
-                                                        <line
-                                                            x1={`${lShoulder.x - 5}%`}
-                                                            y1={`${(lShoulder.y + rShoulder.y) / 2}%`}
-                                                            x2={`${rShoulder.x + 5}%`}
-                                                            y2={`${(lShoulder.y + rShoulder.y) / 2}%`}
-                                                            stroke="#22c55e"
-                                                            strokeWidth={(1.8 / Math.sqrt(zoomLevel)).toFixed(2)}
-                                                            strokeDasharray="5 3"
-                                                        />
-                                                    )}
+                                                    {lShoulder && rShoulder && (() => {
+                                                        const avgY = (lShoulder.y + rShoulder.y) / 2;
+                                                        const minX = Math.min(lShoulder.x, rShoulder.x);
+                                                        const maxX = Math.max(lShoulder.x, rShoulder.x);
+                                                        const spanX = Math.max(3, maxX - minX);
+                                                        return (
+                                                            <line
+                                                                x1={`${minX - spanX * 0.55}%`}
+                                                                y1={`${avgY}%`}
+                                                                x2={`${maxX + spanX * 0.55}%`}
+                                                                y2={`${avgY}%`}
+                                                                stroke="#22c55e"
+                                                                strokeWidth={(1.8 / Math.sqrt(zoomLevel)).toFixed(2)}
+                                                                strokeDasharray="5 3"
+                                                            />
+                                                        );
+                                                    })()}
 
                                                     {/* --- ACTUAL SKELETAL LINES (Red Solid) --- */}
-                                                    {stAsis && flAsis && (
-                                                        <line
-                                                            x1={`${stAsis.x - 8}%`}
-                                                            y1={`${stAsis.y}%`}
-                                                            x2={`${flAsis.x + 8}%`}
-                                                            y2={`${flAsis.y}%`}
-                                                            stroke="#ef4444"
-                                                            strokeWidth={(2.4 / Math.sqrt(zoomLevel)).toFixed(2)}
-                                                        />
-                                                    )}
+                                                    {/* Trendelenburg Pelvic Transverse Line (Hip Hike / Hip Drop) */}
+                                                    {stAsis && flAsis && (() => {
+                                                        const dx = flAsis.x - stAsis.x;
+                                                        const dy = flAsis.y - stAsis.y;
+                                                        return (
+                                                            <line
+                                                                x1={`${stAsis.x - dx * 0.55}%`}
+                                                                y1={`${stAsis.y - dy * 0.55}%`}
+                                                                x2={`${flAsis.x + dx * 0.55}%`}
+                                                                y2={`${flAsis.y + dy * 0.55}%`}
+                                                                stroke="#ef4444"
+                                                                strokeWidth={(2.4 / Math.sqrt(zoomLevel)).toFixed(2)}
+                                                            />
+                                                        );
+                                                    })()}
+                                                    {/* Stance Leg Alignment (Knee Moves Inward / Valgus) */}
                                                     {stAsis && stKnee && (
                                                         <line
                                                             x1={`${stAsis.x}%`}
@@ -2188,16 +2529,21 @@ export default function SmartPostureScanner({
                                                             strokeWidth={(2.4 / Math.sqrt(zoomLevel)).toFixed(2)}
                                                         />
                                                     )}
-                                                    {lShoulder && rShoulder && (
-                                                        <line
-                                                            x1={`${lShoulder.x - 5}%`}
-                                                            y1={`${lShoulder.y}%`}
-                                                            x2={`${rShoulder.x + 5}%`}
-                                                            y2={`${rShoulder.y}%`}
-                                                            stroke="#ef4444"
-                                                            strokeWidth={(2.0 / Math.sqrt(zoomLevel)).toFixed(2)}
-                                                        />
-                                                    )}
+                                                    {/* Shoulder Level Line (Trunk Rotation) */}
+                                                    {lShoulder && rShoulder && (() => {
+                                                        const sDx = rShoulder.x - lShoulder.x;
+                                                        const sDy = rShoulder.y - lShoulder.y;
+                                                        return (
+                                                            <line
+                                                                x1={`${lShoulder.x - sDx * 0.55}%`}
+                                                                y1={`${lShoulder.y - sDy * 0.55}%`}
+                                                                x2={`${rShoulder.x + sDx * 0.55}%`}
+                                                                y2={`${rShoulder.y + sDy * 0.55}%`}
+                                                                stroke="#ef4444"
+                                                                strokeWidth={(2.0 / Math.sqrt(zoomLevel)).toFixed(2)}
+                                                            />
+                                                        );
+                                                    })()}
                                                 </>
                                             )}
                                         </svg>
@@ -2284,6 +2630,8 @@ export default function SmartPostureScanner({
                                             <span>Fokus Tubuh</span>
                                         </button>
                                     )}
+
+
 
                                     {/* Flexible Pin Size Selector */}
                                     <div

@@ -87,6 +87,7 @@ class AthleteController extends Controller
         $athlete->load([
             'dpaAssessments.details.compensation',
             'dpaAssessments.assessor',
+            'trainingPrograms.items.exercise',
         ]);
 
         return Inertia::render('Athletes/Show', [

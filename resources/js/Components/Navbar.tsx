@@ -102,6 +102,17 @@ export default function Navbar() {
                                 Analisis PMA
                             </Link>
 
+                            <Link
+                                href={route('training-programs.index')}
+                                className={`px-3 py-1.5 text-xs font-bold transition-colors rounded-md ${
+                                    route().current('training-programs.*')
+                                        ? 'text-[#84cc16] dark:text-[#b4f031]'
+                                        : 'text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white'
+                                }`}
+                            >
+                                Program Latihan
+                            </Link>
+
                             {/* Dropdown Konfigurasi (Kelola Atlet, Master Kompensasi, Master Latihan, Master Otot, Master Cedera, Kelola Admin) */}
                             <div
                                 ref={configDropdownRef}
@@ -312,6 +323,12 @@ export default function Navbar() {
                             className="px-3 py-2 rounded-md text-sm font-semibold hover:bg-slate-100 dark:hover:bg-slate-800"
                         >
                             Analisis PMA
+                        </Link>
+                        <Link
+                            href={route('training-programs.index')}
+                            className="px-3 py-2 rounded-md text-sm font-semibold hover:bg-slate-100 dark:hover:bg-slate-800"
+                        >
+                            Program Latihan
                         </Link>
 
                         <div className="pt-2 pb-1 px-3 text-[10px] font-semibold text-slate-400">

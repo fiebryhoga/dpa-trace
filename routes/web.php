@@ -33,6 +33,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/dpa/assessments/{dpaAssessment}', [DpaAssessmentController::class, 'destroy'])->name('dpa.destroy');
     Route::post('/dpa/analyze-posture', [\App\Http\Controllers\DpaAiAnalysisController::class, 'analyze'])->name('dpa.analyze-posture');
 
+    // Program Latihan Korektif (Corrective Training Programs)
+    Route::get('/training-programs/athletes/{athlete}', [\App\Http\Controllers\TrainingProgramController::class, 'athleteCalendar'])->name('training-programs.athletes.calendar');
+    Route::post('/training-programs/{trainingProgram}/toggle-session', [\App\Http\Controllers\TrainingProgramController::class, 'toggleSession'])->name('training-programs.toggle-session');
+    Route::resource('training-programs', \App\Http\Controllers\TrainingProgramController::class);
+
     // Master Data & Konfigurasi (DPA Compensations, Exercise Library, Muscles, Injuries, Admin Users)
     Route::resource('dpa-compensations', DpaCompensationController::class);
     Route::resource('exercises', ExerciseController::class);

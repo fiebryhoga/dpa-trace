@@ -21,6 +21,7 @@ import {
     Calendar,
     ArrowLeft,
     Check,
+    Sparkles,
 } from 'lucide-react';
 import {
     Athlete,
@@ -237,6 +238,19 @@ export default function DpaShow({
                     }
                     actions={
                         <div className="flex items-center gap-2 flex-wrap">
+                            {activeTab !== 'input' && analysis && (
+                                <Link
+                                    href={route('training-programs.create', {
+                                        athlete_id: athlete.id,
+                                        assessment_id: latest?.id,
+                                    })}
+                                    className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-slate-900 hover:bg-slate-800 dark:bg-white dark:hover:bg-slate-100 text-white dark:text-slate-950 font-bold rounded-md text-xs shadow-2xs transition-all cursor-pointer"
+                                    title="Generate Program Latihan Korektif Berdasarkan Hasil Asesmen Ini"
+                                >
+                                    <Dumbbell size={14} className="text-[#84cc16] dark:text-[#65a30d]" />
+                                    <span>Buat Program Latihan</span>
+                                </Link>
+                            )}
 
                             {activeTab !== 'input' ? (
                                 <button
@@ -324,7 +338,40 @@ export default function DpaShow({
 
                 {/* ─── TAB 1: ANALISIS KOMPENSASI & PROTOKOL ─── */}
                 {activeTab === 'analysis' && (
-                    <div>
+                    <div className="space-y-5">
+                        {/* Banner CTA Program Latihan Korektif */}
+                        {analysis && (
+                            <div className="bg-gradient-to-r from-slate-900 via-slate-850 to-slate-900 dark:from-[#0E1526] dark:via-[#131C31] dark:to-[#0E1526] text-white rounded-lg p-4 sm:p-5 border border-slate-800 dark:border-slate-800/80 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-md">
+                                <div className="flex items-start sm:items-center gap-3.5">
+                                    <div className="w-10 h-10 rounded-md bg-[#84cc16]/20 text-[#b4f031] flex items-center justify-center shrink-0 border border-[#84cc16]/30">
+                                        <Dumbbell size={20} />
+                                    </div>
+                                    <div>
+                                        <h4 className="text-xs sm:text-sm font-bold text-white flex items-center gap-2">
+                                            <span>Rekomendasi Program Latihan Korektif (4 Fase NASM)</span>
+                                            <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-[#84cc16]/20 text-[#b4f031]">
+                                                Siap Digenerate
+                                            </span>
+                                        </h4>
+                                        <p className="text-xs text-slate-300 dark:text-slate-400 mt-0.5">
+                                            Konversi seluruh temuan {analysis.compensations.length} kompensasi &amp; ketidakseimbangan otot atlet ini menjadi peresepan latihan lengkap (Set, Reps, Tempo &amp; Panduan).
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <Link
+                                    href={route('training-programs.create', {
+                                        athlete_id: athlete.id,
+                                        assessment_id: latest?.id,
+                                    })}
+                                    className="inline-flex items-center justify-center gap-1.5 px-4 py-2 bg-[#84cc16] hover:bg-[#65a30d] dark:bg-[#b4f031] dark:hover:bg-[#a3e635] text-slate-950 font-bold rounded-md text-xs shadow-md transition-all shrink-0 cursor-pointer"
+                                >
+                                    <Sparkles size={14} className="stroke-[2.5]" />
+                                    <span>Generate Program Latihan</span>
+                                </Link>
+                            </div>
+                        )}
+
                         {analysis ? (
                             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
                                 {/* ═══════════════════════════════════════
