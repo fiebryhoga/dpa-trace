@@ -529,8 +529,8 @@ export default function SmartPostureScanner({
                 { id: 'l_asis', name: 'Left ASIS', x: 58, y: 38, color: '#38bdf8' },
                 { id: 'r_knee', name: 'Right Knee', x: 43, y: 68, color: '#ef4444' },
                 { id: 'l_knee', name: 'Left Knee', x: 57, y: 68, color: '#ef4444' },
-                { id: 'r_ankle', name: 'Right Ankle', x: 42, y: 88, color: '#84cc16' },
-                { id: 'l_ankle', name: 'Left Ankle', x: 58, y: 88, color: '#84cc16' },
+                { id: 'r_ankle', name: 'Right Ankle', x: 42, y: 88, color: '#10b981' },
+                { id: 'l_ankle', name: 'Left Ankle', x: 58, y: 88, color: '#10b981' },
                 { id: 'r_toe', name: 'Right Toe', x: 40, y: 94, color: '#ef4444' },
                 { id: 'l_toe', name: 'Left Toe', x: 60, y: 94, color: '#ef4444' },
             ];
@@ -542,7 +542,7 @@ export default function SmartPostureScanner({
                 { id: 'wrist', name: 'Wrist', x: 70, y: 30, color: '#ef4444' },
                 { id: 'hip', name: 'Hip', x: 40, y: 48, color: '#ef4444' },
                 { id: 'knee', name: 'Knee / Depan Lutut (Patella)', x: 63, y: 70, color: '#ef4444' },
-                { id: 'ankle', name: 'Tungkai Bawah / Subtalar', x: 46.0, y: 94.5, color: '#84cc16' },
+                { id: 'ankle', name: 'Tungkai Bawah / Subtalar', x: 46.0, y: 94.5, color: '#10b981' },
             ];
         }
         if (view === 'Posterior View') {
@@ -552,8 +552,8 @@ export default function SmartPostureScanner({
                 { id: 'r_psis', name: 'Right PSIS (Pelvis)', x: 56, y: 36, color: '#ef4444' },
                 { id: 'l_calf', name: 'Left Calf', x: 44, y: 72, color: '#ef4444' },
                 { id: 'r_calf', name: 'Right Calf', x: 56, y: 72, color: '#ef4444' },
-                { id: 'l_ankle', name: 'Left Ankle', x: 43.5, y: 86, color: '#84cc16' },
-                { id: 'r_ankle', name: 'Right Ankle', x: 56.5, y: 86, color: '#84cc16' },
+                { id: 'l_ankle', name: 'Left Ankle', x: 43.5, y: 86, color: '#10b981' },
+                { id: 'r_ankle', name: 'Right Ankle', x: 56.5, y: 86, color: '#10b981' },
                 { id: 'l_calcaneus', name: 'Left Calcaneus (Heel)', x: 42, y: 92, color: '#ef4444' },
                 { id: 'r_calcaneus', name: 'Right Calcaneus (Heel)', x: 58, y: 92, color: '#ef4444' },
             ];
@@ -563,7 +563,7 @@ export default function SmartPostureScanner({
             { id: 'st_asis', name: 'Stance ASIS', x: 46, y: 40, color: '#ef4444' },
             { id: 'fl_asis', name: 'Floating ASIS', x: 55, y: 42, color: '#ef4444' },
             { id: 'st_knee', name: 'Stance Knee', x: 46, y: 69, color: '#ef4444' },
-            { id: 'st_ankle', name: 'Stance Ankle', x: 46, y: 88, color: '#84cc16' },
+            { id: 'st_ankle', name: 'Stance Ankle', x: 46, y: 88, color: '#10b981' },
             { id: 'l_shoulder', name: 'Left Shoulder', x: 42, y: 26, color: '#ef4444' },
             { id: 'r_shoulder', name: 'Right Shoulder', x: 58, y: 26, color: '#ef4444' },
         ];
@@ -1604,7 +1604,7 @@ export default function SmartPostureScanner({
                         { id: 'st_asis', name: 'Stance ASIS', x: stAsisX, y: stAsisY * 100, color: '#ef4444' },
                         { id: 'fl_asis', name: 'Floating ASIS', x: flAsisX, y: flAsisY * 100, color: '#ef4444' },
                         { id: 'st_knee', name: 'Stance Knee', x: mp[stKneeIdx].x * 100, y: mp[stKneeIdx].y * 100, color: '#ef4444' },
-                        { id: 'st_ankle', name: 'Stance Ankle', x: mp[stIdx].x * 100, y: mp[stIdx].y * 100, color: '#84cc16' },
+                        { id: 'st_ankle', name: 'Stance Ankle', x: mp[stIdx].x * 100, y: mp[stIdx].y * 100, color: '#10b981' },
                         { id: 'l_shoulder', name: 'Left Shoulder', x: mp[11].x * 100, y: mp[11].y * 100, color: '#ef4444' },
                         { id: 'r_shoulder', name: 'Right Shoulder', x: mp[12].x * 100, y: mp[12].y * 100, color: '#ef4444' },
                     ];
@@ -1680,7 +1680,7 @@ export default function SmartPostureScanner({
                         { id: 'lumbar', name: 'Lumbar Spine (L3-L5)', x: adjustedLmbX, y: baseLmbY, color: '#f59e0b' },
                         { id: 'hip', name: 'Hip / Pinggul', x: hpPt.x, y: hpPt.y, color: '#ef4444' },
                         { id: 'knee', name: 'Knee / Depan Lutut (Patella)', x: adjustedKneeX, y: kneeRawY, color: '#ef4444' },
-                        { id: 'ankle', name: 'Tungkai Bawah / Subtalar', x: adjustedAnkleX, y: adjustedAnkleY, color: '#84cc16' },
+                        { id: 'ankle', name: 'Tungkai Bawah / Subtalar', x: adjustedAnkleX, y: adjustedAnkleY, color: '#10b981' },
                     ];
                 } else if (activeViewToUse === 'Posterior View') {
                     const lTorsoHeight = Math.abs(mp[23].y - mp[11].y) || 0.35;
@@ -1698,8 +1698,8 @@ export default function SmartPostureScanner({
                         { id: 'r_psis', name: 'Right PSIS', x: rPsisX, y: rPsisY, color: '#ef4444' },
                         { id: 'l_calf', name: 'Left Calf', x: (mp[25].x * 0.25 + mp[27].x * 0.75) * 100, y: (mp[25].y * 0.25 + mp[27].y * 0.75) * 100, color: '#ef4444' },
                         { id: 'r_calf', name: 'Right Calf', x: (mp[26].x * 0.25 + mp[28].x * 0.75) * 100, y: (mp[26].y * 0.25 + mp[28].y * 0.75) * 100, color: '#ef4444' },
-                        { id: 'l_ankle', name: 'Left Ankle', x: mp[27].x * 100, y: mp[27].y * 100, color: '#84cc16' },
-                        { id: 'r_ankle', name: 'Right Ankle', x: mp[28].x * 100, y: mp[28].y * 100, color: '#84cc16' },
+                        { id: 'l_ankle', name: 'Left Ankle', x: mp[27].x * 100, y: mp[27].y * 100, color: '#10b981' },
+                        { id: 'r_ankle', name: 'Right Ankle', x: mp[28].x * 100, y: mp[28].y * 100, color: '#10b981' },
                         { id: 'l_calcaneus', name: 'Left Calcaneus', x: mp[29].x * 100, y: mp[29].y * 100, color: '#ef4444' },
                         { id: 'r_calcaneus', name: 'Right Calcaneus', x: mp[30].x * 100, y: mp[30].y * 100, color: '#ef4444' },
                     ];
@@ -1720,8 +1720,8 @@ export default function SmartPostureScanner({
                         { id: 'r_asis', name: 'Right ASIS', x: rAsisX, y: rAsisY, color: '#38bdf8' },
                         { id: 'l_knee', name: 'Left Knee', x: mp[25].x * 100, y: mp[25].y * 100, color: '#ef4444' },
                         { id: 'r_knee', name: 'Right Knee', x: mp[26].x * 100, y: mp[26].y * 100, color: '#ef4444' },
-                        { id: 'l_ankle', name: 'Left Ankle', x: mp[27].x * 100, y: mp[27].y * 100, color: '#84cc16' },
-                        { id: 'r_ankle', name: 'Right Ankle', x: mp[28].x * 100, y: mp[28].y * 100, color: '#84cc16' },
+                        { id: 'l_ankle', name: 'Left Ankle', x: mp[27].x * 100, y: mp[27].y * 100, color: '#10b981' },
+                        { id: 'r_ankle', name: 'Right Ankle', x: mp[28].x * 100, y: mp[28].y * 100, color: '#10b981' },
                         { id: 'l_toe', name: 'Left Toe', x: mp[31].x * 100, y: mp[31].y * 100, color: '#ef4444' },
                         { id: 'r_toe', name: 'Right Toe', x: mp[32].x * 100, y: mp[32].y * 100, color: '#ef4444' },
                     ];
@@ -1849,19 +1849,19 @@ export default function SmartPostureScanner({
     const rShoulder = findLandmark(['right shoulder', 'r_shoulder', 'bahu kanan']);
 
     return (
-        <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg p-4 sm:p-5 space-y-4">
+        <div className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 rounded-lg p-4 sm:p-5 space-y-4">
             {/* Header */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100 dark:border-slate-800">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100 dark:border-zinc-800">
                 <div className="flex items-center gap-2.5">
-                    <div className="w-8 h-8 rounded-md bg-[#84cc16]/10 dark:bg-[#b4f031]/10 flex items-center justify-center shrink-0">
-                        <Sparkles size={16} className="text-[#84cc16] dark:text-[#b4f031]" />
+                    <div className="w-8 h-8 rounded-md bg-emerald-500/10 dark:bg-emerald-500/20 flex items-center justify-center shrink-0">
+                        <Sparkles size={16} className="text-emerald-600 dark:text-emerald-400" />
                     </div>
                     <div>
                         <div className="flex items-center gap-2">
                             <h4 className="text-xs font-bold text-slate-900 dark:text-white">
                                 Smart AI Posture Scanner
                             </h4>
-                            <span className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-[#84cc16]/15 dark:bg-[#b4f031]/15 text-[#84cc16] dark:text-[#b4f031] flex items-center gap-1">
+                            <span className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-emerald-500/15 text-emerald-800 dark:text-emerald-300 flex items-center gap-1">
                                 <Zap size={10} />
                                 MediaPipe Vision AI
                             </span>
@@ -1875,16 +1875,16 @@ export default function SmartPostureScanner({
                 <button
                     type="button"
                     onClick={() => setShowGuideModal(true)}
-                    className="self-start sm:self-auto px-2.5 py-1.5 rounded-md text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer border bg-slate-50 dark:bg-slate-800/80 text-slate-700 dark:text-slate-200 border-slate-200 dark:border-slate-700 hover:border-[#84cc16] dark:hover:border-[#b4f031]"
+                    className="self-start sm:self-auto px-2.5 py-1.5 rounded-md text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer border bg-slate-50 dark:bg-zinc-800/80 text-slate-700 dark:text-zinc-200 border-slate-200 dark:border-zinc-700 hover:border-emerald-500 dark:hover:border-emerald-500"
                     title="Lihat Clue Gambar Standar NASM"
                 >
-                    <BookOpen size={12} className="text-[#84cc16] dark:text-[#b4f031]" />
+                    <BookOpen size={12} className="text-emerald-600 dark:text-emerald-400" />
                     <span>Panduan NASM</span>
                 </button>
             </div>
 
             {/* Sleek Segmented Stepper Bar (4 Sudut Pandang) */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-1.5 p-1 bg-slate-100/80 dark:bg-slate-950/60 rounded-lg border border-slate-200/80 dark:border-slate-800">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-1.5 p-1 bg-slate-100/80 dark:bg-zinc-900/60 rounded-lg border border-slate-200/80 dark:border-zinc-800">
                 {ASSESSMENT_STEPS.map((step, idx) => {
                     const isActive = selectedView === step.view;
                     const cached = stepCache[step.view];
@@ -1916,7 +1916,7 @@ export default function SmartPostureScanner({
                                 <span
                                     className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0 ${
                                         hasStepPhoto
-                                            ? 'bg-[#84cc16] text-slate-950 font-bold'
+                                            ? 'bg-emerald-600 text-white font-bold'
                                             : isActive
                                             ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-900'
                                             : 'bg-slate-200 dark:bg-slate-800 text-slate-500'
@@ -1979,14 +1979,14 @@ export default function SmartPostureScanner({
                                 onDragEnter={handleDragEnter}
                                 onDragLeave={handleDragLeave}
                                 onDrop={handleDrop}
-                                className={`flex justify-center items-center bg-slate-950 rounded-lg p-2 border border-slate-200 dark:border-slate-800 min-h-[340px] max-h-[500px] overflow-hidden relative select-none ${
+                                className={`flex justify-center items-center bg-black rounded-lg p-2 border border-slate-200 dark:border-zinc-800 min-h-[340px] max-h-[500px] overflow-hidden relative select-none ${
                                     zoomLevel > 1 ? (isPanning ? 'cursor-grabbing' : 'cursor-grab') : 'cursor-default'
                                 }`}
                             >
                                 {isDraggingOver && (
-                                    <div className="absolute inset-0 z-30 bg-[#84cc16]/20 dark:bg-[#b4f031]/20 border-2 border-dashed border-[#84cc16] dark:border-[#b4f031] backdrop-blur-xs flex flex-col items-center justify-center text-slate-950 dark:text-white rounded-lg animate-in fade-in duration-150">
-                                        <UploadCloud size={32} className="text-[#84cc16] dark:text-[#b4f031] animate-bounce mb-1.5" />
-                                        <span className="text-xs font-bold bg-slate-900/80 text-white px-3 py-1 rounded-md">Lepaskan untuk ganti foto {selectedView}</span>
+                                    <div className="absolute inset-0 z-30 bg-emerald-500/20 border-2 border-dashed border-emerald-500 backdrop-blur-xs flex flex-col items-center justify-center text-slate-950 dark:text-white rounded-lg animate-in fade-in duration-150">
+                                        <UploadCloud size={32} className="text-emerald-500 animate-bounce mb-1.5" />
+                                        <span className="text-xs font-bold bg-zinc-900/90 text-white px-3 py-1 rounded-md">Lepaskan untuk ganti foto {selectedView}</span>
                                     </div>
                                 )}
                                 <div
@@ -2623,7 +2623,7 @@ export default function SmartPostureScanner({
                                         <button
                                             type="button"
                                             onClick={() => handleAutoFocusBody()}
-                                            className="px-1.5 py-0.5 rounded bg-[#84cc16] hover:bg-[#65a30d] text-slate-950 font-bold flex items-center gap-1 cursor-pointer transition-colors"
+                                            className="px-1.5 py-0.5 rounded bg-emerald-600 hover:bg-emerald-500 text-white font-bold flex items-center gap-1 cursor-pointer transition-colors"
                                             title="Fokus otomatis perbesar ke tubuh atlet"
                                         >
                                             <Target size={11} />
@@ -2645,7 +2645,7 @@ export default function SmartPostureScanner({
                                                 onClick={() => setPinSize(sz)}
                                                 className={`px-1.5 py-0.5 rounded text-[8.5px] font-bold uppercase transition-colors cursor-pointer ${
                                                     pinSize === sz
-                                                        ? 'bg-[#84cc16] text-slate-950 shadow-xs'
+                                                        ? 'bg-emerald-600 text-white shadow-xs'
                                                         : 'text-white/70 hover:text-white hover:bg-white/10'
                                                 }`}
                                             >
@@ -2756,10 +2756,10 @@ export default function SmartPostureScanner({
                                     <button
                                         type="button"
                                         onClick={() => fileInputRef.current?.click()}
-                                        className="px-2.5 py-1.5 rounded-md text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer border bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 border-slate-200 dark:border-slate-700 shadow-2xs"
+                                        className="px-2.5 py-1.5 rounded-md text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer border bg-slate-100 hover:bg-slate-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-slate-800 dark:text-zinc-200 border-slate-200 dark:border-zinc-700 shadow-2xs"
                                         title="Unggah foto baru untuk menggantikan foto saat ini"
                                     >
-                                        <Upload size={13} className="text-[#84cc16] dark:text-[#b4f031]" />
+                                        <Upload size={13} className="text-emerald-600 dark:text-emerald-400" />
                                         <span>Ganti Foto</span>
                                     </button>
 
@@ -2769,8 +2769,8 @@ export default function SmartPostureScanner({
                                             onClick={() => setShowGalleryPicker(!showGalleryPicker)}
                                             className={`px-2.5 py-1.5 rounded-md text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer border ${
                                                 showGalleryPicker
-                                                    ? 'bg-[#84cc16]/15 border-[#84cc16] text-[#84cc16] dark:text-[#b4f031]'
-                                                    : 'bg-slate-50 hover:bg-slate-100 dark:bg-slate-900 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-800'
+                                                    ? 'bg-emerald-500/15 border-emerald-500 text-emerald-700 dark:text-emerald-300'
+                                                    : 'bg-slate-50 hover:bg-slate-100 dark:bg-zinc-900 dark:hover:bg-zinc-800 text-slate-700 dark:text-zinc-300 border-slate-200 dark:border-zinc-800'
                                             }`}
                                             title="Pilih dari galeri foto atlet"
                                         >
@@ -2793,7 +2793,7 @@ export default function SmartPostureScanner({
 
                             {/* Gallery Drawer when toggled */}
                             {showGalleryPicker && galleryPhotos.length > 0 && (
-                                <div className="p-2.5 rounded-md bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 space-y-2">
+                                <div className="p-2.5 rounded-md bg-slate-50 dark:bg-zinc-950/60 border border-slate-200 dark:border-zinc-800 space-y-2">
                                     <div className="flex items-center justify-between text-[11px] font-semibold text-slate-700 dark:text-slate-300">
                                         <span>Pilih Foto dari Galeri Atlet:</span>
                                         <button
@@ -2815,8 +2815,8 @@ export default function SmartPostureScanner({
                                                 }}
                                                 className={`w-14 h-14 rounded-md border overflow-hidden shrink-0 transition-all cursor-pointer ${
                                                     selectedGalleryPhoto === gal.image_path
-                                                        ? 'border-[#84cc16] ring-2 ring-[#84cc16]/40'
-                                                        : 'border-slate-200 dark:border-slate-800 hover:border-[#84cc16]'
+                                                        ? 'border-emerald-500 ring-2 ring-emerald-500/40'
+                                                        : 'border-slate-200 dark:border-zinc-800 hover:border-emerald-500'
                                                 }`}
                                             >
                                                 <img
@@ -2844,18 +2844,18 @@ export default function SmartPostureScanner({
                                 onDrop={handleDrop}
                                 className={`rounded-lg border-2 border-dashed p-6 flex flex-col items-center justify-center text-center cursor-pointer transition-all group aspect-[4/3] ${
                                     isDraggingOver
-                                        ? 'border-[#84cc16] dark:border-[#b4f031] bg-[#84cc16]/15 dark:bg-[#b4f031]/15 ring-2 ring-[#84cc16]/40 dark:ring-[#b4f031]/40 scale-[1.01]'
-                                        : 'border-slate-200 dark:border-slate-800 hover:border-[#84cc16] dark:hover:border-[#b4f031] bg-slate-50/50 dark:bg-slate-950/40 hover:bg-[#84cc16]/5'
+                                        ? 'border-emerald-500 bg-emerald-50/50 dark:bg-emerald-950/20 ring-2 ring-emerald-500/40 scale-[1.01]'
+                                        : 'border-slate-200 dark:border-zinc-800 hover:border-emerald-500 dark:hover:border-emerald-500 bg-slate-50/50 dark:bg-zinc-950/40 hover:bg-emerald-500/5'
                                 }`}
                             >
                                 <div className={`w-11 h-11 rounded-full flex items-center justify-center mb-2 transition-all ${
                                     isDraggingOver
-                                        ? 'bg-[#84cc16] text-slate-950 scale-110 shadow-md'
-                                        : 'bg-slate-100 dark:bg-slate-900 text-slate-400 group-hover:text-[#84cc16] dark:group-hover:text-[#b4f031] group-hover:scale-105'
+                                        ? 'bg-emerald-600 text-white scale-110 shadow-md'
+                                        : 'bg-slate-100 dark:bg-zinc-900 text-slate-400 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 group-hover:scale-105'
                                 }`}>
                                     <UploadCloud size={22} className={isDraggingOver ? 'animate-bounce' : ''} />
                                 </div>
-                                <p className="text-xs font-bold text-slate-800 dark:text-slate-200">
+                                <p className="text-xs font-bold text-slate-800 dark:text-zinc-200">
                                     {isDraggingOver ? 'Lepaskan foto di sini...' : `Klik atau tarik (drag & drop) foto ${selectedView}`}
                                 </p>
                                 <p className="text-[10.5px] text-slate-400 mt-0.5">
@@ -2875,7 +2875,7 @@ export default function SmartPostureScanner({
                                                 key={gal.id}
                                                 type="button"
                                                 onClick={() => handleSelectGalleryPhoto(gal.image_path)}
-                                                className="w-12 h-12 rounded border border-slate-200 dark:border-slate-800 overflow-hidden shrink-0 hover:border-[#84cc16] dark:hover:border-[#b4f031] cursor-pointer"
+                                                className="w-12 h-12 rounded border border-slate-200 dark:border-zinc-800 overflow-hidden shrink-0 hover:border-emerald-500 dark:hover:border-emerald-500 cursor-pointer"
                                             >
                                                 <img
                                                     src={
@@ -2900,7 +2900,7 @@ export default function SmartPostureScanner({
                             type="button"
                             onClick={runScan}
                             disabled={isScanning || !imagePreview}
-                            className="w-full py-2.5 px-4 rounded-md bg-[#84cc16] hover:bg-[#65a30d] dark:bg-[#b4f031] dark:hover:bg-[#a2dd26] text-slate-950 text-xs font-bold transition-all shadow-xs flex items-center justify-center gap-2 cursor-pointer disabled:opacity-40"
+                            className="w-full py-2.5 px-4 rounded-md bg-emerald-600 hover:bg-emerald-700 dark:bg-emerald-500 dark:hover:bg-emerald-600 text-white text-xs font-bold transition-all shadow-xs flex items-center justify-center gap-2 cursor-pointer disabled:opacity-40"
                         >
                             {isScanning ? (
                                 <>
@@ -2929,10 +2929,10 @@ export default function SmartPostureScanner({
                     {scanResults ? (
                         <div className="space-y-3">
                             {/* Summary Box & Visual Switcher */}
-                            <div className="p-2.5 rounded-md bg-slate-50/80 dark:bg-slate-950/60 border border-slate-200/80 dark:border-slate-800 space-y-2">
+                            <div className="p-2.5 rounded-md bg-slate-50/80 dark:bg-zinc-950/60 border border-slate-200/80 dark:border-zinc-800 space-y-2">
                                 <div className="flex flex-wrap items-center justify-between gap-1.5 text-[10.5px]">
-                                    <span className="font-bold text-slate-800 dark:text-slate-200 flex items-center gap-1">
-                                        <CheckCircle2 size={12} className="text-[#84cc16] dark:text-[#b4f031]" />
+                                    <span className="font-bold text-slate-800 dark:text-zinc-200 flex items-center gap-1">
+                                        <CheckCircle2 size={12} className="text-emerald-600 dark:text-emerald-400" />
                                         <span>
                                             {scanResults.detected_compensations.length > 0
                                                 ? `Hasil Analisis (${scanResults.detected_compensations.length} Deviasi Terdeteksi)`
@@ -2941,14 +2941,14 @@ export default function SmartPostureScanner({
                                     </span>
                                     
                                     {/* Tab switcher between List and Body Visual */}
-                                    <div className="flex items-center gap-1 p-0.5 bg-slate-200/70 dark:bg-slate-850 rounded-md border border-slate-200/80 dark:border-slate-800">
+                                    <div className="flex items-center gap-1 p-0.5 bg-slate-200/70 dark:bg-zinc-900 rounded-md border border-slate-200/80 dark:border-zinc-800">
                                         <button
                                             type="button"
                                             onClick={() => setAnalysisTab('list')}
                                             className={`px-2 py-0.5 rounded text-[10.5px] font-semibold transition-all flex items-center gap-1 cursor-pointer ${
                                                 analysisTab === 'list'
-                                                    ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-2xs font-bold'
-                                                    : 'text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'
+                                                    ? 'bg-white dark:bg-zinc-800 text-slate-900 dark:text-white shadow-2xs font-bold'
+                                                    : 'text-slate-500 hover:text-slate-800 dark:hover:text-zinc-200'
                                             }`}
                                         >
                                             <ListChecks size={11} />
@@ -2959,8 +2959,8 @@ export default function SmartPostureScanner({
                                             onClick={() => setAnalysisTab('visual')}
                                             className={`px-2 py-0.5 rounded text-[10.5px] font-semibold transition-all flex items-center gap-1 cursor-pointer ${
                                                 analysisTab === 'visual'
-                                                    ? 'bg-white dark:bg-slate-800 text-[#84cc16] dark:text-[#b4f031] shadow-2xs font-bold'
-                                                    : 'text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'
+                                                    ? 'bg-white dark:bg-zinc-800 text-emerald-600 dark:text-emerald-400 shadow-2xs font-bold'
+                                                    : 'text-slate-500 hover:text-slate-800 dark:hover:text-zinc-200'
                                             }`}
                                         >
                                             <Activity size={11} />
@@ -2968,7 +2968,7 @@ export default function SmartPostureScanner({
                                         </button>
                                     </div>
                                 </div>
-                                <p className="text-[11px] text-slate-600 dark:text-slate-300 leading-relaxed">
+                                <p className="text-[11px] text-slate-600 dark:text-zinc-300 leading-relaxed">
                                     {scanResults.summary}
                                 </p>
                             </div>
@@ -2977,9 +2977,9 @@ export default function SmartPostureScanner({
                             {analysisTab === 'list' ? (
                                 <div className="space-y-2 max-h-64 overflow-y-auto pr-1">
                                     {scanResults.detected_compensations.length === 0 ? (
-                                        <div className="p-4 rounded-md border border-dashed border-slate-200 dark:border-slate-800 text-center space-y-1 bg-slate-50/40 dark:bg-slate-950/20">
+                                        <div className="p-4 rounded-md border border-dashed border-slate-200 dark:border-zinc-800 text-center space-y-1 bg-slate-50/40 dark:bg-zinc-950/20">
                                             <CheckCircle2 size={20} className="text-emerald-500 mx-auto" />
-                                            <h5 className="text-xs font-bold text-slate-800 dark:text-slate-200">
+                                            <h5 className="text-xs font-bold text-slate-800 dark:text-zinc-200">
                                                 Tidak Ada Deviasi Kompensasi
                                             </h5>
                                             <p className="text-[10.5px] text-slate-400 max-w-xs mx-auto">
@@ -2995,15 +2995,15 @@ export default function SmartPostureScanner({
                                                     onClick={() => toggleCheckResult(comp.compensation_id)}
                                                     className={`p-2.5 rounded-lg border transition-all cursor-pointer flex items-start gap-2.5 ${
                                                         isChecked
-                                                            ? 'bg-white dark:bg-slate-900 border-[#84cc16] dark:border-[#b4f031] shadow-xs'
-                                                            : 'bg-slate-50/50 dark:bg-slate-950/40 border-slate-200 dark:border-slate-800 opacity-60'
+                                                            ? 'bg-white dark:bg-zinc-900 border-emerald-500 dark:border-emerald-500 shadow-xs'
+                                                            : 'bg-slate-50/50 dark:bg-zinc-950/40 border-slate-200 dark:border-zinc-800 opacity-60'
                                                     }`}
                                                 >
                                                     <input
                                                         type="checkbox"
                                                         checked={isChecked}
                                                         onChange={() => {}}
-                                                        className="mt-0.5 rounded border-slate-300 text-[#84cc16] focus:ring-[#84cc16] cursor-pointer"
+                                                        className="mt-0.5 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer"
                                                     />
                                                     <div className="space-y-1 min-w-0 flex-1">
                                                         <div className="flex items-center justify-between gap-1">
@@ -3012,18 +3012,18 @@ export default function SmartPostureScanner({
                                                             </h5>
                                                             <div className="flex items-center gap-1 shrink-0">
                                                                 {comp.angle_metric && (
-                                                                    <span className="px-1.5 py-0.2 rounded text-[9px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
+                                                                    <span className="px-1.5 py-0.2 rounded text-[9px] font-bold bg-slate-100 dark:bg-zinc-800 text-slate-700 dark:text-zinc-300 border border-slate-200 dark:border-zinc-700">
                                                                         {comp.angle_metric}
                                                                     </span>
                                                                 )}
-                                                                <span className="px-1.5 py-0.2 rounded text-[9px] font-bold bg-[#84cc16]/15 dark:bg-[#b4f031]/15 text-[#84cc16] dark:text-[#b4f031]">
+                                                                <span className="px-1.5 py-0.2 rounded text-[9px] font-bold bg-emerald-500/15 text-emerald-800 dark:text-emerald-300">
                                                                     {comp.confidence}%
                                                                 </span>
                                                             </div>
                                                         </div>
 
                                                         {comp.clinical_rationale && (
-                                                            <p className="text-[10px] text-slate-500 dark:text-slate-400 leading-snug">
+                                                            <p className="text-[10px] text-slate-500 dark:text-zinc-400 leading-snug">
                                                                 {comp.clinical_rationale}
                                                             </p>
                                                         )}
@@ -3050,7 +3050,7 @@ export default function SmartPostureScanner({
                                     )}
                                 </div>
                             ) : (
-                                <div className="p-3 bg-white dark:bg-slate-900 rounded-lg border border-slate-200/80 dark:border-slate-800 shadow-2xs">
+                                <div className="p-3 bg-white dark:bg-zinc-900 rounded-lg border border-slate-200/80 dark:border-zinc-800 shadow-2xs">
                                     {(() => {
                                         const activeOrAll = scanResults.detected_compensations.filter((c) =>
                                             selectedCompensationIds.includes(c.compensation_id)
@@ -3086,8 +3086,8 @@ export default function SmartPostureScanner({
 
                             {/* Real-time sync indicator */}
                             {scanResults.detected_compensations.length > 0 && (
-                                <div className="flex items-center justify-between pt-1 border-t border-slate-100 dark:border-slate-800 text-[10.5px]">
-                                    <span className="flex items-center gap-1 text-[#84cc16] dark:text-[#b4f031] font-medium">
+                                <div className="flex items-center justify-between pt-1 border-t border-slate-100 dark:border-zinc-800 text-[10.5px]">
+                                    <span className="flex items-center gap-1 text-emerald-600 dark:text-emerald-400 font-medium">
                                         <CheckCircle2 size={12} />
                                         <span>Otomatis terhubung ke formulir di bawah</span>
                                     </span>
@@ -3098,10 +3098,10 @@ export default function SmartPostureScanner({
                             )}
                         </div>
                     ) : (
-                        <div className="h-full min-h-[180px] p-6 rounded-lg border border-dashed border-slate-200 dark:border-slate-800 flex flex-col items-center justify-center text-center space-y-2 text-slate-400">
+                        <div className="h-full min-h-[180px] p-6 rounded-lg border border-dashed border-slate-200 dark:border-zinc-800 flex flex-col items-center justify-center text-center space-y-2 text-slate-400">
                             <Crosshair size={26} className="opacity-40" />
                             <div>
-                                <p className="text-xs font-bold text-slate-700 dark:text-slate-300">
+                                <p className="text-xs font-bold text-slate-700 dark:text-zinc-300">
                                     Pemeriksaan {currentStep.badgeText}: {currentStep.title} ({currentStep.subtitle}) Siap
                                 </p>
                                 <p className="text-[10.5px] max-w-xs mt-0.5 leading-relaxed">
@@ -3116,15 +3116,15 @@ export default function SmartPostureScanner({
             {/* ═════════════════════════════════════════════════════
                 BOTTOM SEQUENTIAL STEP NAVIGATION BAR
                ═════════════════════════════════════════════════════ */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pt-3 border-t border-slate-100 dark:border-slate-800">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pt-3 border-t border-slate-100 dark:border-zinc-800">
                 <button
                     type="button"
                     onClick={goToPrevStep}
                     disabled={!hasPrevStep}
                     className={`px-3 py-1.5 rounded-md text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer border ${
                         hasPrevStep
-                            ? 'bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-200 border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 shadow-2xs'
-                            : 'bg-slate-50 dark:bg-slate-950 text-slate-300 dark:text-slate-700 border-transparent cursor-not-allowed opacity-50'
+                            ? 'bg-white dark:bg-zinc-900 text-slate-700 dark:text-zinc-200 border-slate-200 dark:border-zinc-800 hover:border-slate-300 dark:hover:border-zinc-700 shadow-2xs'
+                            : 'bg-slate-50 dark:bg-zinc-950 text-slate-300 dark:text-zinc-700 border-transparent cursor-not-allowed opacity-50'
                     }`}
                 >
                     <ChevronLeft size={14} />
@@ -3136,7 +3136,7 @@ export default function SmartPostureScanner({
                         <button
                             type="button"
                             onClick={goToNextStep}
-                            className="px-3.5 py-1.5 rounded-md text-xs font-bold transition-all flex items-center gap-1.5 shadow-xs bg-[#84cc16] hover:bg-[#74be09] dark:bg-[#b4f031] dark:hover:bg-[#a3e421] text-slate-950 cursor-pointer"
+                            className="px-3.5 py-1.5 rounded-md text-xs font-bold transition-all flex items-center gap-1.5 shadow-xs bg-emerald-600 hover:bg-emerald-700 dark:bg-emerald-500 dark:hover:bg-emerald-600 text-white cursor-pointer"
                         >
                             <span>Lanjut ke Langkah {nextStep?.stepNumber}: {nextStep?.title} ({nextStep?.subtitle})</span>
                             <ChevronRight size={14} />
@@ -3153,10 +3153,10 @@ export default function SmartPostureScanner({
             {/* Visual Guide Reference Modal */}
             {showGuideModal && (
                 <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in">
-                    <div className="bg-white dark:bg-[#0D1322] border border-slate-200 dark:border-slate-800 rounded-xl p-5 max-w-3xl w-full shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
-                        <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2.5">
+                    <div className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 rounded-xl p-5 max-w-3xl w-full shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
+                        <div className="flex items-center justify-between border-b border-slate-100 dark:border-zinc-800 pb-2.5">
                             <div className="flex items-center gap-2">
-                                <BookOpen size={16} className="text-[#84cc16] dark:text-[#b4f031]" />
+                                <BookOpen size={16} className="text-emerald-600 dark:text-emerald-400" />
                                 <h3 className="text-sm font-bold text-slate-900 dark:text-white">
                                     Panduan Visual Deviasi Biomekanika (Standar NASM)
                                 </h3>
@@ -3179,8 +3179,8 @@ export default function SmartPostureScanner({
                                     onClick={() => handleSwitchStep(step.view)}
                                     className={`px-3 py-1.5 rounded text-xs font-bold transition-all cursor-pointer border ${
                                         selectedView === step.view
-                                            ? 'bg-[#84cc16] dark:bg-[#b4f031] text-slate-950 border-[#84cc16] shadow-2xs'
-                                            : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-700'
+                                            ? 'bg-emerald-600 dark:bg-emerald-500 text-white border-emerald-600 shadow-2xs'
+                                            : 'bg-slate-100 dark:bg-zinc-900 text-slate-600 dark:text-zinc-400 border-slate-200 dark:border-zinc-800'
                                     }`}
                                 >
                                     <span>{step.badgeText}: {step.title}</span>
@@ -3189,7 +3189,7 @@ export default function SmartPostureScanner({
                         </div>
 
                         {/* Guide Image Preview */}
-                        <div className="rounded-lg overflow-hidden border border-slate-200 dark:border-slate-800 bg-slate-950 flex items-center justify-center p-2">
+                        <div className="rounded-lg overflow-hidden border border-slate-200 dark:border-zinc-800 bg-black flex items-center justify-center p-2">
                             <img
                                 src={getGuideImage(selectedView)}
                                 alt={`Panduan ${selectedView}`}
@@ -3197,7 +3197,7 @@ export default function SmartPostureScanner({
                             />
                         </div>
 
-                        <div className="p-3 rounded-md bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs text-slate-600 dark:text-slate-300 space-y-1.5">
+                        <div className="p-3 rounded-md bg-slate-50 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 text-xs text-slate-600 dark:text-zinc-300 space-y-1.5">
                             <p className="font-semibold text-slate-800 dark:text-slate-200">
                                 Keterangan Garis Biomekanika PMA / NASM:
                             </p>

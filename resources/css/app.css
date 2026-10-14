@@ -29,25 +29,25 @@
     }
 
     .dark {
-        --background: 225 40% 6%;
-        --foreground: 210 40% 98%;
-        --card: 224 38% 10%;
-        --card-foreground: 210 40% 98%;
-        --popover: 224 38% 10%;
-        --popover-foreground: 210 40% 98%;
-        --primary: 79 86% 57%;
-        --primary-foreground: 224 71% 4%;
-        --secondary: 79 30% 12%;
-        --secondary-foreground: 79 86% 65%;
-        --muted: 224 30% 14%;
-        --muted-foreground: 215 20% 65%;
-        --accent: 79 35% 15%;
-        --accent-foreground: 79 86% 65%;
+        --background: 0 0% 0%;
+        --foreground: 0 0% 98%;
+        --card: 240 10% 3.9%;
+        --card-foreground: 0 0% 98%;
+        --popover: 240 10% 3.9%;
+        --popover-foreground: 0 0% 98%;
+        --primary: 158 64% 45%;
+        --primary-foreground: 0 0% 100%;
+        --secondary: 240 3.7% 12%;
+        --secondary-foreground: 158 64% 75%;
+        --muted: 240 3.7% 12%;
+        --muted-foreground: 240 5% 65%;
+        --accent: 240 3.7% 12%;
+        --accent-foreground: 158 64% 75%;
         --destructive: 0 63% 31%;
         --destructive-foreground: 0 0% 98%;
-        --border: 226 28% 18%;
-        --input: 226 28% 18%;
-        --ring: 79 86% 57%;
+        --border: 240 3.7% 15.9%;
+        --input: 240 3.7% 15.9%;
+        --ring: 158 64% 45%;
     }
 
     * {
@@ -55,7 +55,7 @@
     }
 
     body {
-        @apply bg-[#F8FAFC] text-slate-900 antialiased selection:bg-[#b4f031] selection:text-black dark:bg-[#070B12] dark:text-slate-100 dark:selection:bg-[#b4f031] dark:selection:text-black;
+        @apply bg-[#F8FAFC] text-slate-900 antialiased selection:bg-emerald-500 selection:text-white dark:bg-black dark:text-zinc-100 dark:selection:bg-emerald-500 dark:selection:text-white;
         font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
     }
 }

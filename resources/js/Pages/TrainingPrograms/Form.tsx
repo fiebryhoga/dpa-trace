@@ -162,7 +162,7 @@ function SearchableExerciseSelect({
                                             )}
                                             <span className="truncate text-xs">{ex.name}</span>
                                         </div>
-                                        {isSelected && <Check size={12} className="shrink-0 text-[#65a30d] dark:text-[#b4f031]" />}
+                                        {isSelected && <Check size={12} className="shrink-0 text-emerald-600 dark:text-emerald-400" />}
                                     </button>
                                 );
                             })
@@ -422,7 +422,7 @@ export default function TrainingProgramForm({
                     title={isEdit ? `Edit Program: ${program?.name}` : 'Buat Program Latihan Korektif'}
                     description="Susun parameter peresepan latihan korektif (Set, Reps, Rest, Gambar, dan Video) berbasis 4 Fase NASM"
                     icon={
-                        <div className="w-10 h-10 rounded-md bg-[#84cc16]/15 dark:bg-[#b4f031]/15 text-[#65a30d] dark:text-[#b4f031] flex items-center justify-center border border-[#84cc16]/30 shrink-0">
+                        <div className="w-10 h-10 rounded-md bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center border border-emerald-500/20 shrink-0">
                             <Dumbbell size={20} />
                         </div>
                     }
@@ -430,7 +430,7 @@ export default function TrainingProgramForm({
                         <div className="flex items-center gap-2">
                             <Link
                                 href={isEdit && program ? route('training-programs.show', program.slug) : route('training-programs.index')}
-                                className="px-3.5 py-2 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 rounded-md text-xs font-semibold shadow-2xs transition-colors"
+                                className="px-3.5 py-2 bg-white dark:bg-zinc-900 hover:bg-slate-50 dark:hover:bg-zinc-800 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-zinc-800 rounded-md text-xs font-semibold shadow-2xs transition-colors"
                             >
                                 Batal
                             </Link>
@@ -438,7 +438,7 @@ export default function TrainingProgramForm({
                             <button
                                 type="submit"
                                 disabled={processing}
-                                className="inline-flex items-center gap-1.5 px-4 py-2 bg-[#84cc16] hover:bg-[#65a30d] dark:bg-[#b4f031] dark:hover:bg-[#a3e635] text-slate-950 font-bold rounded-md text-xs shadow-2xs transition-all cursor-pointer disabled:opacity-50"
+                                className="inline-flex items-center gap-1.5 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 dark:bg-emerald-500 dark:hover:bg-emerald-400 text-white dark:text-zinc-950 font-bold rounded-md text-xs shadow-2xs transition-all cursor-pointer disabled:opacity-50"
                             >
                                 <Save size={14} className="stroke-[2.5]" />
                                 <span>{processing ? 'Menyimpan...' : isEdit ? 'Simpan Perubahan' : 'Simpan Program Latihan'}</span>
@@ -451,15 +451,15 @@ export default function TrainingProgramForm({
                 <div className="flex flex-col lg:flex-row gap-5 items-start">
                     {/* LEFT COLUMN: Section 1 - General Info & Target Card (Compact Sticky Sidebar) */}
                     <div className="w-full lg:w-[290px] xl:w-[310px] shrink-0 space-y-4 lg:sticky lg:top-4">
-                        <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-md p-3.5 sm:p-4 space-y-3.5 shadow-2xs">
-                            <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+                        <div className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 rounded-md p-3.5 sm:p-4 space-y-3.5 shadow-2xs">
+                            <div className="flex items-center justify-between border-b border-slate-100 dark:border-zinc-800 pb-3">
                                 <div className="flex items-center gap-2">
-                                    <Target size={16} className="text-[#65a30d] dark:text-[#b4f031]" />
+                                    <Target size={16} className="text-emerald-600 dark:text-emerald-400" />
                                     <h3 className="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-white">
                                         Informasi Sesi Latihan
                                     </h3>
                                 </div>
-                                <span className="px-2 py-0.5 rounded-md text-[10px] font-bold bg-[#84cc16]/10 text-[#65a30d] dark:text-[#b4f031] border border-[#84cc16]/20">
+                                <span className="px-2 py-0.5 rounded-md text-[10px] font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
                                     {data.items.length} Gerakan
                                 </span>
                             </div>
@@ -475,7 +475,7 @@ export default function TrainingProgramForm({
                                         value={data.name}
                                         onChange={(e) => setData('name', e.target.value)}
                                         placeholder="Contoh: Korektif Postur Sesi 1"
-                                        className="w-full py-1.5 px-3 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-md text-xs font-bold text-slate-900 dark:text-white focus:ring-1 focus:ring-[#84cc16] dark:focus:ring-[#b4f031]"
+                                        className="w-full py-1.5 px-3 bg-slate-50 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 rounded-md text-xs font-bold text-slate-900 dark:text-white focus:ring-1 focus:ring-emerald-500 dark:focus:ring-emerald-400"
                                         required
                                     />
                                     {errors.name && <p className="text-[11px] text-red-500 mt-1">{errors.name}</p>}
@@ -487,11 +487,11 @@ export default function TrainingProgramForm({
                                         Member Atlet
                                     </label>
                                     {selectedAthlete ? (
-                                        <div className="py-1.5 px-3 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-md flex items-center justify-between shadow-2xs">
+                                        <div className="py-1.5 px-3 bg-slate-50 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 rounded-md flex items-center justify-between shadow-2xs">
                                             <span className="text-xs font-bold text-slate-900 dark:text-white truncate">
                                                 {selectedAthlete.athlete_code ? `${selectedAthlete.athlete_code} - ` : ''}{selectedAthlete.full_name}
                                             </span>
-                                            <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-[#84cc16]/10 text-[#65a30d] dark:text-[#b4f031]">
+                                            <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
                                                 Atlet Terpilih
                                             </span>
                                         </div>
@@ -499,7 +499,7 @@ export default function TrainingProgramForm({
                                         <select
                                             value={data.athlete_id}
                                             onChange={(e) => setData('athlete_id', e.target.value)}
-                                            className="w-full py-1.5 px-3 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-md text-xs font-bold text-slate-900 dark:text-white focus:ring-1 focus:ring-[#84cc16] dark:focus:ring-[#b4f031]"
+                                            className="w-full py-1.5 px-3 bg-slate-50 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 rounded-md text-xs font-bold text-slate-900 dark:text-white focus:ring-1 focus:ring-emerald-500 dark:focus:ring-emerald-400"
                                             required
                                         >
                                             <option value="">-- Pilih Atlet --</option>
@@ -528,7 +528,7 @@ export default function TrainingProgramForm({
                                             setData('start_date', e.target.value);
                                             setData('end_date', e.target.value);
                                         }}
-                                        className="w-full py-1.5 px-3 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-md text-xs font-bold text-slate-900 dark:text-white focus:ring-1 focus:ring-[#84cc16] dark:focus:ring-[#b4f031]"
+                                        className="w-full py-1.5 px-3 bg-slate-50 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 rounded-md text-xs font-bold text-slate-900 dark:text-white focus:ring-1 focus:ring-emerald-500 dark:focus:ring-emerald-400"
                                         required
                                     />
 
@@ -537,28 +537,28 @@ export default function TrainingProgramForm({
                                         <button
                                             type="button"
                                             onClick={() => handleQuickDate(0)}
-                                            className="px-2 py-0.5 text-[10px] font-semibold rounded-md bg-slate-100 dark:bg-slate-800 hover:bg-[#84cc16]/20 text-slate-700 dark:text-slate-300 transition-colors cursor-pointer"
+                                            className="px-2 py-0.5 text-[10px] font-semibold rounded-md bg-slate-100 dark:bg-zinc-800 hover:bg-emerald-500/20 text-slate-700 dark:text-slate-300 transition-colors cursor-pointer"
                                         >
                                             Hari Ini
                                         </button>
                                         <button
                                             type="button"
                                             onClick={() => handleQuickDate(1)}
-                                            className="px-2 py-0.5 text-[10px] font-semibold rounded-md bg-slate-100 dark:bg-slate-800 hover:bg-[#84cc16]/20 text-slate-700 dark:text-slate-300 transition-colors cursor-pointer"
+                                            className="px-2 py-0.5 text-[10px] font-semibold rounded-md bg-slate-100 dark:bg-zinc-800 hover:bg-emerald-500/20 text-slate-700 dark:text-slate-300 transition-colors cursor-pointer"
                                         >
                                             Besok
                                         </button>
                                         <button
                                             type="button"
                                             onClick={() => handleQuickDate(2)}
-                                            className="px-2 py-0.5 text-[10px] font-semibold rounded-md bg-slate-100 dark:bg-slate-800 hover:bg-[#84cc16]/20 text-slate-700 dark:text-slate-300 transition-colors cursor-pointer"
+                                            className="px-2 py-0.5 text-[10px] font-semibold rounded-md bg-slate-100 dark:bg-zinc-800 hover:bg-emerald-500/20 text-slate-700 dark:text-slate-300 transition-colors cursor-pointer"
                                         >
                                             Lusa (+2)
                                         </button>
                                     </div>
                                 </div>
 
-                                {/* Status */}
+                                 {/* Status */}
                                 <div>
                                     <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
                                         Status Sesi
@@ -569,8 +569,8 @@ export default function TrainingProgramForm({
                                             onClick={() => setData('status', 'active')}
                                             className={`py-1 px-2.5 rounded-md text-xs font-bold border transition-all cursor-pointer ${
                                                 data.status === 'active'
-                                                    ? 'bg-[#84cc16]/15 border-[#84cc16] text-[#65a30d] dark:text-[#b4f031]'
-                                                    : 'border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400'
+                                                    ? 'bg-emerald-500/15 border-emerald-500 text-emerald-700 dark:text-emerald-300'
+                                                    : 'border-slate-200 dark:border-zinc-800 text-slate-600 dark:text-slate-400'
                                             }`}
                                         >
                                             Terjadwal
@@ -581,7 +581,7 @@ export default function TrainingProgramForm({
                                             className={`py-1 px-2.5 rounded-md text-xs font-bold border transition-all cursor-pointer ${
                                                 data.status === 'completed'
                                                     ? 'bg-blue-500/15 border-blue-500 text-blue-600 dark:text-blue-400'
-                                                    : 'border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400'
+                                                    : 'border-slate-200 dark:border-zinc-800 text-slate-600 dark:text-slate-400'
                                             }`}
                                         >
                                             Selesai
@@ -591,14 +591,14 @@ export default function TrainingProgramForm({
 
                                 {/* Target Kompensasi DPA (Clean Bulleted List - Tanpa Background Badge) */}
                                 {data.target_compensations && data.target_compensations.length > 0 && (
-                                    <div className="pt-2 border-t border-slate-100 dark:border-slate-800 space-y-1.5">
+                                    <div className="pt-2 border-t border-slate-100 dark:border-zinc-800 space-y-1.5">
                                         <span className="text-[11px] font-bold text-slate-600 dark:text-slate-400 block">
                                             Target Kompensasi DPA:
                                         </span>
                                         <ul className="space-y-1 pl-1">
                                             {data.target_compensations.map((comp, idx) => (
                                                 <li key={idx} className="text-xs font-semibold text-slate-800 dark:text-slate-200 flex items-center gap-1.5">
-                                                    <span className="w-1.5 h-1.5 rounded-full bg-[#84cc16] dark:bg-[#b4f031] shrink-0" />
+                                                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 dark:bg-emerald-500 shrink-0" />
                                                     <span className="truncate">{comp}</span>
                                                 </li>
                                             ))}
@@ -613,13 +613,13 @@ export default function TrainingProgramForm({
                     <div className="flex-1 min-w-0 space-y-4">
                         {/* Phase Filter Tabs */}
                         <div className="space-y-2">
-                            <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-md p-1.5 flex items-center gap-1 overflow-x-auto shadow-2xs">
+                            <div className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 rounded-md p-1.5 flex items-center gap-1 overflow-x-auto shadow-2xs">
                                 <button
                                     type="button"
                                     onClick={() => setActivePhaseTab('all')}
                                     className={`px-3 py-1.5 rounded-md text-xs font-bold whitespace-nowrap transition-all cursor-pointer ${
                                         activePhaseTab === 'all'
-                                            ? 'bg-[#84cc16] dark:bg-[#b4f031] text-slate-950 shadow-xs'
+                                            ? 'bg-emerald-600 dark:bg-emerald-500 text-white dark:text-zinc-950 shadow-xs'
                                             : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                                     }`}
                                 >
@@ -634,7 +634,7 @@ export default function TrainingProgramForm({
                                             onClick={() => setActivePhaseTab(p.key)}
                                             className={`px-3 py-1.5 rounded-md text-xs font-bold whitespace-nowrap transition-all cursor-pointer ${
                                                 activePhaseTab === p.key
-                                                    ? 'bg-[#84cc16] dark:bg-[#b4f031] text-slate-950 shadow-xs'
+                                                    ? 'bg-emerald-600 dark:bg-emerald-500 text-white dark:text-zinc-950 shadow-xs'
                                                     : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                                             }`}
                                         >
@@ -662,9 +662,9 @@ export default function TrainingProgramForm({
                             return (
                                 <div
                                     key={phaseInfo.key}
-                                    className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-md p-4 sm:p-5 space-y-4 shadow-2xs"
+                                    className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 rounded-md p-4 sm:p-5 space-y-4 shadow-2xs"
                                 >
-                                    <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2.5">
+                                    <div className="flex items-center justify-between border-b border-slate-100 dark:border-zinc-800 pb-2.5">
                                         <div className="flex items-center gap-2">
                                             <span className={`w-1.5 h-3.5 rounded-xs ${phaseInfo.colorBar}`} />
                                             <h4 className="text-xs font-bold text-slate-900 dark:text-white">
@@ -683,7 +683,7 @@ export default function TrainingProgramForm({
                                                     setExerciseLibraryModalOpen(true);
                                                     setExerciseSearch('');
                                                 }}
-                                                className="px-2.5 py-1 rounded-md bg-[#84cc16]/15 hover:bg-[#84cc16]/25 dark:bg-[#b4f031]/15 dark:hover:bg-[#b4f031]/25 text-[#65a30d] dark:text-[#b4f031] text-[11px] font-bold flex items-center gap-1.5 cursor-pointer transition-colors"
+                                                className="px-2.5 py-1 rounded-md bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-[11px] font-bold flex items-center gap-1.5 cursor-pointer transition-colors"
                                             >
                                                 <BookOpen size={12} />
                                                 <span>Pilih dari Master Library</span>
@@ -710,12 +710,12 @@ export default function TrainingProgramForm({
                                                         onDragOver={(e) => handleDragOver(e, originalIndex)}
                                                         onDrop={(e) => handleDrop(e, originalIndex)}
                                                         onDragEnd={handleDragEnd}
-                                                        className={`bg-slate-50/60 dark:bg-slate-950/50 border rounded-md p-3 sm:p-3.5 transition-all space-y-3 ${
+                                                        className={`bg-slate-50/60 dark:bg-zinc-900/50 border rounded-md p-3 sm:p-3.5 transition-all space-y-3 ${
                                                             isDragging
-                                                                ? 'opacity-30 border-dashed border-[#84cc16] scale-[0.99]'
+                                                                ? 'opacity-30 border-dashed border-emerald-500 scale-[0.99]'
                                                                 : isDragOver
-                                                                ? 'border-[#84cc16] bg-[#84cc16]/5 ring-1 ring-[#84cc16]'
-                                                                : 'border-slate-200/80 dark:border-slate-800/80 hover:border-slate-300 dark:hover:border-slate-700'
+                                                                ? 'border-emerald-500 bg-emerald-500/5 ring-1 ring-emerald-500'
+                                                                : 'border-slate-200/80 dark:border-zinc-800/80 hover:border-slate-300 dark:hover:border-zinc-700'
                                                         }`}
                                                     >
                                                         {/* Top Row: Drag Handle + Exercise Selector + Delete Button */}
@@ -829,10 +829,10 @@ export default function TrainingProgramForm({
                                                                         setSelectedVideoUrl(currentExercise.video_url || null);
                                                                         setSelectedVideoTitle(currentExercise.name);
                                                                     }}
-                                                                    className="w-24 h-16 sm:w-28 sm:h-18 rounded-md bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 flex flex-col items-center justify-center shrink-0 cursor-pointer hover:border-[#84cc16] dark:hover:border-[#b4f031] transition-all relative group shadow-2xs"
+                                                                    className="w-24 h-16 sm:w-28 sm:h-18 rounded-md bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 flex flex-col items-center justify-center shrink-0 cursor-pointer hover:border-emerald-500 dark:hover:border-emerald-500 transition-all relative group shadow-2xs"
                                                                     title="Putar Video Panduan"
                                                                 >
-                                                                    <div className="w-7 h-7 rounded-full bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-800 dark:text-slate-200 transition-all group-hover:scale-110 group-hover:bg-[#84cc16] group-hover:text-slate-950 group-hover:border-[#84cc16]">
+                                                                    <div className="w-7 h-7 rounded-full bg-slate-100 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-700 flex items-center justify-center text-slate-800 dark:text-slate-200 transition-all group-hover:scale-110 group-hover:bg-emerald-600 group-hover:text-white group-hover:border-emerald-500">
                                                                         <Play size={11} className="fill-current ml-0.5" />
                                                                     </div>
                                                                     <span className="text-[9px] font-bold text-slate-500 dark:text-slate-400 group-hover:text-slate-900 dark:group-hover:text-white mt-1">
@@ -846,7 +846,7 @@ export default function TrainingProgramForm({
                                             })}
                                         </div>
                                     ) : (
-                                        <div className="py-6 text-center border border-dashed border-slate-200 dark:border-slate-800 rounded-md space-y-1 bg-slate-50/40 dark:bg-slate-950/40">
+                                        <div className="py-6 text-center border border-dashed border-slate-200 dark:border-zinc-800 rounded-md space-y-1 bg-slate-50/40 dark:bg-zinc-950/40">
                                             <p className="text-xs text-slate-400">Belum ada latihan pada fase ini.</p>
                                             <div className="flex items-center justify-center pt-1">
                                                 <button
@@ -856,7 +856,7 @@ export default function TrainingProgramForm({
                                                         setExerciseLibraryModalOpen(true);
                                                         setExerciseSearch('');
                                                     }}
-                                                    className="text-xs font-semibold text-[#65a30d] dark:text-[#b4f031] hover:underline cursor-pointer"
+                                                    className="text-xs font-semibold text-emerald-600 dark:text-emerald-400 hover:underline cursor-pointer"
                                                 >
                                                     + Pilih dari Master Library
                                                 </button>
@@ -873,16 +873,16 @@ export default function TrainingProgramForm({
             {/* Exercise Library Modal Selector */}
             {exerciseLibraryModalOpen && (
                 <div
-                    className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/60 backdrop-blur-xs p-4 cursor-pointer"
+                    className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-xs p-4 cursor-pointer"
                     onClick={() => setExerciseLibraryModalOpen(false)}
                 >
                     <div
-                        className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-md max-w-lg w-full p-4 space-y-3 shadow-2xl animate-in fade-in zoom-in-95 cursor-default"
+                        className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 rounded-md max-w-lg w-full p-4 space-y-3 shadow-2xl animate-in fade-in zoom-in-95 cursor-default"
                         onClick={(e) => e.stopPropagation()}
                     >
-                        <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2.5">
+                        <div className="flex items-center justify-between border-b border-slate-100 dark:border-zinc-800 pb-2.5">
                             <div className="flex items-center gap-2">
-                                <BookOpen size={16} className="text-[#65a30d] dark:text-[#b4f031]" />
+                                <BookOpen size={16} className="text-emerald-600 dark:text-emerald-400" />
                                 <h4 className="text-xs font-bold text-slate-900 dark:text-white uppercase">
                                     Pilih Latihan dari Master Library
                                 </h4>
@@ -904,7 +904,7 @@ export default function TrainingProgramForm({
                                 value={exerciseSearch}
                                 onChange={(e) => setExerciseSearch(e.target.value)}
                                 placeholder="Cari nama latihan di library..."
-                                className="w-full pl-8 pr-3 py-1.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-md text-xs focus:ring-1 focus:ring-[#84cc16] dark:focus:ring-[#b4f031]"
+                                className="w-full pl-8 pr-3 py-1.5 bg-slate-50 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 rounded-md text-xs focus:ring-1 focus:ring-emerald-500 dark:focus:ring-emerald-400"
                                 autoFocus
                             />
                         </div>
@@ -916,22 +916,22 @@ export default function TrainingProgramForm({
                                     <div
                                         key={ex.id}
                                         onClick={() => handleSelectFromLibrary(ex)}
-                                        className="p-2.5 rounded-md border border-slate-100 dark:border-slate-800 hover:border-[#84cc16] dark:hover:border-[#b4f031] bg-slate-50/60 dark:bg-slate-950/60 hover:bg-[#84cc16]/5 dark:hover:bg-[#b4f031]/5 cursor-pointer transition-all flex items-center justify-between group"
+                                        className="p-2.5 rounded-md border border-slate-100 dark:border-zinc-800 hover:border-emerald-500 dark:hover:border-emerald-500 bg-slate-50/60 dark:bg-zinc-900/60 hover:bg-emerald-500/5 dark:hover:bg-emerald-500/5 cursor-pointer transition-all flex items-center justify-between group"
                                     >
                                         <div className="flex items-center gap-2 min-w-0">
                                             {ex.image_path ? (
                                                 <img
                                                     src={getImageUrl(ex.image_path) || ''}
                                                     alt=""
-                                                    className="w-9 h-6 object-cover rounded-md shrink-0 border border-slate-200 dark:border-slate-700"
+                                                    className="w-9 h-6 object-cover rounded-md shrink-0 border border-slate-200 dark:border-zinc-700"
                                                 />
                                             ) : (
-                                                <div className="w-9 h-6 rounded-md bg-slate-200 dark:bg-slate-800 flex items-center justify-center shrink-0">
+                                                <div className="w-9 h-6 rounded-md bg-slate-200 dark:bg-zinc-800 flex items-center justify-center shrink-0">
                                                     <Dumbbell size={12} className="text-slate-400" />
                                                 </div>
                                             )}
                                             <div className="min-w-0">
-                                                <div className="text-xs font-bold text-slate-900 dark:text-white group-hover:text-[#65a30d] dark:group-hover:text-[#b4f031] truncate">
+                                                <div className="text-xs font-bold text-slate-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 truncate">
                                                     {ex.name}
                                                 </div>
                                                 {ex.instructions && (
@@ -942,7 +942,7 @@ export default function TrainingProgramForm({
                                             </div>
                                         </div>
 
-                                        <span className="px-2 py-0.5 rounded-md text-[10px] font-bold bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 shrink-0">
+                                        <span className="px-2 py-0.5 rounded-md text-[10px] font-bold bg-white dark:bg-zinc-800 border border-slate-200 dark:border-zinc-700 text-slate-600 dark:text-slate-300 shrink-0">
                                             Pilih +
                                         </span>
                                     </div>
@@ -954,11 +954,11 @@ export default function TrainingProgramForm({
                             )}
                         </div>
 
-                        <div className="pt-2 border-t border-slate-100 dark:border-slate-800 flex justify-end">
+                        <div className="pt-2 border-t border-slate-100 dark:border-zinc-800 flex justify-end">
                             <button
                                 type="button"
                                 onClick={() => setExerciseLibraryModalOpen(false)}
-                                className="px-3 py-1.5 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs font-semibold cursor-pointer"
+                                className="px-3 py-1.5 rounded-md bg-slate-100 dark:bg-zinc-800 text-slate-700 dark:text-slate-300 text-xs font-semibold cursor-pointer"
                             >
                                 Tutup
                             </button>
@@ -970,16 +970,16 @@ export default function TrainingProgramForm({
             {/* Video Preview Modal */}
             {selectedVideoUrl && (
                 <div
-                    className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/60 backdrop-blur-xs p-4 animate-in fade-in cursor-pointer"
+                    className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-xs p-4 animate-in fade-in cursor-pointer"
                     onClick={() => setSelectedVideoUrl(null)}
                 >
                     <div
-                        className="relative w-full max-w-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-md overflow-hidden shadow-2xl space-y-3 p-4 cursor-default"
+                        className="relative w-full max-w-2xl bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 rounded-md overflow-hidden shadow-2xl space-y-3 p-4 cursor-default"
                         onClick={(e) => e.stopPropagation()}
                     >
-                        <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2.5">
+                        <div className="flex items-center justify-between border-b border-slate-100 dark:border-zinc-800 pb-2.5">
                             <div className="flex items-center gap-2 min-w-0 pr-2">
-                                <Play size={13} className="text-[#84cc16] dark:text-[#b4f031] fill-current shrink-0" />
+                                <Play size={13} className="text-emerald-600 dark:text-emerald-400 fill-current shrink-0" />
                                 <h4 className="text-xs font-bold text-slate-900 dark:text-white truncate">
                                     {selectedVideoTitle || 'Video Panduan Gerakan'}
                                 </h4>

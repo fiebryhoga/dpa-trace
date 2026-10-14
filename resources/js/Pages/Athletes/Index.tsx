@@ -236,7 +236,7 @@ export default function AthleteIndex({
                     icon={Users}
                     title={
                         <>
-                            Kelola Data <span className="text-[#84cc16] dark:text-[#b4f031]">Atlet</span>
+                            Kelola Data <span className="text-emerald-600 dark:text-emerald-400">Atlet</span>
                         </>
                     }
                     description="Manajemen profil atlet terpadu, data antropometri, dan riwayat Postural & Movement Assessment (PMA)."
@@ -248,7 +248,7 @@ export default function AthleteIndex({
                                 placeholder="Cari nama atlet, kode..."
                                 value={search}
                                 onChange={(e) => setSearch(e.target.value)}
-                                className="w-full pl-8 pr-7 py-1.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-md text-xs placeholder:text-slate-400 outline-none focus:border-[#84cc16] dark:focus:border-[#b4f031] shadow-2xs"
+                                className="w-full pl-8 pr-7 py-1.5 bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 rounded-md text-xs placeholder:text-slate-400 outline-none focus:border-emerald-500 shadow-2xs"
                             />
                             {search && (
                                 <button
@@ -308,10 +308,10 @@ export default function AthleteIndex({
                                             <img
                                                 src={photoPreview}
                                                 alt="Preview"
-                                                className="h-12 w-12 rounded-full object-cover aspect-square border-2 border-[#84cc16] dark:border-[#b4f031] shadow-2xs"
+                                                className="h-12 w-12 rounded-full object-cover aspect-square border-2 border-emerald-500 dark:border-emerald-400 shadow-2xs"
                                             />
                                         ) : (
-                                            <div className="h-12 w-12 rounded-full bg-slate-200 dark:bg-slate-800 text-slate-400 flex items-center justify-center font-bold text-sm aspect-square border border-slate-300 dark:border-slate-700">
+                                            <div className="h-12 w-12 rounded-full bg-slate-200 dark:bg-zinc-900 text-slate-400 flex items-center justify-center font-bold text-sm aspect-square border border-slate-300 dark:border-zinc-800">
                                                 <Camera size={18} />
                                             </div>
                                         )}
@@ -337,7 +337,7 @@ export default function AthleteIndex({
                                             <button
                                                 type="button"
                                                 onClick={() => fileInputRef.current?.click()}
-                                                className="px-2 py-1 rounded bg-slate-200/80 hover:bg-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 text-[10.5px] font-semibold transition-colors inline-flex items-center gap-1 cursor-pointer"
+                                                className="px-2 py-1 rounded bg-slate-200/80 hover:bg-slate-300 dark:bg-zinc-900 dark:hover:bg-zinc-800 text-slate-800 dark:text-slate-200 text-[10.5px] font-semibold transition-colors inline-flex items-center gap-1 cursor-pointer"
                                             >
                                                 <Upload size={10} />
                                                 <span>{photoPreview ? 'Ganti foto' : 'Pilih foto'}</span>
@@ -372,7 +372,7 @@ export default function AthleteIndex({
                                         placeholder="PMA-2026-001"
                                         value={data.athlete_code}
                                         onChange={(e) => setData('athlete_code', e.target.value)}
-                                        className="w-full px-2.5 py-1.5 bg-slate-50/70 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-md text-xs font-mono text-slate-900 dark:text-slate-100 outline-none focus:border-[#84cc16] dark:focus:border-[#b4f031]"
+                                        className="w-full px-2.5 py-1.5 bg-slate-50/70 dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 rounded-md text-xs font-mono text-slate-900 dark:text-slate-100 outline-none focus:border-emerald-500"
                                     />
                                     {errors.athlete_code && <p className="text-[10.5px] text-rose-500">{errors.athlete_code}</p>}
                                 </div>
@@ -419,7 +419,7 @@ export default function AthleteIndex({
                                     placeholder="Contoh: Dimas Arya Pratama"
                                     value={data.full_name}
                                     onChange={(e) => setData('full_name', e.target.value)}
-                                    className="w-full px-2.5 py-1.5 bg-slate-50/70 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-md text-xs font-medium text-slate-900 dark:text-slate-100 outline-none focus:border-[#84cc16] dark:focus:border-[#b4f031]"
+                                    className="w-full px-2.5 py-1.5 bg-slate-50/70 dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 rounded-md text-xs font-medium text-slate-900 dark:text-slate-100 outline-none focus:border-emerald-500"
                                 />
                                 {errors.full_name && <p className="text-[10.5px] text-rose-500">{errors.full_name}</p>}
                             </div>
@@ -438,7 +438,7 @@ export default function AthleteIndex({
                                         placeholder="20"
                                         value={data.age}
                                         onChange={(e) => setData('age', e.target.value)}
-                                        className="w-full px-2.5 py-1.5 bg-slate-50/70 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-md text-xs font-medium text-slate-900 dark:text-slate-100 outline-none focus:border-[#84cc16] dark:focus:border-[#b4f031]"
+                                        className="w-full px-2.5 py-1.5 bg-slate-50/70 dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 rounded-md text-xs font-medium text-slate-900 dark:text-slate-100 outline-none focus:border-emerald-500"
                                     />
                                     {errors.age && <p className="text-[10.5px] text-rose-500">{errors.age}</p>}
                                 </div>
@@ -450,7 +450,7 @@ export default function AthleteIndex({
                                     <select
                                         value={data.dominant_side}
                                         onChange={(e) => setData('dominant_side', e.target.value as any)}
-                                        className="w-full px-2 py-1.5 bg-slate-50/70 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-md text-xs font-medium text-slate-900 dark:text-slate-100 outline-none focus:border-[#84cc16] dark:focus:border-[#b4f031]"
+                                        className="w-full px-2 py-1.5 bg-slate-50/70 dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 rounded-md text-xs font-medium text-slate-900 dark:text-slate-100 outline-none focus:border-emerald-500"
                                     >
                                         <option value="R">Kanan (Right)</option>
                                         <option value="L">Kiri (Left)</option>
@@ -460,7 +460,7 @@ export default function AthleteIndex({
                             </div>
 
                             {/* Antropometri: Tinggi & Berat Badan */}
-                            <div className="grid grid-cols-3 gap-2 p-2 bg-slate-50/70 dark:bg-slate-950/70 border border-slate-200/80 dark:border-slate-800 rounded-md">
+                            <div className="grid grid-cols-3 gap-2 p-2 bg-slate-50/70 dark:bg-zinc-950/70 border border-slate-200/80 dark:border-zinc-800 rounded-md">
                                 <div className="space-y-0.5">
                                     <label className="text-[10px] font-semibold text-slate-600 dark:text-slate-400">
                                         Tinggi (cm)
@@ -471,7 +471,7 @@ export default function AthleteIndex({
                                         placeholder="180"
                                         value={data.height_cm}
                                         onChange={(e) => setData('height_cm', e.target.value)}
-                                        className="w-full px-2 py-1 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded text-xs font-bold text-slate-900 dark:text-slate-100 outline-none focus:border-[#84cc16] dark:focus:border-[#b4f031]"
+                                        className="w-full px-2 py-1 bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 rounded text-xs font-bold text-slate-900 dark:text-slate-100 outline-none focus:border-emerald-500"
                                     />
                                 </div>
 
@@ -485,7 +485,7 @@ export default function AthleteIndex({
                                         placeholder="75"
                                         value={data.weight_kg}
                                         onChange={(e) => setData('weight_kg', e.target.value)}
-                                        className="w-full px-2 py-1 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded text-xs font-bold text-slate-900 dark:text-slate-100 outline-none focus:border-[#84cc16] dark:focus:border-[#b4f031]"
+                                        className="w-full px-2 py-1 bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 rounded text-xs font-bold text-slate-900 dark:text-slate-100 outline-none focus:border-emerald-500"
                                     />
                                 </div>
 
@@ -493,7 +493,7 @@ export default function AthleteIndex({
                                     <span className="text-[10px] font-semibold text-slate-500">
                                         BMI Est.
                                     </span>
-                                    <span className="text-xs font-bold text-[#84cc16] dark:text-[#b4f031]">
+                                    <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400">
                                         {calculatedBmi() || '-'}
                                     </span>
                                 </div>
@@ -508,17 +508,17 @@ export default function AthleteIndex({
                                     placeholder="Contoh: ACL sprain lutut kanan 2024..."
                                     value={data.injury_history}
                                     onChange={(e) => setData('injury_history', e.target.value)}
-                                    className="w-full px-2.5 py-1.5 bg-slate-50/70 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-md text-xs font-medium text-slate-900 dark:text-slate-100 outline-none focus:border-[#84cc16] dark:focus:border-[#b4f031] resize-none"
+                                    className="w-full px-2.5 py-1.5 bg-slate-50/70 dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 rounded-md text-xs font-medium text-slate-900 dark:text-slate-100 outline-none focus:border-emerald-500 resize-none"
                                 />
                             </div>
 
                             {/* Submit Button */}
-                            <div className="pt-2 flex items-center justify-end gap-2 border-t border-slate-100 dark:border-slate-800">
+                            <div className="pt-2 flex items-center justify-end gap-2 border-t border-slate-100 dark:border-zinc-800">
                                 {editingAthlete && (
                                     <button
                                         type="button"
                                         onClick={handleCancelEdit}
-                                        className="px-2.5 py-1.5 rounded-md text-[11px] font-semibold text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                                        className="px-2.5 py-1.5 rounded-md text-[11px] font-semibold text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-zinc-800 transition-colors"
                                     >
                                         Batal
                                     </button>
@@ -526,7 +526,7 @@ export default function AthleteIndex({
                                 <button
                                     type="submit"
                                     disabled={processing}
-                                    className="w-full inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-md bg-[#84cc16] hover:bg-[#65a30d] dark:bg-[#b4f031] dark:hover:bg-[#a2dd26] text-white dark:text-slate-950 text-xs font-bold transition-all cursor-pointer disabled:opacity-50 shadow-2xs"
+                                    className="w-full inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-md bg-emerald-600 hover:bg-emerald-700 dark:bg-emerald-500 dark:hover:bg-emerald-400 text-white dark:text-black text-xs font-bold transition-all cursor-pointer disabled:opacity-50 shadow-2xs"
                                 >
                                     <Save size={12} />
                                     <span>{editingAthlete ? 'Perbarui Data Atlet' : 'Simpan Data Atlet'}</span>
@@ -572,8 +572,8 @@ export default function AthleteIndex({
                                             key={ath.id}
                                             className={`rounded-md border p-4 transition-all shadow-2xs hover:shadow-xs flex flex-col justify-between gap-3 ${
                                                 isBeingEdited
-                                                    ? 'bg-[#84cc16]/10 dark:bg-[#b4f031]/10 border-[#84cc16] dark:border-[#b4f031] ring-1 ring-[#84cc16] dark:ring-[#b4f031]'
-                                                    : 'bg-white dark:bg-slate-900 border-slate-200/80 dark:border-slate-800 hover:border-[#84cc16]/60 dark:hover:border-[#b4f031]/60'
+                                                    ? 'bg-emerald-500/10 border-emerald-500 ring-1 ring-emerald-500'
+                                                    : 'bg-white dark:bg-zinc-950 border-slate-200/80 dark:border-zinc-800 hover:border-emerald-500/60'
                                             }`}
                                         >
                                             {/* Header: Foto, Nama, Info Dasar & Quick Edit */}
@@ -583,10 +583,10 @@ export default function AthleteIndex({
                                                         <img
                                                             src={ath.photo_url}
                                                             alt={ath.full_name}
-                                                            className="w-10 h-10 rounded-full object-cover shrink-0 border border-slate-200 dark:border-slate-700"
+                                                            className="w-10 h-10 rounded-full object-cover shrink-0 border border-slate-200 dark:border-zinc-800"
                                                         />
                                                     ) : (
-                                                        <div className="w-10 h-10 rounded-full bg-[#84cc16] dark:bg-[#b4f031] text-slate-950 font-bold text-xs flex items-center justify-center shrink-0 shadow-2xs">
+                                                        <div className="w-10 h-10 rounded-full bg-emerald-600 dark:bg-emerald-500 text-white dark:text-black font-bold text-xs flex items-center justify-center shrink-0 shadow-2xs">
                                                             {ath.full_name.charAt(0).toUpperCase()}
                                                         </div>
                                                     )}
@@ -594,7 +594,7 @@ export default function AthleteIndex({
                                                     <div className="min-w-0">
                                                         <Link
                                                             href={route('athletes.show', ath.athlete_code || ath.id)}
-                                                            className="text-xs font-bold text-slate-900 dark:text-white hover:text-[#84cc16] dark:hover:text-[#b4f031] transition-colors truncate block"
+                                                            className="text-xs font-bold text-slate-900 dark:text-white hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors truncate block"
                                                         >
                                                             {ath.full_name}
                                                         </Link>
@@ -616,8 +616,8 @@ export default function AthleteIndex({
                                                         onClick={() => handleEditClick(ath)}
                                                         className={`p-1.5 rounded-md transition-colors cursor-pointer ${
                                                             isBeingEdited
-                                                                ? 'bg-[#84cc16] text-slate-950 font-bold'
-                                                                : 'text-slate-400 hover:text-[#84cc16] dark:hover:text-[#b4f031] hover:bg-[#84cc16]/10 dark:hover:bg-[#b4f031]/10'
+                                                                ? 'bg-emerald-600 text-white font-bold'
+                                                                : 'text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-emerald-500/10'
                                                         }`}
                                                         title="Edit Data Atlet"
                                                     >
@@ -635,7 +635,7 @@ export default function AthleteIndex({
                                             </div>
 
                                             {/* Anthropometry & Dominance Metric Box */}
-                                            <div className="grid grid-cols-4 gap-1 py-2 px-2.5 rounded-md bg-slate-50/80 dark:bg-slate-950/60 border border-slate-100 dark:border-slate-800/80 text-center">
+                                            <div className="grid grid-cols-4 gap-1 py-2 px-2.5 rounded-md bg-slate-50/80 dark:bg-zinc-900/60 border border-slate-100 dark:border-zinc-800 text-center">
                                                 <div>
                                                     <span className="block text-[9.5px] text-slate-400 font-medium">Tinggi</span>
                                                     <span className="text-[11px] font-bold text-slate-800 dark:text-slate-200">
@@ -650,7 +650,7 @@ export default function AthleteIndex({
                                                 </div>
                                                 <div>
                                                     <span className="block text-[9.5px] text-slate-400 font-medium">BMI</span>
-                                                    <span className="text-[11px] font-bold text-[#84cc16] dark:text-[#b4f031]">
+                                                    <span className="text-[11px] font-bold text-emerald-600 dark:text-emerald-400">
                                                         {ath.bmi ?? '-'}
                                                     </span>
                                                 </div>
@@ -663,9 +663,9 @@ export default function AthleteIndex({
                                             </div>
 
                                             {/* Footer: Sesi PMA & Action Buttons */}
-                                            <div className="flex items-center justify-between pt-2 border-t border-slate-100 dark:border-slate-800/80 text-[11px]">
+                                            <div className="flex items-center justify-between pt-2 border-t border-slate-100 dark:border-zinc-800 text-[11px]">
                                                 <div className="flex items-center gap-1.5 text-slate-500 dark:text-slate-400">
-                                                    <Activity size={12} className={ath.dpa_assessments_count > 0 ? 'text-[#84cc16] dark:text-[#b4f031]' : 'text-slate-400'} />
+                                                    <Activity size={12} className={ath.dpa_assessments_count > 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-400'} />
                                                     <span className="font-semibold text-slate-700 dark:text-slate-300 text-[10.5px]">
                                                         {ath.dpa_assessments_count} Sesi PMA
                                                     </span>
@@ -679,13 +679,13 @@ export default function AthleteIndex({
                                                 <div className="flex items-center gap-1.5">
                                                     <Link
                                                         href={route('athletes.show', ath.athlete_code || ath.id)}
-                                                        className="px-2.5 py-1 rounded text-[10.5px] font-semibold text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700/80 transition-colors"
+                                                        className="px-2.5 py-1 rounded text-[10.5px] font-semibold text-slate-700 dark:text-slate-200 bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 hover:bg-slate-50 dark:hover:bg-zinc-800 transition-colors"
                                                     >
                                                         Detail
                                                     </Link>
                                                     <Link
                                                         href={route('dpa.athletes.show', ath.athlete_code || ath.id)}
-                                                        className="px-2.5 py-1 rounded text-[10.5px] font-bold text-white dark:text-slate-950 bg-[#84cc16] hover:bg-[#65a30d] dark:bg-[#b4f031] dark:hover:bg-[#a2dd26] transition-colors shadow-2xs"
+                                                        className="px-2.5 py-1 rounded text-[10.5px] font-bold text-white dark:text-black bg-emerald-600 hover:bg-emerald-700 dark:bg-emerald-500 dark:hover:bg-emerald-400 transition-colors shadow-2xs"
                                                     >
                                                         + Uji PMA
                                                     </Link>
@@ -707,8 +707,8 @@ export default function AthleteIndex({
                                             href={link.url}
                                             className={`px-2.5 py-1 rounded-md text-xs font-semibold transition-colors ${
                                                 link.active
-                                                    ? 'bg-[#84cc16] dark:bg-[#b4f031] text-white dark:text-slate-950 font-bold'
-                                                    : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:border-[#84cc16]'
+                                                    ? 'bg-emerald-600 dark:bg-emerald-500 text-white dark:text-black font-bold'
+                                                    : 'bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-slate-600 dark:text-slate-400 hover:border-emerald-500'
                                             }`}
                                             dangerouslySetInnerHTML={{ __html: link.label }}
                                         />

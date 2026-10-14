@@ -167,7 +167,7 @@ export default function DpaCreate({
                     backLabel="Kembali ke Analisis PMA"
                     title={
                         <>
-                            Lembar Penilaian <span className="text-[#84cc16] dark:text-[#b4f031]">PMA</span>
+                            Lembar Penilaian <span className="text-emerald-600 dark:text-emerald-400">PMA</span>
                         </>
                     }
                     description="Protokol Standar Athlete PMA • 4-View Kinetic Checkpoints & Overactive/Underactive Muscle Mapping."
@@ -180,8 +180,8 @@ export default function DpaCreate({
                 />
 
                 {/* Athlete & Session Metadata */}
-                <Card className="border-slate-200/90 dark:border-slate-800 bg-white dark:bg-[#0E1526] shadow-sm">
-                    <CardHeader className="py-3 px-4 pb-2 border-b border-slate-100 dark:border-slate-800/80">
+                <Card className="border-slate-200/90 dark:border-zinc-800 bg-white dark:bg-zinc-950 shadow-sm">
+                    <CardHeader className="py-3 px-4 pb-2 border-b border-slate-100 dark:border-zinc-800/80">
                         <CardTitle className="text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider flex items-center gap-1.5">
                             <User className="h-3.5 w-3.5" />
                             <span>1. Athlete & Session Metadata</span>
@@ -205,7 +205,7 @@ export default function DpaCreate({
                                             current_weight_kg: selected?.weight_kg || prev.current_weight_kg,
                                         }));
                                     }}
-                                    className="flex h-10 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-100"
+                                    className="flex h-10 w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-100"
                                     required
                                 >
                                     {athletes.map((ath) => (
@@ -264,8 +264,8 @@ export default function DpaCreate({
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
                     {/* Left Checklist Column */}
                     <div className="lg:col-span-8 space-y-4">
-                        {/* View Tabs with #b4f031 Active Indicator */}
-                        <div className="flex items-center gap-2 overflow-x-auto pb-1 border-b border-slate-200 dark:border-slate-800">
+                        {/* View Tabs with Emerald Active Indicator */}
+                        <div className="flex items-center gap-2 overflow-x-auto pb-1 border-b border-slate-200 dark:border-zinc-800">
                             {categories.map((cat) => {
                                 const countInCat = (compensationsGrouped[cat] || []).filter((c) => isSelected(c.id)).length;
                                 return (
@@ -275,14 +275,14 @@ export default function DpaCreate({
                                         onClick={() => setActiveTab(cat)}
                                         className={`px-3.5 py-2 rounded-lg text-xs font-bold flex items-center gap-2 transition-all whitespace-nowrap shadow-xs ${
                                             activeTab === cat
-                                                ? 'bg-[#b4f031] text-slate-950 font-bold'
-                                                : 'bg-white dark:bg-slate-900/80 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-800 hover:border-[#b4f031]'
+                                                ? 'bg-emerald-600 text-white font-bold'
+                                                : 'bg-white dark:bg-zinc-900/80 text-slate-600 dark:text-zinc-400 border border-slate-200 dark:border-zinc-800 hover:border-emerald-500'
                                         }`}
                                     >
                                         <span>{cat}</span>
                                         {countInCat > 0 && (
                                             <span className={`h-4 w-4 rounded-full text-[10px] flex items-center justify-center font-black ${
-                                                activeTab === cat ? 'bg-slate-950 text-[#b4f031]' : 'bg-[#b4f031] text-slate-950'
+                                                activeTab === cat ? 'bg-zinc-950 text-white' : 'bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300'
                                             }`}>
                                                 {countInCat}
                                             </span>
@@ -303,8 +303,8 @@ export default function DpaCreate({
                                         key={comp.id}
                                         className={`rounded-lg border p-4 transition-all ${
                                             selected
-                                                ? 'border-[#b4f031] bg-[#b4f031]/10 dark:border-[#b4f031]/70 dark:bg-[#b4f031]/10 ring-1 ring-[#b4f031]/30'
-                                                : 'border-slate-200/90 bg-white hover:border-[#b4f031]/60 dark:border-slate-800 dark:bg-[#0E1526]/80'
+                                                ? 'border-emerald-500 bg-emerald-50/50 dark:border-emerald-600/70 dark:bg-emerald-950/20 ring-1 ring-emerald-500/30'
+                                                : 'border-slate-200/90 bg-white hover:border-emerald-500/60 dark:border-zinc-800 dark:bg-zinc-950/80'
                                         }`}
                                     >
                                         <div className="flex items-start gap-3.5">
@@ -314,9 +314,9 @@ export default function DpaCreate({
                                                 className="mt-0.5 focus:outline-none"
                                             >
                                                 {selected ? (
-                                                    <CheckSquare className="h-5 w-5 text-[#84cc16] dark:text-[#b4f031]" />
+                                                    <CheckSquare className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
                                                 ) : (
-                                                    <Square className="h-5 w-5 text-slate-300 hover:text-[#84cc16] dark:text-slate-600" />
+                                                    <Square className="h-5 w-5 text-slate-300 hover:text-emerald-600 dark:text-zinc-600" />
                                                 )}
                                             </button>
 
@@ -337,9 +337,9 @@ export default function DpaCreate({
 
                                                 {/* If Selected, Show Severity & Side Selectors */}
                                                 {selected && selectedData && (
-                                                    <div className="pt-2.5 border-t border-[#b4f031]/20 dark:border-[#b4f031]/20 grid grid-cols-1 sm:grid-cols-3 gap-2.5 animate-in fade-in-0 duration-150">
+                                                    <div className="pt-2.5 border-t border-emerald-500/20 dark:border-emerald-600/20 grid grid-cols-1 sm:grid-cols-3 gap-2.5 animate-in fade-in-0 duration-150">
                                                         <div>
-                                                            <label className="text-[10px] font-bold text-slate-900 dark:text-[#b4f031] block mb-1">
+                                                            <label className="text-[10px] font-bold text-slate-900 dark:text-emerald-400 block mb-1">
                                                                 Severity Level
                                                             </label>
                                                             <select
@@ -351,7 +351,7 @@ export default function DpaCreate({
                                                                         e.target.value,
                                                                     )
                                                                 }
-                                                                className="h-8 w-full rounded-md border border-[#b4f031]/40 bg-white px-2 text-[11px] font-medium text-slate-900 focus:outline-none dark:border-[#b4f031]/30 dark:bg-slate-950 dark:text-slate-100"
+                                                                className="h-8 w-full rounded-md border border-emerald-500/40 bg-white px-2 text-[11px] font-medium text-slate-900 focus:outline-none dark:border-emerald-600/40 dark:bg-zinc-900 dark:text-zinc-100"
                                                             >
                                                                 <option value="Mild">Mild</option>
                                                                 <option value="Moderate">Moderate</option>
@@ -360,7 +360,7 @@ export default function DpaCreate({
                                                         </div>
 
                                                         <div>
-                                                            <label className="text-[10px] font-bold text-slate-900 dark:text-[#b4f031] block mb-1">
+                                                            <label className="text-[10px] font-bold text-slate-900 dark:text-emerald-400 block mb-1">
                                                                 Deviation Side
                                                             </label>
                                                             <select
@@ -372,7 +372,7 @@ export default function DpaCreate({
                                                                         e.target.value,
                                                                     )
                                                                 }
-                                                                className="h-8 w-full rounded-md border border-[#b4f031]/40 bg-white px-2 text-[11px] font-medium text-slate-900 focus:outline-none dark:border-[#b4f031]/30 dark:bg-slate-950 dark:text-slate-100"
+                                                                className="h-8 w-full rounded-md border border-emerald-500/40 bg-white px-2 text-[11px] font-medium text-slate-900 focus:outline-none dark:border-emerald-600/40 dark:bg-zinc-900 dark:text-zinc-100"
                                                             >
                                                                 <option value="Bilateral">Bilateral</option>
                                                                 <option value="Right">Right Side</option>
@@ -381,7 +381,7 @@ export default function DpaCreate({
                                                         </div>
 
                                                         <div>
-                                                            <label className="text-[10px] font-bold text-slate-900 dark:text-[#b4f031] block mb-1">
+                                                            <label className="text-[10px] font-bold text-slate-900 dark:text-emerald-400 block mb-1">
                                                                 Specific Notes (Optional)
                                                             </label>
                                                             <input
@@ -395,7 +395,7 @@ export default function DpaCreate({
                                                                         e.target.value,
                                                                     )
                                                                 }
-                                                                className="h-8 w-full rounded-md border border-[#b4f031]/40 bg-white px-2 text-[11px] font-medium text-slate-900 focus:outline-none dark:border-[#b4f031]/30 dark:bg-slate-950 dark:text-slate-100"
+                                                                className="h-8 w-full rounded-md border border-emerald-500/40 bg-white px-2 text-[11px] font-medium text-slate-900 focus:outline-none dark:border-emerald-600/40 dark:bg-zinc-900 dark:text-zinc-100"
                                                             />
                                                         </div>
                                                     </div>
@@ -416,18 +416,18 @@ export default function DpaCreate({
                                 placeholder="Enter general remarks on core stability, mobility constraints, or movement dynamics..."
                                 value={data.notes}
                                 onChange={(e) => setData('notes', e.target.value)}
-                                className="flex w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs ring-offset-white placeholder:text-slate-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#b4f031] dark:border-slate-800 dark:bg-slate-950 dark:ring-offset-slate-950 dark:placeholder:text-slate-600 dark:focus-visible:ring-[#b4f031]"
+                                className="flex w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs ring-offset-white placeholder:text-slate-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 dark:border-zinc-800 dark:bg-zinc-950 dark:ring-offset-black dark:placeholder:text-zinc-600 dark:focus-visible:ring-emerald-500"
                             />
                         </div>
                     </div>
 
                     {/* Right Live Biomechanical Analytics Sidebar */}
                     <div className="lg:col-span-4 space-y-4">
-                        <Card className="border-slate-200/90 dark:border-slate-800 sticky top-20 shadow-xs bg-white dark:bg-[#0E1526]">
-                            <CardHeader className="pb-3 border-b border-slate-100 dark:border-slate-800/80">
+                        <Card className="border-slate-200/90 dark:border-zinc-800 sticky top-20 shadow-xs bg-white dark:bg-zinc-950">
+                            <CardHeader className="pb-3 border-b border-slate-100 dark:border-zinc-800/80">
                                 <div className="flex items-center justify-between">
-                                    <CardTitle className="text-xs font-bold text-slate-900 dark:text-[#b4f031] uppercase tracking-wider flex items-center gap-1.5">
-                                        <Zap className="h-3.5 w-3.5 text-[#84cc16] dark:text-[#b4f031]" />
+                                    <CardTitle className="text-xs font-bold text-slate-900 dark:text-emerald-400 uppercase tracking-wider flex items-center gap-1.5">
+                                        <Zap className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
                                         <span>Live Biomechanics</span>
                                     </CardTitle>
                                     <Badge

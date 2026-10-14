@@ -82,12 +82,12 @@ function SearchableExerciseDropdown({
                 onClick={() => setIsOpen(!isOpen)}
                 className={`w-full flex items-center justify-between gap-1.5 px-2.5 py-1 rounded-md border text-[11px] font-semibold transition-all cursor-pointer truncate ${
                     isOpen
-                        ? 'border-[#84cc16] dark:border-[#b4f031] ring-1 ring-[#84cc16]/30 dark:ring-[#b4f031]/30 bg-white dark:bg-slate-900 text-slate-900 dark:text-white'
-                        : 'border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-950 text-slate-600 dark:text-slate-400 hover:border-slate-300 dark:hover:border-slate-600 hover:text-slate-900 dark:hover:text-slate-200'
+                        ? 'border-emerald-600 dark:border-emerald-500 ring-1 ring-emerald-500/30 dark:ring-emerald-400/30 bg-white dark:bg-zinc-900 text-slate-900 dark:text-white'
+                        : 'border-slate-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 text-slate-600 dark:text-slate-400 hover:border-slate-300 dark:hover:border-zinc-700 hover:text-slate-900 dark:hover:text-slate-200'
                 }`}
             >
                 <span className="truncate flex items-center gap-1.5">
-                    <Plus size={11} className="text-[#84cc16] dark:text-[#b4f031] shrink-0" />
+                    <Plus size={11} className="text-emerald-600 dark:text-emerald-400 shrink-0" />
                     <span className="truncate">Hubungkan latihan...</span>
                 </span>
                 <ChevronDown
@@ -97,8 +97,8 @@ function SearchableExerciseDropdown({
             </button>
 
             {isOpen && (
-                <div className="absolute left-0 right-0 top-full mt-1.5 z-50 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-md shadow-lg overflow-hidden animate-in fade-in-50 zoom-in-95 duration-100 min-w-[240px]">
-                    <div className="p-1.5 border-b border-slate-100 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-950/80 sticky top-0 z-10">
+                <div className="absolute left-0 right-0 top-full mt-1.5 z-50 bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 rounded-md shadow-lg overflow-hidden animate-in fade-in-50 zoom-in-95 duration-100 min-w-[240px]">
+                    <div className="p-1.5 border-b border-slate-100 dark:border-zinc-800 bg-slate-50/80 dark:bg-zinc-950/80 sticky top-0 z-10">
                         <div className="relative">
                             <Search size={12} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400" />
                             <input
@@ -107,7 +107,7 @@ function SearchableExerciseDropdown({
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
                                 placeholder="Cari nama latihan..."
-                                className="w-full pl-7 pr-6 py-1 rounded border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-950 text-xs text-slate-900 dark:text-slate-100 placeholder:text-slate-400 outline-none focus:border-[#84cc16] dark:focus:border-[#b4f031]"
+                                className="w-full pl-7 pr-6 py-1 rounded border border-slate-200 dark:border-zinc-700 bg-white dark:bg-zinc-950 text-xs text-slate-900 dark:text-slate-100 placeholder:text-slate-400 outline-none focus:border-emerald-600 dark:focus:border-emerald-500"
                             />
                             {searchQuery && (
                                 <button
@@ -135,30 +135,30 @@ function SearchableExerciseDropdown({
                                         onSelect(ex.id);
                                         setIsOpen(false);
                                     }}
-                                    className="w-full flex items-center justify-between p-1.5 rounded text-left text-xs hover:bg-[#84cc16]/10 dark:hover:bg-[#b4f031]/10 transition-colors group cursor-pointer"
+                                    className="w-full flex items-center justify-between p-1.5 rounded text-left text-xs hover:bg-emerald-500/10 dark:hover:bg-emerald-500/10 transition-colors group cursor-pointer"
                                 >
                                     <div className="min-w-0 flex items-center gap-1.5">
-                                        <div className="w-5 h-5 rounded bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700/60 flex items-center justify-center shrink-0">
-                                            <Dumbbell size={10} className="text-slate-500 group-hover:text-[#84cc16] dark:group-hover:text-[#b4f031]" />
+                                        <div className="w-5 h-5 rounded bg-slate-100 dark:bg-zinc-800 border border-slate-200 dark:border-zinc-700/60 flex items-center justify-center shrink-0">
+                                            <Dumbbell size={10} className="text-slate-500 group-hover:text-emerald-600 dark:group-hover:text-emerald-400" />
                                         </div>
                                         <span className="font-semibold text-slate-800 dark:text-slate-200 truncate group-hover:text-slate-950 dark:group-hover:text-white text-[11.5px]">
                                             {ex.name}
                                         </span>
                                     </div>
-                                    <Plus size={11} className="text-slate-400 group-hover:text-[#84cc16] dark:group-hover:text-[#b4f031] shrink-0" />
+                                    <Plus size={11} className="text-slate-400 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 shrink-0" />
                                 </button>
                             ))
                         )}
                     </div>
 
-                    <div className="p-1.5 border-t border-slate-100 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-950/60 flex items-center justify-between text-[10px]">
+                    <div className="p-1.5 border-t border-slate-100 dark:border-zinc-800 bg-slate-50/60 dark:bg-zinc-950/60 flex items-center justify-between text-[10px]">
                         <span className="text-slate-400">
                             {availableExercises.length} tersedia
                         </span>
                         <Link
                             href={route('exercises.create')}
                             target="_blank"
-                            className="font-bold text-[#84cc16] dark:text-[#b4f031] hover:underline flex items-center gap-1"
+                            className="font-bold text-emerald-600 dark:text-emerald-400 hover:underline flex items-center gap-1"
                         >
                             <Plus size={10} />
                             <span>Buat Baru</span>
@@ -312,7 +312,7 @@ function TagInput({
                         <Link
                             href={manageUrl}
                             target="_blank"
-                            className="font-medium text-slate-400 hover:text-[#84cc16] dark:hover:text-[#b4f031] transition-colors flex items-center gap-0.5 text-[10px]"
+                            className="font-medium text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors flex items-center gap-0.5 text-[10px]"
                             title={`Buka ${manageLabel} di tab baru`}
                         >
                             <span>{manageLabel}</span>
@@ -328,7 +328,7 @@ function TagInput({
             {/* Input & Tags Area */}
             <div
                 onClick={() => inputRef.current?.focus()}
-                className={`min-h-[38px] p-1.5 rounded-md bg-white dark:bg-slate-950 border transition-all flex flex-wrap items-center gap-1 cursor-text ${colorStyles.container}`}
+                className={`min-h-[38px] p-1.5 rounded-md bg-white dark:bg-zinc-950 border transition-all flex flex-wrap items-center gap-1 cursor-text ${colorStyles.container}`}
             >
                 {tags.map((tag, idx) => (
                     <span
@@ -367,7 +367,7 @@ function TagInput({
                             e.stopPropagation();
                             setIsPickerOpen(!isPickerOpen);
                         }}
-                        className={`text-[10px] font-bold px-1.5 py-0.5 rounded border border-dashed border-slate-300 dark:border-slate-700 hover:border-slate-400 dark:hover:border-slate-500 transition-colors ml-auto cursor-pointer flex items-center gap-1 ${colorStyles.btnAccent}`}
+                        className={`text-[10px] font-bold px-1.5 py-0.5 rounded border border-dashed border-slate-300 dark:border-zinc-700 hover:border-slate-400 dark:hover:border-zinc-500 transition-colors ml-auto cursor-pointer flex items-center gap-1 ${colorStyles.btnAccent}`}
                     >
                         <BookOpen size={10} />
                         <span>Katalog ({availableMaster.length})</span>
@@ -377,8 +377,8 @@ function TagInput({
 
             {/* Popover Catalog Picker */}
             {isPickerOpen && (
-                <div className="absolute left-0 right-0 top-full mt-1 z-50 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-md shadow-xl overflow-hidden animate-in fade-in-50 zoom-in-95 duration-100">
-                    <div className="p-1.5 border-b border-slate-100 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-950/80 flex items-center justify-between gap-2">
+                <div className="absolute left-0 right-0 top-full mt-1 z-50 bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 rounded-md shadow-xl overflow-hidden animate-in fade-in-50 zoom-in-95 duration-100">
+                    <div className="p-1.5 border-b border-slate-100 dark:border-zinc-800 bg-slate-50/80 dark:bg-zinc-950/80 flex items-center justify-between gap-2">
                         <div className="relative flex-1">
                             <Search size={11} className="absolute left-2 top-1/2 -translate-y-1/2 text-slate-400" />
                             <input
@@ -387,7 +387,7 @@ function TagInput({
                                 onChange={(e) => setPickerSearch(e.target.value)}
                                 placeholder="Cari dalam katalog..."
                                 autoFocus
-                                className="w-full pl-6 pr-5 py-1 rounded border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-950 text-xs text-slate-900 dark:text-slate-100 placeholder:text-slate-400 outline-none focus:border-[#84cc16] dark:focus:border-[#b4f031]"
+                                className="w-full pl-6 pr-5 py-1 rounded border border-slate-200 dark:border-zinc-700 bg-white dark:bg-zinc-950 text-xs text-slate-900 dark:text-slate-100 placeholder:text-slate-400 outline-none focus:border-emerald-600 dark:focus:border-emerald-500"
                             />
                         </div>
                         <button
@@ -571,23 +571,23 @@ export default function CompensationForm({
                                 return (
                                     <div
                                         key={ex.id}
-                                        className="flex items-center justify-between p-1 rounded bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 gap-1.5 min-w-0 hover:border-slate-300 dark:hover:border-slate-700 transition-all group shadow-2xs"
+                                        className="flex items-center justify-between p-1 rounded bg-white dark:bg-zinc-950 border border-slate-200/90 dark:border-zinc-800 gap-1.5 min-w-0 hover:border-slate-300 dark:hover:border-zinc-700 transition-all group shadow-2xs"
                                     >
                                         <Link
                                             href={route('exercises.edit', ex.id)}
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className="flex items-center gap-1.5 min-w-0 flex-1 hover:text-[#84cc16] dark:hover:text-[#b4f031] transition-colors"
+                                            className="flex items-center gap-1.5 min-w-0 flex-1 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
                                             title="Buka detail latihan di tab baru"
                                         >
                                             {img ? (
                                                 <img
                                                     src={img}
                                                     alt={ex.name}
-                                                    className="w-5 h-5 rounded object-cover border border-slate-200 dark:border-slate-700 shrink-0"
+                                                    className="w-5 h-5 rounded object-cover border border-slate-200 dark:border-zinc-700 shrink-0"
                                                 />
                                             ) : (
-                                                <div className="w-5 h-5 rounded bg-slate-100 dark:bg-slate-800 flex items-center justify-center shrink-0 text-slate-400">
+                                                <div className="w-5 h-5 rounded bg-slate-100 dark:bg-zinc-800 flex items-center justify-center shrink-0 text-slate-400">
                                                     <Dumbbell size={9} />
                                                 </div>
                                             )}
@@ -636,11 +636,11 @@ export default function CompensationForm({
                     title={
                         isEdit ? (
                             <>
-                                Edit Kompensasi <span className="text-[#84cc16] dark:text-[#b4f031]">Postur</span>
+                                Edit Kompensasi <span className="text-emerald-600 dark:text-emerald-400">Postur</span>
                             </>
                         ) : (
                             <>
-                                Tambah Master <span className="text-[#84cc16] dark:text-[#b4f031]">Kompensasi PMA</span>
+                                Tambah Master <span className="text-emerald-600 dark:text-emerald-400">Kompensasi PMA</span>
                             </>
                         )
                     }
@@ -652,8 +652,8 @@ export default function CompensationForm({
                     {/* ═══════════════════════════════════════════
                         KOLOM KIRI (lg:col-span-5 xl:col-span-4): FORMULIR DATA TERPADU (COMPACT CARD)
                        ═══════════════════════════════════════════ */}
-                    <div className="lg:col-span-5 xl:col-span-4 bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-md p-3.5 shadow-xs space-y-3.5 sticky top-4 max-h-[calc(100vh-2rem)] overflow-y-auto">
-                        <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2.5">
+                    <div className="lg:col-span-5 xl:col-span-4 bg-white dark:bg-zinc-950 border border-slate-200/80 dark:border-zinc-800 rounded-md p-3.5 shadow-xs space-y-3.5 sticky top-4 max-h-[calc(100vh-2rem)] overflow-y-auto">
+                        <div className="flex items-center justify-between border-b border-slate-100 dark:border-zinc-800 pb-2.5">
                             <div>
                                 <h3 className="text-xs font-bold text-slate-900 dark:text-white">
                                     {isEdit ? 'Edit Data Kompensasi' : 'Tambah Kompensasi Baru'}
@@ -686,7 +686,7 @@ export default function CompensationForm({
                                     <select
                                         value={data.category}
                                         onChange={(e) => setData('category', e.target.value)}
-                                        className="w-full rounded-md border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-950 px-2.5 py-1.5 text-xs font-medium text-slate-900 dark:text-slate-100 outline-none focus:border-[#84cc16] dark:focus:border-[#b4f031] transition-all cursor-pointer"
+                                        className="w-full rounded-md border border-slate-200 dark:border-zinc-700 bg-white dark:bg-zinc-950 px-2.5 py-1.5 text-xs font-medium text-slate-900 dark:text-slate-100 outline-none focus:border-emerald-600 dark:focus:border-emerald-500 transition-all cursor-pointer"
                                     >
                                         <option value="Posterior View">Posterior View</option>
                                         <option value="Lateral View">Lateral View</option>
@@ -705,7 +705,7 @@ export default function CompensationForm({
                                         placeholder="Foot & Ankle, Knee..."
                                         value={data.checkpoint}
                                         onChange={(e) => setData('checkpoint', e.target.value)}
-                                        className="w-full rounded-md border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-950 px-2.5 py-1.5 text-xs font-medium text-slate-900 dark:text-slate-100 outline-none focus:border-[#84cc16] dark:focus:border-[#b4f031] placeholder:text-slate-400 transition-all"
+                                        className="w-full rounded-md border border-slate-200 dark:border-zinc-700 bg-white dark:bg-zinc-950 px-2.5 py-1.5 text-xs font-medium text-slate-900 dark:text-slate-100 outline-none focus:border-emerald-600 dark:focus:border-emerald-500 placeholder:text-slate-400 transition-all"
                                     />
                                 </div>
                             </div>
@@ -719,7 +719,7 @@ export default function CompensationForm({
                                     placeholder="Contoh: Foot - Feet Turn Out, Knee Valgus..."
                                     value={data.name}
                                     onChange={(e) => setData('name', e.target.value)}
-                                    className="w-full rounded-md border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-950 px-2.5 py-1.5 text-xs font-medium text-slate-900 dark:text-slate-100 outline-none focus:border-[#84cc16] dark:focus:border-[#b4f031] placeholder:text-slate-400 transition-all"
+                                    className="w-full rounded-md border border-slate-200 dark:border-zinc-700 bg-white dark:bg-zinc-950 px-2.5 py-1.5 text-xs font-medium text-slate-900 dark:text-slate-100 outline-none focus:border-emerald-600 dark:focus:border-emerald-500 placeholder:text-slate-400 transition-all"
                                 />
                                 {errors.name && <p className="text-[10px] text-rose-500">{errors.name}</p>}
                             </div>
@@ -731,8 +731,8 @@ export default function CompensationForm({
                                 </label>
                                 
                                 {previewImage ? (
-                                    <div className="flex items-center gap-2.5 p-2 rounded-md border border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-950/50">
-                                        <div className="w-12 h-12 rounded-md border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 overflow-hidden shrink-0 flex items-center justify-center">
+                                    <div className="flex items-center gap-2.5 p-2 rounded-md border border-slate-200 dark:border-zinc-800 bg-slate-50/70 dark:bg-zinc-950/50">
+                                        <div className="w-12 h-12 rounded-md border border-slate-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 overflow-hidden shrink-0 flex items-center justify-center">
                                             <img
                                                 src={previewImage}
                                                 className="w-full h-full object-contain p-0.5"
@@ -744,7 +744,7 @@ export default function CompensationForm({
                                                 Gambar terunggah
                                             </p>
                                             <div className="flex items-center gap-2 mt-1">
-                                                <label className="inline-flex items-center gap-1 text-[10.5px] font-semibold text-[#84cc16] dark:text-[#b4f031] hover:underline cursor-pointer">
+                                                <label className="inline-flex items-center gap-1 text-[10.5px] font-semibold text-emerald-600 dark:text-emerald-400 hover:underline cursor-pointer">
                                                     <Upload size={10} />
                                                     <span>Ganti</span>
                                                     <input
@@ -767,12 +767,12 @@ export default function CompensationForm({
                                         </div>
                                     </div>
                                 ) : (
-                                    <label className="flex items-center justify-center gap-2 p-2.5 rounded-md border border-dashed border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-950/40 hover:bg-slate-100/60 dark:hover:bg-slate-900/60 transition-colors cursor-pointer text-center group">
-                                        <div className="w-6 h-6 rounded bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-400 group-hover:text-[#84cc16] dark:group-hover:text-[#b4f031] transition-colors">
+                                    <label className="flex items-center justify-center gap-2 p-2.5 rounded-md border border-dashed border-slate-200 dark:border-zinc-700 bg-slate-50/50 dark:bg-zinc-950/40 hover:bg-slate-100/60 dark:hover:bg-zinc-900/60 transition-colors cursor-pointer text-center group">
+                                        <div className="w-6 h-6 rounded bg-slate-100 dark:bg-zinc-800 flex items-center justify-center text-slate-400 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
                                             <ImageIcon size={12} />
                                         </div>
                                         <span className="text-[11px] text-slate-500 dark:text-slate-400 font-medium">
-                                            <span className="font-bold text-[#84cc16] dark:text-[#b4f031]">Pilih Gambar</span> (WebP, PNG, JPG)
+                                            <span className="font-bold text-emerald-600 dark:text-emerald-400">Pilih Gambar</span> (WebP, PNG, JPG)
                                         </span>
                                         <input
                                             type="file"
@@ -826,11 +826,11 @@ export default function CompensationForm({
                         </div>
 
                         {/* SUBMIT BUTTON DI BAWAH KARTU FORM (PERSIS MASTER OTOT / MASTER LATIHAN) */}
-                        <div className="pt-2 border-t border-slate-100 dark:border-slate-800">
+                        <div className="pt-2 border-t border-slate-100 dark:border-zinc-800">
                             <button
                                 type="submit"
                                 disabled={processing}
-                                className="w-full py-2 bg-[#84cc16] hover:bg-[#65a30d] dark:bg-[#b4f031] dark:hover:bg-[#a2dd26] text-white dark:text-slate-950 rounded-md text-xs font-bold transition-all shadow-xs flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50"
+                                className="w-full py-2 bg-emerald-600 hover:bg-emerald-700 dark:bg-emerald-500 dark:hover:bg-emerald-400 text-white dark:text-zinc-950 rounded-md text-xs font-bold transition-all shadow-xs flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50"
                             >
                                 <Save size={13} />
                                 <span>{isEdit ? 'Perbarui Data Kompensasi' : 'Simpan Data Kompensasi'}</span>
@@ -851,11 +851,11 @@ export default function CompensationForm({
                         />
 
                         {/* KARTU 2: PROTOKOL LATIHAN KOREKTIF (4 FASE CONTINUUM) */}
-                        <div className="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-md p-3.5 shadow-xs space-y-3">
-                            <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2.5">
+                        <div className="bg-white dark:bg-zinc-950 border border-slate-200/80 dark:border-zinc-800 rounded-md p-3.5 shadow-xs space-y-3">
+                            <div className="flex items-center justify-between border-b border-slate-100 dark:border-zinc-800 pb-2.5">
                                 <div className="flex items-center gap-2">
-                                    <div className="w-6 h-6 rounded-md bg-[#84cc16]/10 dark:bg-[#b4f031]/10 flex items-center justify-center">
-                                        <Zap size={13} className="text-[#84cc16] dark:text-[#b4f031]" />
+                                    <div className="w-6 h-6 rounded-md bg-emerald-500/10 dark:bg-emerald-500/10 flex items-center justify-center">
+                                        <Zap size={13} className="text-emerald-600 dark:text-emerald-400" />
                                     </div>
                                     <div>
                                         <h3 className="text-xs font-bold text-slate-900 dark:text-white">
@@ -867,7 +867,7 @@ export default function CompensationForm({
                                     </div>
                                 </div>
                                 <div className="flex items-center gap-2">
-                                    <span className="text-[10.5px] font-bold px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
+                                    <span className="text-[10.5px] font-bold px-2 py-0.5 rounded-full bg-slate-100 dark:bg-zinc-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-zinc-700">
                                         {data.exercise_ids_inhibit.length +
                                             data.exercise_ids_lengthen.length +
                                             data.exercise_ids_activate.length +
@@ -877,7 +877,7 @@ export default function CompensationForm({
                                     <Link
                                         href={route('exercises.index')}
                                         target="_blank"
-                                        className="inline-flex items-center gap-1 text-[11px] font-bold text-[#84cc16] dark:text-[#b4f031] hover:underline"
+                                        className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-600 dark:text-emerald-400 hover:underline"
                                     >
                                         <span>Master Latihan</span>
                                         <ExternalLink size={10} />

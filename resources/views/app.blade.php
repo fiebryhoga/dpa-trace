@@ -13,7 +13,7 @@
         <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
         <meta name="apple-mobile-web-app-title" content="Athlete PMA" />
         <link rel="manifest" href="/site.webmanifest" />
-        <meta name="theme-color" content="#b4f031" />
+        <meta name="theme-color" content="#059669" />
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -39,7 +39,7 @@
         @vite(['resources/js/app.tsx', "resources/js/Pages/{$page['component']}.tsx"])
         @inertiaHead
     </head>
-    <body class="font-sans antialiased bg-zinc-50 text-zinc-900 dark:bg-zinc-950 dark:text-zinc-100 min-h-screen">
+    <body class="font-sans antialiased bg-zinc-50 text-zinc-900 dark:bg-black dark:text-zinc-100 min-h-screen">
         @inertia
     </body>
 </html>

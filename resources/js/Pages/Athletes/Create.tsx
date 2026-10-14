@@ -41,14 +41,14 @@ export default function AthleteCreate() {
                     backLabel="Kembali ke Daftar Atlet"
                     title={
                         <>
-                            Tambah <span className="text-[#84cc16] dark:text-[#b4f031]">Atlet Baru</span>
+                            Tambah <span className="text-emerald-600 dark:text-emerald-400">Atlet Baru</span>
                         </>
                     }
                     description="Daftarkan profil atlet, data antropometri, dan cabang olahraga untuk penilaian PMA."
                 />
 
                 <form onSubmit={submit}>
-                    <Card className="border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0E1526]">
+                    <Card className="border-slate-200 dark:border-zinc-800 bg-white dark:bg-zinc-950">
                         <CardHeader className="pb-4">
                             <CardTitle className="text-base">Profile & Biomechanical Biodata</CardTitle>
                             <CardDescription className="text-xs">
@@ -101,7 +101,7 @@ export default function AthleteCreate() {
                                         id="gender"
                                         value={data.gender}
                                         onChange={(e) => setData('gender', e.target.value as 'L' | 'P')}
-                                        className="flex h-10 w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-xs text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#b4f031] dark:border-slate-800 dark:bg-slate-950 dark:text-slate-100"
+                                        className="flex h-10 w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-xs text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/30 focus-visible:border-emerald-500 dark:border-zinc-800 dark:bg-zinc-950 dark:text-slate-100"
                                     >
                                         <option value="L">Male</option>
                                         <option value="P">Female</option>
@@ -152,7 +152,7 @@ export default function AthleteCreate() {
                                         id="dominant_side"
                                         value={data.dominant_side}
                                         onChange={(e) => setData('dominant_side', e.target.value as any)}
-                                        className="flex h-10 w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-xs text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#b4f031] dark:border-slate-800 dark:bg-slate-950 dark:text-slate-100"
+                                        className="flex h-10 w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-xs text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/30 focus-visible:border-emerald-500 dark:border-zinc-800 dark:bg-zinc-950 dark:text-slate-100"
                                     >
                                         <option value="R">Right (R)</option>
                                         <option value="L">Left (L)</option>
@@ -214,7 +214,7 @@ export default function AthleteCreate() {
                                     placeholder="Note past ACL tears, ankle sprains, shoulder impingement, or recurring lumbar tightness..."
                                     value={data.injury_history}
                                     onChange={(e) => setData('injury_history', e.target.value)}
-                                    className="flex w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-xs ring-offset-white placeholder:text-slate-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#b4f031] dark:border-slate-800 dark:bg-slate-950 dark:ring-offset-slate-950 dark:placeholder:text-slate-600 dark:focus-visible:ring-[#b4f031]"
+                                    className="flex w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-xs ring-offset-white placeholder:text-slate-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/30 focus-visible:border-emerald-500 dark:border-zinc-800 dark:bg-zinc-950 dark:ring-offset-black dark:placeholder:text-zinc-500 dark:focus-visible:ring-emerald-400/30 dark:focus-visible:border-emerald-400"
                                 />
                             </div>
 

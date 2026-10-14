@@ -160,7 +160,7 @@ export default function InjuryIndex({
                     title={
                         <>
                             Master Potensi{' '}
-                            <span className="text-[#84cc16] dark:text-[#b4f031]">Risiko Cedera</span>
+                            <span className="text-emerald-600 dark:text-emerald-400">Risiko Cedera</span>
                         </>
                     }
                     description="Katalog kondisi patologis dan risiko cedera muskuloskeletal yang diakibatkan oleh kompensasi postur."
@@ -172,7 +172,7 @@ export default function InjuryIndex({
                                 placeholder="Cari nama cedera, patologi..."
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
-                                className="w-full pl-8 pr-7 py-1.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-md text-xs font-medium text-slate-900 dark:text-slate-100 placeholder:text-slate-400 outline-none focus:border-[#84cc16] dark:focus:border-[#b4f031] transition-all shadow-2xs"
+                                className="w-full pl-8 pr-7 py-1.5 bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-700 rounded-md text-xs font-medium text-slate-900 dark:text-zinc-100 placeholder:text-slate-400 outline-none focus:border-emerald-500 dark:focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all shadow-2xs"
                             />
                             {searchTerm && (
                                 <button
@@ -181,7 +181,7 @@ export default function InjuryIndex({
                                         setSearchTerm('');
                                         handleSearchChange('');
                                     }}
-                                    className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 cursor-pointer"
+                                    className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-zinc-200 cursor-pointer"
                                 >
                                     <X size={12} />
                                 </button>
@@ -195,13 +195,13 @@ export default function InjuryIndex({
                     {/* ═══════════════════════════════════════════
                         KOLOM KIRI (lg:col-span-4 xl:col-span-3): FORMULIR CEDERA + LIVE BODY SILUET
                        ═══════════════════════════════════════════ */}
-                    <div className="lg:col-span-4 xl:col-span-3 bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-md p-3.5 shadow-xs space-y-3 sticky top-4 max-h-[calc(100vh-2rem)] overflow-y-auto">
-                        <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2.5">
+                    <div className="lg:col-span-4 xl:col-span-3 bg-white dark:bg-zinc-950 border border-slate-200/80 dark:border-zinc-800 rounded-md p-3.5 shadow-xs space-y-3 sticky top-4 max-h-[calc(100vh-2rem)] overflow-y-auto">
+                        <div className="flex items-center justify-between border-b border-slate-100 dark:border-zinc-800 pb-2.5">
                             <div>
                                 <h3 className="text-xs font-bold text-slate-900 dark:text-white">
                                     {editingInjury ? 'Edit Data Cedera' : 'Tambah Cedera Baru'}
                                 </h3>
-                                <p className="text-[10px] text-slate-400">
+                                <p className="text-[10px] text-slate-400 dark:text-zinc-500">
                                     {editingInjury
                                         ? `Mengubah ${editingInjury.name}`
                                         : 'Klik tubuh untuk memilih lokasi cedera'}
@@ -221,20 +221,20 @@ export default function InjuryIndex({
                         </div>
 
                         {/* LIVE BODY VISUALIZER STRIP (RAMPING, KOMPAK, BRAND GREEN HIGHLIGHT) */}
-                        <div className="bg-slate-50 dark:bg-slate-950 border border-slate-200/80 dark:border-slate-800 rounded-md p-2 flex flex-col items-center justify-center space-y-1">
-                            <div className="flex items-center justify-between w-full text-[10px] font-semibold text-slate-400 pb-1 border-b border-slate-200/50 dark:border-slate-800/60">
-                                <span className="flex items-center gap-1 text-[#84cc16] dark:text-[#b4f031]">
+                        <div className="bg-slate-50 dark:bg-zinc-900 border border-slate-200/80 dark:border-zinc-800 rounded-md p-2 flex flex-col items-center justify-center space-y-1">
+                            <div className="flex items-center justify-between w-full text-[10px] font-semibold text-slate-400 dark:text-zinc-500 pb-1 border-b border-slate-200/50 dark:border-zinc-800/60">
+                                <span className="flex items-center gap-1 text-emerald-600 dark:text-emerald-400">
                                     <Sparkles size={11} />
                                     <span>Klik Bagian Terkena</span>
                                 </span>
-                                <span className="font-mono text-[10px] font-bold text-slate-700 dark:text-slate-200">
+                                <span className="font-mono text-[10px] font-bold text-slate-700 dark:text-zinc-200">
                                     {selectedSlugs.length} dipilih
                                 </span>
                             </div>
 
                             <div className="flex items-center justify-around gap-1 py-0.5 w-full">
                                 <div className="flex flex-col items-center flex-1 cursor-pointer group">
-                                    <span className="text-[8px] font-bold text-slate-400 uppercase mb-0.5 group-hover:text-[#84cc16] dark:group-hover:text-[#b4f031] transition-colors">
+                                    <span className="text-[8px] font-bold text-slate-400 uppercase mb-0.5 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
                                         Depan
                                     </span>
                                     <div className="w-20 h-36 flex items-center justify-center [&_svg]:cursor-pointer [&_path]:cursor-pointer [&_path]:hover:opacity-75 transition-all">
@@ -243,14 +243,14 @@ export default function InjuryIndex({
                                             side="front"
                                             scale={0.46}
                                             gender="male"
-                                            colors={['#84cc16', '#a3e635']}
+                                            colors={['#10b981', '#34d399']}
                                             onBodyPartPress={handleBodyPartToggle}
                                         />
                                     </div>
                                 </div>
 
                                 <div className="flex flex-col items-center flex-1 cursor-pointer group">
-                                    <span className="text-[8px] font-bold text-slate-400 uppercase mb-0.5 group-hover:text-[#84cc16] dark:group-hover:text-[#b4f031] transition-colors">
+                                    <span className="text-[8px] font-bold text-slate-400 uppercase mb-0.5 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
                                         Belakang
                                     </span>
                                     <div className="w-20 h-36 flex items-center justify-center [&_svg]:cursor-pointer [&_path]:cursor-pointer [&_path]:hover:opacity-75 transition-all">
@@ -259,7 +259,7 @@ export default function InjuryIndex({
                                             side="back"
                                             scale={0.46}
                                             gender="male"
-                                            colors={['#84cc16', '#a3e635']}
+                                            colors={['#10b981', '#34d399']}
                                             onBodyPartPress={handleBodyPartToggle}
                                         />
                                     </div>
@@ -270,11 +270,11 @@ export default function InjuryIndex({
                         <form onSubmit={handleFormSubmit} className="space-y-2.5">
                             {/* Lokasi Cedera Terpilih dari Siluet Tubuh */}
                             <div className="space-y-1">
-                                <div className="flex items-center justify-between text-[10.5px] font-semibold text-slate-700 dark:text-slate-300">
+                                <div className="flex items-center justify-between text-[10.5px] font-semibold text-slate-700 dark:text-zinc-300">
                                     <span className="flex items-center gap-1.5">
                                         <span>Lokasi Tubuh Terkait</span>
                                         {selectedSlugs.length > 0 && (
-                                            <span className="px-1.5 py-0.2 bg-[#84cc16]/15 dark:bg-[#b4f031]/15 text-[#84cc16] dark:text-[#b4f031] rounded text-[9.5px] font-bold">
+                                            <span className="px-1.5 py-0.2 bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 rounded text-[9.5px] font-bold">
                                                 {selectedSlugs.length}
                                             </span>
                                         )}
@@ -291,17 +291,17 @@ export default function InjuryIndex({
                                 </div>
 
                                 {selectedSlugs.length === 0 ? (
-                                    <div className="p-2 rounded-md bg-slate-50 dark:bg-slate-950 border border-dashed border-slate-200 dark:border-slate-800 text-[10.5px] text-slate-400 text-center">
+                                    <div className="p-2 rounded-md bg-slate-50 dark:bg-zinc-900 border border-dashed border-slate-200 dark:border-zinc-800 text-[10.5px] text-slate-400 dark:text-zinc-500 text-center">
                                         Klik siluet tubuh di atas untuk memilih lokasi cedera
                                     </div>
                                 ) : (
-                                    <div className="flex flex-wrap gap-1 p-1.5 rounded-md bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 max-h-24 overflow-y-auto">
+                                    <div className="flex flex-wrap gap-1 p-1.5 rounded-md bg-slate-50 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 max-h-24 overflow-y-auto">
                                         {selectedSlugs.map((s) => (
                                             <span
                                                 key={s}
-                                                className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-[10.5px] font-semibold text-slate-800 dark:text-slate-200 shadow-2xs"
+                                                className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 text-[10.5px] font-semibold text-slate-800 dark:text-zinc-200 shadow-2xs"
                                             >
-                                                <span className="w-1.5 h-1.5 rounded-full bg-[#84cc16] dark:bg-[#b4f031] shrink-0" />
+                                                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 dark:bg-emerald-400 shrink-0" />
                                                 <span className="truncate max-w-[120px]">
                                                     {SLUG_LABELS[s] || s}
                                                 </span>
@@ -321,7 +321,7 @@ export default function InjuryIndex({
 
                             {/* Nama Potensi Cedera */}
                             <div className="space-y-1">
-                                <label className="text-[10.5px] font-semibold text-slate-700 dark:text-slate-300">
+                                <label className="text-[10.5px] font-semibold text-slate-700 dark:text-zinc-300">
                                     Nama Potensi Cedera <span className="text-rose-500">*</span>
                                 </label>
                                 <input
@@ -330,7 +330,7 @@ export default function InjuryIndex({
                                     placeholder="Contoh: Plantar fasciitis, ACL strain..."
                                     value={data.name}
                                     onChange={(e) => setData('name', e.target.value)}
-                                    className="w-full px-2.5 py-1.5 bg-slate-50/70 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-md text-xs font-medium text-slate-900 dark:text-slate-100 outline-none focus:border-[#84cc16] dark:focus:border-[#b4f031]"
+                                    className="w-full px-2.5 py-1.5 bg-slate-50/70 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-700 rounded-md text-xs font-medium text-slate-900 dark:text-zinc-100 outline-none focus:border-emerald-500 dark:focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
                                 />
                                 {errors.name && (
                                     <p className="text-[10px] text-rose-500">{errors.name}</p>
@@ -339,7 +339,7 @@ export default function InjuryIndex({
 
                             {/* Deskripsi Patologi */}
                             <div className="space-y-1">
-                                <label className="text-[10.5px] font-semibold text-slate-700 dark:text-slate-300">
+                                <label className="text-[10.5px] font-semibold text-slate-700 dark:text-zinc-300">
                                     Deskripsi Patologi / Dampak
                                 </label>
                                 <textarea
@@ -347,17 +347,17 @@ export default function InjuryIndex({
                                     placeholder="Gejala patologis, beban mekanis kompensasi..."
                                     value={data.description}
                                     onChange={(e) => setData('description', e.target.value)}
-                                    className="w-full px-2.5 py-1.5 bg-slate-50/70 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-md text-xs font-medium text-slate-900 dark:text-slate-100 outline-none focus:border-[#84cc16] dark:focus:border-[#b4f031]"
+                                    className="w-full px-2.5 py-1.5 bg-slate-50/70 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-700 rounded-md text-xs font-medium text-slate-900 dark:text-zinc-100 outline-none focus:border-emerald-500 dark:focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"
                                 />
                             </div>
 
                             {/* Submit & Cancel Actions */}
-                            <div className="pt-2 flex items-center justify-end gap-1.5 border-t border-slate-100 dark:border-slate-800">
+                            <div className="pt-2 flex items-center justify-end gap-1.5 border-t border-slate-100 dark:border-zinc-800">
                                 {editingInjury && (
                                     <button
                                         type="button"
                                         onClick={handleCancelEdit}
-                                        className="px-2 py-1.5 rounded-md text-[11px] font-semibold text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                                        className="px-2 py-1.5 rounded-md text-[11px] font-semibold text-slate-600 dark:text-zinc-400 hover:bg-slate-100 dark:hover:bg-zinc-850 transition-colors"
                                     >
                                         Batal
                                     </button>
@@ -365,7 +365,7 @@ export default function InjuryIndex({
                                 <button
                                     type="submit"
                                     disabled={processing}
-                                    className="w-full inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-md bg-[#84cc16] hover:bg-[#65a30d] dark:bg-[#b4f031] dark:hover:bg-[#a2dd26] text-white dark:text-slate-950 text-xs font-bold transition-all cursor-pointer disabled:opacity-50 shadow-2xs"
+                                    className="w-full inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-md bg-emerald-600 hover:bg-emerald-700 dark:bg-emerald-500 dark:hover:bg-emerald-400 text-white dark:text-zinc-950 text-xs font-bold transition-all cursor-pointer disabled:opacity-50 shadow-2xs"
                                 >
                                     <Save size={12} />
                                     <span>{editingInjury ? 'Perbarui Cedera' : 'Simpan Cedera'}</span>
@@ -380,16 +380,16 @@ export default function InjuryIndex({
                     <div className="lg:col-span-8 xl:col-span-9 space-y-3">
                         {/* Header Total */}
                         <div className="flex items-center justify-between pb-0.5">
-                            <span className="text-xs font-bold text-slate-600 dark:text-slate-400">
+                            <span className="text-xs font-bold text-slate-600 dark:text-zinc-400">
                                 Daftar Master Cedera ({injuries.total})
                             </span>
                         </div>
 
                         {/* Table Card */}
-                        <div className="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-md overflow-hidden shadow-xs">
+                        <div className="bg-white dark:bg-zinc-950 border border-slate-200/80 dark:border-zinc-800 rounded-md overflow-hidden shadow-xs">
                             <div className="overflow-x-auto">
                                 <table className="w-full text-left text-xs">
-                                    <thead className="bg-slate-50 dark:bg-slate-950/70 border-b border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 font-semibold text-[11px]">
+                                    <thead className="bg-slate-50 dark:bg-zinc-900/70 border-b border-slate-200 dark:border-zinc-800 text-slate-500 dark:text-zinc-400 font-semibold text-[11px]">
                                         <tr>
                                             <th className="py-2.5 px-3.5 w-1/4">Nama Potensi Cedera</th>
                                             <th className="py-2.5 px-3.5 w-1/3">Pemetaan Bagian Visual Tubuh</th>
@@ -397,10 +397,10 @@ export default function InjuryIndex({
                                             <th className="py-2.5 px-3.5 text-right w-20">Aksi</th>
                                         </tr>
                                     </thead>
-                                    <tbody className="divide-y divide-slate-100 dark:divide-slate-800/60 font-medium">
+                                    <tbody className="divide-y divide-slate-100 dark:divide-zinc-800/60 font-medium">
                                         {injuries.data.length === 0 ? (
                                             <tr>
-                                                <td colSpan={4} className="py-8 text-center text-slate-400 text-xs">
+                                                <td colSpan={4} className="py-8 text-center text-slate-400 dark:text-zinc-500 text-xs">
                                                     Tidak ada data risiko cedera yang cocok.
                                                 </td>
                                             </tr>
@@ -412,8 +412,8 @@ export default function InjuryIndex({
                                                         key={injury.id}
                                                         className={`transition-colors ${
                                                             isBeingEdited
-                                                                ? 'bg-[#84cc16]/10 dark:bg-[#b4f031]/10'
-                                                                : 'hover:bg-slate-50/70 dark:hover:bg-slate-800/40'
+                                                                ? 'bg-emerald-500/10 dark:bg-emerald-500/15'
+                                                                : 'hover:bg-slate-50/70 dark:hover:bg-zinc-900/40'
                                                         }`}
                                                     >
                                                         <td className="py-2.5 px-3.5 font-bold text-slate-900 dark:text-white align-top">
@@ -429,19 +429,19 @@ export default function InjuryIndex({
                                                                         .map((s) => (
                                                                             <span
                                                                                 key={s}
-                                                                                className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-[10.5px] font-medium"
+                                                                                className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-slate-100 dark:bg-zinc-900 text-slate-700 dark:text-zinc-300 text-[10.5px] font-medium"
                                                                             >
-                                                                                <span className="w-1.5 h-1.5 rounded-full bg-[#84cc16] dark:bg-[#b4f031]" />
+                                                                                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 dark:bg-emerald-400" />
                                                                                 <span>{SLUG_LABELS[s] || s}</span>
                                                                             </span>
                                                                         ))}
                                                                 </div>
                                                             ) : (
-                                                                <span className="text-slate-400">-</span>
+                                                                <span className="text-slate-400 dark:text-zinc-600">-</span>
                                                             )}
                                                         </td>
-                                                        <td className="py-2.5 px-3.5 text-slate-600 dark:text-slate-400 text-xs align-top">
-                                                            {injury.description || <span className="text-slate-400">-</span>}
+                                                        <td className="py-2.5 px-3.5 text-slate-600 dark:text-zinc-400 text-xs align-top">
+                                                            {injury.description || <span className="text-slate-400 dark:text-zinc-600">-</span>}
                                                         </td>
                                                         <td className="py-2.5 px-3.5 text-right space-x-1 align-top">
                                                             <button
@@ -449,8 +449,8 @@ export default function InjuryIndex({
                                                                 onClick={() => handleEditClick(injury)}
                                                                 className={`p-1.5 rounded-md transition-colors cursor-pointer ${
                                                                     isBeingEdited
-                                                                        ? 'bg-[#84cc16] text-slate-950 font-bold'
-                                                                        : 'text-slate-400 hover:text-[#84cc16] dark:hover:text-[#b4f031] hover:bg-[#84cc16]/10 dark:hover:bg-[#b4f031]/10'
+                                                                        ? 'bg-emerald-600 dark:bg-emerald-500 text-white dark:text-zinc-950 font-bold'
+                                                                        : 'text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-emerald-500/10 dark:hover:bg-emerald-500/10'
                                                                 }`}
                                                                 title="Edit Data Cedera & Visualisasi"
                                                             >

@@ -8,19 +8,19 @@ const badgeVariants = cva(
         variants: {
             variant: {
                 default:
-                    'border-transparent bg-[#b4f031] text-slate-950 font-bold shadow-sm',
+                    'border-transparent bg-emerald-600 text-white font-bold shadow-xs',
                 brand:
-                    'border-[#b4f031]/40 bg-[#b4f031]/15 text-slate-950 font-bold dark:border-[#b4f031]/30 dark:bg-[#b4f031]/10 dark:text-[#b4f031]',
+                    'border-emerald-200 bg-emerald-50 text-emerald-800 font-bold dark:border-emerald-800/60 dark:bg-emerald-950/60 dark:text-emerald-300',
                 emerald:
                     'border-emerald-200 bg-emerald-50 text-emerald-800 dark:border-emerald-800/60 dark:bg-emerald-950/60 dark:text-emerald-300',
                 teal:
                     'border-teal-200 bg-teal-50 text-teal-800 dark:border-teal-800/60 dark:bg-teal-950/60 dark:text-teal-300',
                 indigo:
-                    'border-[#b4f031]/40 bg-[#b4f031]/15 text-slate-950 font-bold dark:border-[#b4f031]/30 dark:bg-[#b4f031]/10 dark:text-[#b4f031]',
+                    'border-indigo-200 bg-indigo-50 text-indigo-800 font-bold dark:border-indigo-800/60 dark:bg-indigo-950/60 dark:text-indigo-300',
                 purple:
-                    'border-teal-200 bg-teal-50 text-teal-800 dark:border-teal-800/60 dark:bg-teal-950/60 dark:text-teal-300',
+                    'border-purple-200 bg-purple-50 text-purple-800 dark:border-purple-800/60 dark:bg-purple-950/60 dark:text-purple-300',
                 violet:
-                    'border-[#b4f031]/40 bg-[#b4f031]/15 text-slate-950 font-bold dark:border-[#b4f031]/30 dark:bg-[#b4f031]/10 dark:text-[#b4f031]',
+                    'border-violet-200 bg-violet-50 text-violet-800 font-bold dark:border-violet-800/60 dark:bg-violet-950/60 dark:text-violet-300',
                 sky:
                     'border-sky-200 bg-sky-50 text-sky-700 dark:border-sky-800/60 dark:bg-sky-950/60 dark:text-sky-300',
                 secondary:

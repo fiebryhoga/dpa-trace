@@ -191,7 +191,7 @@ export default function ExerciseIndex({
                     title={
                         <>
                             Master Data Latihan{' '}
-                            <span className="text-[#84cc16] dark:text-[#b4f031]">Korektif</span>
+                            <span className="text-emerald-600 dark:text-emerald-400">Korektif</span>
                         </>
                     }
                     description="Daftar basis data latihan gerak korektif, instruksi pelaksanaan, dan media peraga."
@@ -203,7 +203,7 @@ export default function ExerciseIndex({
                                 placeholder="Cari nama latihan, instruksi..."
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
-                                className="w-full pl-8 pr-7 py-1.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-md text-xs font-medium text-slate-900 dark:text-slate-100 placeholder:text-slate-400 outline-none focus:border-[#84cc16] dark:focus:border-[#b4f031] transition-all shadow-2xs"
+                                className="w-full pl-8 pr-7 py-1.5 bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 rounded-md text-xs font-medium text-slate-900 dark:text-slate-100 placeholder:text-slate-400 outline-none focus:border-emerald-600 dark:focus:border-emerald-500 transition-all shadow-2xs"
                             />
                             {searchTerm && (
                                 <button
@@ -223,8 +223,8 @@ export default function ExerciseIndex({
                     {/* ═══════════════════════════════════════════
                         KOLOM KIRI (lg:col-span-4 xl:col-span-3): FORMULIR TAMBAH / EDIT LATIHAN
                        ═══════════════════════════════════════════ */}
-                    <div className="lg:col-span-4 xl:col-span-3 bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-md p-3.5 shadow-xs space-y-3 sticky top-4 max-h-[calc(100vh-2rem)] overflow-y-auto">
-                        <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2.5">
+                    <div className="lg:col-span-4 xl:col-span-3 bg-white dark:bg-zinc-950 border border-slate-200/80 dark:border-zinc-800 rounded-md p-3.5 shadow-xs space-y-3 sticky top-4 max-h-[calc(100vh-2rem)] overflow-y-auto">
+                        <div className="flex items-center justify-between border-b border-slate-100 dark:border-zinc-800 pb-2.5">
                             <div>
                                 <h3 className="text-xs font-bold text-slate-900 dark:text-white">
                                     {editingExercise ? 'Edit Latihan Korektif' : 'Tambah Latihan Baru'}
@@ -255,7 +255,7 @@ export default function ExerciseIndex({
                                     Foto / Ilustrasi Gerakan
                                 </label>
                                 <div className="flex items-center gap-3">
-                                    <div className="relative w-16 h-16 rounded-md bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 flex items-center justify-center overflow-hidden shrink-0">
+                                    <div className="relative w-16 h-16 rounded-md bg-slate-50 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 flex items-center justify-center overflow-hidden shrink-0">
                                         {previewImage ? (
                                             <img
                                                 src={previewImage}
@@ -279,7 +279,7 @@ export default function ExerciseIndex({
                                         <div className="flex items-center gap-1.5">
                                             <label
                                                 htmlFor="exercise-image-upload"
-                                                className="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-[10.5px] font-semibold text-slate-700 dark:text-slate-200 cursor-pointer transition-colors"
+                                                className="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-slate-100 dark:bg-zinc-800 hover:bg-slate-200 dark:hover:bg-zinc-700 text-[10.5px] font-semibold text-slate-700 dark:text-slate-200 cursor-pointer transition-colors"
                                             >
                                                 <Camera size={11} />
                                                 <span>Pilih Gambar</span>
@@ -312,7 +312,7 @@ export default function ExerciseIndex({
                                     placeholder="Contoh: Foam Roll Calf, Static Gastrocnemius..."
                                     value={data.name}
                                     onChange={(e) => setData('name', e.target.value)}
-                                    className="w-full px-2.5 py-1.5 bg-slate-50/70 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-md text-xs font-medium text-slate-900 dark:text-slate-100 outline-none focus:border-[#84cc16] dark:focus:border-[#b4f031]"
+                                    className="w-full px-2.5 py-1.5 bg-slate-50/70 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-700 rounded-md text-xs font-medium text-slate-900 dark:text-slate-100 outline-none focus:border-emerald-600 dark:focus:border-emerald-500"
                                 />
                                 {errors.name && (
                                     <p className="text-[10px] text-rose-500">{errors.name}</p>
@@ -330,7 +330,7 @@ export default function ExerciseIndex({
                                     placeholder="https://youtube.com/watch?v=..."
                                     value={data.video_url}
                                     onChange={(e) => setData('video_url', e.target.value)}
-                                    className="w-full px-2.5 py-1.5 bg-slate-50/70 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-md text-xs font-medium text-slate-900 dark:text-slate-100 outline-none focus:border-[#84cc16] dark:focus:border-[#b4f031]"
+                                    className="w-full px-2.5 py-1.5 bg-slate-50/70 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-700 rounded-md text-xs font-medium text-slate-900 dark:text-slate-100 outline-none focus:border-emerald-600 dark:focus:border-emerald-500"
                                 />
                             </div>
 
@@ -344,7 +344,7 @@ export default function ExerciseIndex({
                                     placeholder="Jelaskan teknik gerakan, durasi (hold 30 detik), repetisi, dan fokus kontraksi..."
                                     value={data.instructions}
                                     onChange={(e) => setData('instructions', e.target.value)}
-                                    className="w-full px-2.5 py-1.5 bg-slate-50/70 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-md text-xs font-medium text-slate-900 dark:text-slate-100 outline-none focus:border-[#84cc16] dark:focus:border-[#b4f031]"
+                                    className="w-full px-2.5 py-1.5 bg-slate-50/70 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-700 rounded-md text-xs font-medium text-slate-900 dark:text-slate-100 outline-none focus:border-emerald-600 dark:focus:border-emerald-500"
                                 />
                             </div>
 
@@ -355,7 +355,7 @@ export default function ExerciseIndex({
                                     id="exercise-is-active"
                                     checked={data.is_active}
                                     onChange={(e) => setData('is_active', e.target.checked)}
-                                    className="rounded border-slate-300 text-[#84cc16] focus:ring-[#84cc16]"
+                                    className="rounded border-slate-300 text-emerald-600 focus:ring-emerald-500"
                                 />
                                 <label
                                     htmlFor="exercise-is-active"
@@ -366,12 +366,12 @@ export default function ExerciseIndex({
                             </div>
 
                             {/* Submit & Cancel Actions */}
-                            <div className="pt-2 flex items-center justify-end gap-2 border-t border-slate-100 dark:border-slate-800">
+                            <div className="pt-2 flex items-center justify-end gap-2 border-t border-slate-100 dark:border-zinc-800">
                                 {editingExercise && (
                                     <button
                                         type="button"
                                         onClick={handleCancelEdit}
-                                        className="px-2.5 py-1.5 rounded-md text-[11px] font-semibold text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                                        className="px-2.5 py-1.5 rounded-md text-[11px] font-semibold text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-zinc-800 transition-colors"
                                     >
                                         Batal
                                     </button>
@@ -379,7 +379,7 @@ export default function ExerciseIndex({
                                 <button
                                     type="submit"
                                     disabled={processing}
-                                    className="w-full inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-md bg-[#84cc16] hover:bg-[#65a30d] dark:bg-[#b4f031] dark:hover:bg-[#a2dd26] text-white dark:text-slate-950 text-xs font-bold transition-all cursor-pointer disabled:opacity-50 shadow-2xs"
+                                    className="w-full inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-md bg-emerald-600 hover:bg-emerald-700 dark:bg-emerald-500 dark:hover:bg-emerald-400 text-white dark:text-zinc-950 text-xs font-bold transition-all cursor-pointer disabled:opacity-50 shadow-2xs"
                                 >
                                     <Save size={12} />
                                     <span>{editingExercise ? 'Perbarui Latihan' : 'Simpan Latihan'}</span>
@@ -432,8 +432,8 @@ export default function ExerciseIndex({
                                             key={item.id}
                                             className={`rounded-md border p-3.5 transition-all shadow-2xs hover:shadow-xs flex flex-col justify-between gap-2.5 ${
                                                 isBeingEdited
-                                                    ? 'bg-[#84cc16]/10 dark:bg-[#b4f031]/10 border-[#84cc16] dark:border-[#b4f031] ring-1 ring-[#84cc16] dark:ring-[#b4f031]'
-                                                    : 'bg-white dark:bg-slate-900 border-slate-200/80 dark:border-slate-800 hover:border-[#84cc16]/60 dark:hover:border-[#b4f031]/60'
+                                                    ? 'bg-emerald-500/10 dark:bg-emerald-500/10 border-emerald-500 dark:border-emerald-500 ring-1 ring-emerald-500 dark:ring-emerald-500'
+                                                    : 'bg-white dark:bg-zinc-950 border-slate-200/80 dark:border-zinc-800 hover:border-emerald-500/60 dark:hover:border-emerald-500/60'
                                             }`}
                                         >
                                             <div className="space-y-2">
@@ -442,7 +442,7 @@ export default function ExerciseIndex({
                                                     <div className="flex items-start gap-2.5 min-w-0">
                                                         <div
                                                             onClick={() => setSelectedModalExercise(item)}
-                                                            className="w-12 h-12 rounded-md bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 flex items-center justify-center shrink-0 overflow-hidden cursor-pointer hover:border-[#84cc16] transition-colors"
+                                                            className="w-12 h-12 rounded-md bg-slate-50 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 flex items-center justify-center shrink-0 overflow-hidden cursor-pointer hover:border-emerald-500 transition-colors"
                                                         >
                                                             {image ? (
                                                                 <img
@@ -480,8 +480,8 @@ export default function ExerciseIndex({
                                                             onClick={() => handleEditClick(item)}
                                                             className={`p-1 rounded-md transition-colors cursor-pointer shrink-0 ${
                                                                 isBeingEdited
-                                                                    ? 'bg-[#84cc16] text-slate-950 font-bold'
-                                                                    : 'text-slate-400 hover:text-[#84cc16] dark:hover:text-[#b4f031] hover:bg-[#84cc16]/10 dark:hover:bg-[#b4f031]/10'
+                                                                    ? 'bg-emerald-600 text-white font-bold'
+                                                                    : 'text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-emerald-500/10 dark:hover:bg-emerald-500/10'
                                                             }`}
                                                             title="Edit Latihan"
                                                         >
@@ -500,7 +500,7 @@ export default function ExerciseIndex({
 
                                                 {/* Instructions snippet */}
                                                 {item.instructions ? (
-                                                    <p className="text-[11px] text-slate-600 dark:text-slate-400 line-clamp-2 leading-relaxed bg-slate-50/70 dark:bg-slate-950/50 p-2 rounded border border-slate-100 dark:border-slate-800/80">
+                                                    <p className="text-[11px] text-slate-600 dark:text-slate-400 line-clamp-2 leading-relaxed bg-slate-50/70 dark:bg-zinc-900/50 p-2 rounded border border-slate-100 dark:border-zinc-800/80">
                                                         {item.instructions}
                                                     </p>
                                                 ) : (
@@ -511,7 +511,7 @@ export default function ExerciseIndex({
                                             </div>
 
                                             {/* Footer Info */}
-                                            <div className="flex items-center justify-between pt-1 border-t border-slate-100 dark:border-slate-800/80 text-[10px]">
+                                            <div className="flex items-center justify-between pt-1 border-t border-slate-100 dark:border-zinc-800/80 text-[10px]">
                                                 <span className="inline-flex items-center gap-1 font-semibold text-emerald-600 dark:text-emerald-400">
                                                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block" />
                                                     <span>{item.is_active ? 'Aktif' : 'Nonaktif'}</span>
@@ -520,7 +520,7 @@ export default function ExerciseIndex({
                                                 <button
                                                     type="button"
                                                     onClick={() => setSelectedModalExercise(item)}
-                                                    className="text-[#84cc16] dark:text-[#b4f031] font-bold hover:underline cursor-pointer flex items-center gap-1"
+                                                    className="text-emerald-600 dark:text-emerald-400 font-bold hover:underline cursor-pointer flex items-center gap-1"
                                                 >
                                                     <Eye size={10} />
                                                     <span>Lihat Detail</span>
@@ -536,11 +536,11 @@ export default function ExerciseIndex({
 
                 {/* ─── MODAL DETAIL LATIHAN ─── */}
                 {selectedModalExercise && (
-                    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-xs animate-in fade-in-50 duration-150">
-                        <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-md max-w-lg w-full p-4 space-y-3 shadow-2xl relative">
-                            <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2">
+                    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-xs animate-in fade-in-50 duration-150">
+                        <div className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 rounded-md max-w-lg w-full p-4 space-y-3 shadow-2xl relative">
+                            <div className="flex items-center justify-between border-b border-slate-100 dark:border-zinc-800 pb-2">
                                 <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                                    <Dumbbell size={15} className="text-[#84cc16] dark:text-[#b4f031]" />
+                                    <Dumbbell size={15} className="text-emerald-600 dark:text-emerald-400" />
                                     <span>{selectedModalExercise.name}</span>
                                 </h3>
                                 <button
@@ -553,7 +553,7 @@ export default function ExerciseIndex({
                             </div>
 
                             {selectedModalExercise.image_path && (
-                                <div className="w-full h-48 bg-slate-50 dark:bg-slate-950 rounded-md border border-slate-200 dark:border-slate-800 flex items-center justify-center p-2 overflow-hidden">
+                                <div className="w-full h-48 bg-slate-50 dark:bg-zinc-900 rounded-md border border-slate-200 dark:border-zinc-800 flex items-center justify-center p-2 overflow-hidden">
                                     <img
                                         src={
                                             selectedModalExercise.image_path.startsWith('/')
@@ -570,7 +570,7 @@ export default function ExerciseIndex({
                                 <span className="text-[11px] font-bold text-slate-700 dark:text-slate-300">
                                     Instruksi Pelaksanaan:
                                 </span>
-                                <p className="text-xs text-slate-600 dark:text-slate-300 whitespace-pre-line leading-relaxed bg-slate-50 dark:bg-slate-950 p-2.5 rounded border border-slate-100 dark:border-slate-800">
+                                <p className="text-xs text-slate-600 dark:text-slate-300 whitespace-pre-line leading-relaxed bg-slate-50 dark:bg-zinc-900 p-2.5 rounded border border-slate-100 dark:border-zinc-800">
                                     {selectedModalExercise.instructions || 'Belum ada instruksi tertulis.'}
                                 </p>
                             </div>
@@ -590,7 +590,7 @@ export default function ExerciseIndex({
                                 </div>
                             )}
 
-                            <div className="pt-2 border-t border-slate-100 dark:border-slate-800 flex items-center justify-end gap-2">
+                            <div className="pt-2 border-t border-slate-100 dark:border-zinc-800 flex items-center justify-end gap-2">
                                 <button
                                     type="button"
                                     onClick={() => {
@@ -598,14 +598,14 @@ export default function ExerciseIndex({
                                         setSelectedModalExercise(null);
                                         handleEditClick(ex);
                                     }}
-                                    className="px-3 py-1.5 rounded-md bg-[#84cc16] dark:bg-[#b4f031] text-white dark:text-slate-950 text-xs font-bold transition-all"
+                                    className="px-3 py-1.5 rounded-md bg-emerald-600 hover:bg-emerald-700 dark:bg-emerald-500 dark:hover:bg-emerald-400 text-white dark:text-zinc-950 text-xs font-bold transition-all cursor-pointer"
                                 >
                                     Edit Latihan
                                 </button>
                                 <button
                                     type="button"
                                     onClick={() => setSelectedModalExercise(null)}
-                                    className="px-3 py-1.5 rounded-md border border-slate-200 dark:border-slate-700 text-xs font-semibold text-slate-700 dark:text-slate-300"
+                                    className="px-3 py-1.5 rounded-md border border-slate-200 dark:border-zinc-700 text-xs font-semibold text-slate-700 dark:text-slate-300 cursor-pointer"
                                 >
                                     Tutup
                                 </button>

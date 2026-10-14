@@ -38,11 +38,11 @@ export default function Login({ status, canResetPassword = true }: LoginProps) {
     };
 
     return (
-        <div className="min-h-screen flex flex-col lg:flex-row bg-white text-zinc-900 dark:bg-[#09090B] dark:text-zinc-100 transition-colors duration-200">
+        <div className="min-h-screen flex flex-col lg:flex-row bg-white text-zinc-900 dark:bg-black dark:text-zinc-100 transition-colors duration-200">
             <Head title="Sign In - Athlete PMA" />
 
             {/* Left Column: Cinematic Biomechanics Hero Visual (Desktop) */}
-            <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden bg-zinc-950 text-white flex-col justify-between p-10 xl:p-14">
+            <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden bg-black text-white flex-col justify-between p-10 xl:p-14">
                 {/* Full-bleed Cinematic Background Image */}
                 <img
                     src="/images/login-hero.jpg"
@@ -51,15 +51,15 @@ export default function Login({ status, canResetPassword = true }: LoginProps) {
                 />
 
                 {/* Rich Gradient Vignette Overlays for Maximum Legibility */}
-                <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/40 to-zinc-950/70 pointer-events-none" />
-                <div className="absolute inset-0 bg-[#b4f031]/10 mix-blend-multiply pointer-events-none" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-black/70 pointer-events-none" />
+                <div className="absolute inset-0 bg-emerald-500/10 mix-blend-multiply pointer-events-none" />
 
                 {/* Top Logo & Title with Backdrop Blur */}
-                <div className="relative z-10 flex items-center gap-3 p-2 rounded-lg max-w-fit">
-                    <ApplicationLogo className="h-9 w-9 drop-shadow-md" />
+                <div className="relative z-10 flex items-center gap-3 p-0 rounded-lg max-w-fit">
+                    <ApplicationLogo className="w-20 drop-shadow-md" />
                     <div>
-                        <span className="text-base font-bold tracking-tight text-white block leading-tight">
-                            Athlete <span className="text-[#b4f031]">PMA</span>
+                        <span className="text-base font-bold text-white block leading-tight">
+                            Athlete <span className="text-emerald-400">PMA</span>
                         </span>
                         <span className="text-xs text-zinc-300 leading-none">
                             Postural & Movement Assessment
@@ -69,7 +69,7 @@ export default function Login({ status, canResetPassword = true }: LoginProps) {
 
                 {/* Bottom Editorial Quote & System Tagline */}
                 <div className="relative z-10 space-y-3 max-w-lg mt-auto">
-                    <p className="text-xs font-bold uppercase tracking-wider text-[#b4f031]">
+                    <p className="text-xs font-bold uppercase tracking-wider text-emerald-400">
                         Sports Biomechanics & Kinetic Analysis
                     </p>
 
@@ -78,20 +78,20 @@ export default function Login({ status, canResetPassword = true }: LoginProps) {
                     </h2>
 
                     <div className="flex items-center gap-2 text-xs text-zinc-300 font-medium pt-1">
-                        <ShieldCheck className="h-4 w-4 text-[#b4f031] shrink-0" />
+                        <ShieldCheck className="h-4 w-4 text-emerald-400 shrink-0" />
                         <span>Evidence-based diagnostic system for sports performance.</span>
                     </div>
                 </div>
             </div>
 
             {/* Right Column: Clean Authentication Form */}
-            <div className="w-full lg:w-1/2 flex flex-col justify-between p-6 sm:p-10 xl:p-14 bg-white dark:bg-[#09090B] relative">
+            <div className="w-full lg:w-1/2 flex flex-col justify-between p-6 sm:p-10 xl:p-14 bg-white dark:bg-black relative">
                 {/* Top Bar on Right Side (Theme Toggle + Mobile Logo) */}
                 <div className="flex items-center justify-between w-full">
                     <div className="flex lg:hidden items-center gap-2.5">
                         <ApplicationLogo className="h-8 w-8" />
                         <span className="text-sm font-bold tracking-tight text-zinc-900 dark:text-white">
-                            Athlete <span className="text-[#84cc16] dark:text-[#b4f031]">PMA</span>
+                            Athlete <span className="text-emerald-600 dark:text-emerald-400">PMA</span>
                         </span>
                     </div>
                     <div className="ml-auto">
@@ -111,8 +111,8 @@ export default function Login({ status, canResetPassword = true }: LoginProps) {
                     </div>
 
                     {status && (
-                        <div className="flex items-center gap-2 rounded-lg border border-[#b4f031]/40 bg-[#b4f031]/15 p-3 text-xs font-semibold text-slate-950 dark:text-[#b4f031]">
-                            <CheckCircle2 className="h-4 w-4 shrink-0 text-[#84cc16] dark:text-[#b4f031]" />
+                        <div className="flex items-center gap-2 rounded-lg border border-emerald-500/30 bg-emerald-500/10 p-3 text-xs font-semibold text-emerald-800 dark:text-emerald-300">
+                            <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-600 dark:text-emerald-400" />
                             <span>{status}</span>
                         </div>
                     )}
@@ -134,7 +134,7 @@ export default function Login({ status, canResetPassword = true }: LoginProps) {
                                 error={!!errors.username}
                                 leftIcon={<User className="h-4 w-4 text-zinc-400" />}
                                 onChange={(e) => setData('username', e.target.value)}
-                                className="h-10 text-xs rounded-lg border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/50 focus:bg-white dark:focus:bg-zinc-900"
+                                className="h-10 text-xs rounded-lg border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-950 focus:bg-white dark:focus:bg-zinc-900"
                                 required
                             />
                             {errors.username && (
@@ -153,7 +153,7 @@ export default function Login({ status, canResetPassword = true }: LoginProps) {
                                 {canResetPassword && (
                                     <Link
                                         href={route('password.request')}
-                                        className="text-xs text-slate-700 hover:text-slate-950 dark:text-zinc-400 dark:hover:text-[#b4f031] font-semibold transition-colors"
+                                        className="text-xs text-slate-700 hover:text-slate-950 dark:text-zinc-400 dark:hover:text-emerald-400 font-semibold transition-colors"
                                     >
                                         Forgot password?
                                     </Link>
@@ -184,7 +184,7 @@ export default function Login({ status, canResetPassword = true }: LoginProps) {
                                     </button>
                                 }
                                 onChange={(e) => setData('password', e.target.value)}
-                                className="h-10 text-xs rounded-lg border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/50 focus:bg-white dark:focus:bg-zinc-900"
+                                className="h-10 text-xs rounded-lg border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-950 focus:bg-white dark:focus:bg-zinc-900"
                                 required
                             />
                             {errors.password && (
@@ -213,7 +213,7 @@ export default function Login({ status, canResetPassword = true }: LoginProps) {
                         {/* Submit Button */}
                         <Button
                             type="submit"
-                            className="w-full h-10 text-xs font-bold gap-2 rounded-lg bg-[#b4f031] text-slate-950 hover:bg-[#a2dd26] shadow-md shadow-[#b4f031]/25 transition-all"
+                            className="w-full h-10 text-xs font-bold gap-2 rounded-lg bg-emerald-600 text-white hover:bg-emerald-700 dark:bg-emerald-500 dark:text-black dark:hover:bg-emerald-400 shadow-sm transition-all"
                             isLoading={processing}
                         >
                             <span>{processing ? 'Signing in...' : 'Sign In to Athlete PMA'}</span>

@@ -84,7 +84,7 @@ export default function AthleteShow({ athlete }: { athlete: Athlete }) {
                     title={athlete.full_name}
                     description={
                         <span>
-                            <strong className="text-[#84cc16] dark:text-[#b4f031] font-semibold">
+                            <strong className="text-emerald-600 dark:text-emerald-400 font-semibold">
                                 {athlete.gender === 'L' ? 'Laki-laki' : 'Perempuan'}
                             </strong>
                             {athlete.age && ` • ${athlete.age} Tahun`}
@@ -109,7 +109,7 @@ export default function AthleteShow({ athlete }: { athlete: Athlete }) {
                                 </Button>
                             </Link>
                             <Link href={route('dpa.athletes.show', athlete.athlete_code || athlete.id)}>
-                                <Button size="sm" className="gap-1.5 text-xs font-bold bg-[#b4f031] text-slate-950 hover:bg-[#a2dd26] rounded-md">
+                                <Button size="sm" className="gap-1.5 text-xs font-bold bg-emerald-600 hover:bg-emerald-700 dark:bg-emerald-500 dark:hover:bg-emerald-400 text-white dark:text-black rounded-md">
                                     <Activity className="h-3.5 w-3.5" />
                                     <span>Buka Analisis PMA</span>
                                 </Button>
@@ -122,51 +122,51 @@ export default function AthleteShow({ athlete }: { athlete: Athlete }) {
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
                     {/* Left Column: Anthropometric & Medical Card */}
                     <div className="lg:col-span-4 space-y-4">
-                        <Card className="border-slate-200/90 dark:border-slate-800 bg-white dark:bg-[#0E1526] shadow-sm">
-                            <CardHeader className="pb-3 border-b border-slate-100 dark:border-slate-800/80">
+                        <Card className="border-slate-200/90 dark:border-zinc-800 bg-white dark:bg-zinc-950 shadow-sm">
+                            <CardHeader className="pb-3 border-b border-slate-100 dark:border-zinc-800/80">
                                 <CardTitle className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
-                                    <Shield className="h-4 w-4 text-[#84cc16] dark:text-[#b4f031]" />
+                                    <Shield className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
                                     <span>Anthropometry & Biometrics</span>
                                 </CardTitle>
                             </CardHeader>
                             <CardContent className="space-y-3 pt-4">
                                 <div className="grid grid-cols-2 gap-2">
-                                    <div className="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-900/60 border border-slate-200/60 dark:border-slate-800/60">
+                                    <div className="p-2.5 rounded-lg bg-slate-50 dark:bg-zinc-900/60 border border-slate-200/60 dark:border-zinc-800">
                                         <span className="text-[10px] text-slate-400 block font-medium">Gender</span>
                                         <span className="text-xs font-bold text-slate-900 dark:text-white">
                                             {athlete.gender === 'L' ? 'Male' : 'Female'}
                                         </span>
                                     </div>
 
-                                    <div className="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-900/60 border border-slate-200/60 dark:border-slate-800/60">
+                                    <div className="p-2.5 rounded-lg bg-slate-50 dark:bg-zinc-900/60 border border-slate-200/60 dark:border-zinc-800">
                                         <span className="text-[10px] text-slate-400 block font-medium">Age</span>
                                         <span className="text-xs font-bold text-slate-900 dark:text-white">
                                             {athlete.calculated_age ? `${athlete.calculated_age} Yrs` : '-'}
                                         </span>
                                     </div>
 
-                                    <div className="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-900/60 border border-slate-200/60 dark:border-slate-800/60">
+                                    <div className="p-2.5 rounded-lg bg-slate-50 dark:bg-zinc-900/60 border border-slate-200/60 dark:border-zinc-800">
                                         <span className="text-[10px] text-slate-400 block font-medium">Height</span>
                                         <span className="text-xs font-bold text-slate-900 dark:text-white">
                                             {athlete.height_cm ? `${athlete.height_cm} cm` : '-'}
                                         </span>
                                     </div>
 
-                                    <div className="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-900/60 border border-slate-200/60 dark:border-slate-800/60">
+                                    <div className="p-2.5 rounded-lg bg-slate-50 dark:bg-zinc-900/60 border border-slate-200/60 dark:border-zinc-800">
                                         <span className="text-[10px] text-slate-400 block font-medium">Weight</span>
                                         <span className="text-xs font-bold text-slate-900 dark:text-white">
                                             {athlete.weight_kg ? `${athlete.weight_kg} kg` : '-'}
                                         </span>
                                     </div>
 
-                                    <div className="p-2.5 rounded-lg bg-[#b4f031]/10 dark:bg-[#b4f031]/10 border border-[#b4f031]/30">
-                                        <span className="text-[10px] text-slate-700 dark:text-[#b4f031] block font-semibold">Body Mass Index</span>
+                                    <div className="p-2.5 rounded-lg bg-emerald-500/10 border border-emerald-500/20">
+                                        <span className="text-[10px] text-emerald-700 dark:text-emerald-400 block font-semibold">Body Mass Index</span>
                                         <span className="text-xs font-bold text-slate-950 dark:text-white">
                                             {athlete.bmi ? `${athlete.bmi} (${athlete.bmi_category})` : '-'}
                                         </span>
                                     </div>
 
-                                    <div className="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-900/60 border border-slate-200/60 dark:border-slate-800/60">
+                                    <div className="p-2.5 rounded-lg bg-slate-50 dark:bg-zinc-900/60 border border-slate-200/60 dark:border-zinc-800">
                                         <span className="text-[10px] text-slate-400 block font-medium">Dominant Side</span>
                                         <span className="text-xs font-bold text-slate-900 dark:text-white">
                                             {athlete.dominant_side === 'R' ? 'Right (R)' : athlete.dominant_side === 'L' ? 'Left (L)' : 'Bilateral'}
@@ -191,8 +191,8 @@ export default function AthleteShow({ athlete }: { athlete: Athlete }) {
 
                     {/* Right Column: PMA Assessment History */}
                     <div className="lg:col-span-8 space-y-4">
-                        <Card className="border-slate-200/90 dark:border-slate-800 bg-white dark:bg-[#0E1526] shadow-sm">
-                            <CardHeader className="flex flex-row items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800/80">
+                        <Card className="border-slate-200/90 dark:border-zinc-800 bg-white dark:bg-zinc-950 shadow-sm">
+                            <CardHeader className="flex flex-row items-center justify-between pb-3 border-b border-slate-100 dark:border-zinc-800/80">
                                 <div>
                                     <CardTitle className="text-base font-bold text-slate-900 dark:text-white">
                                         Postural & Movement Assessment History
@@ -202,7 +202,7 @@ export default function AthleteShow({ athlete }: { athlete: Athlete }) {
                                     </CardDescription>
                                 </div>
                                 <Link href={route('dpa.athletes.show', athlete.athlete_code || athlete.id)}>
-                                    <Button size="sm" className="h-8 text-xs gap-1.5 font-bold bg-[#b4f031] text-slate-950 hover:bg-[#a2dd26] shadow-brand">
+                                    <Button size="sm" className="h-8 text-xs gap-1.5 font-bold bg-emerald-600 hover:bg-emerald-700 dark:bg-emerald-500 dark:hover:bg-emerald-400 text-white dark:text-black shadow-xs">
                                         <PlusCircle className="h-3.5 w-3.5" />
                                         <span>Buka Evaluasi PMA</span>
                                     </Button>
@@ -211,8 +211,8 @@ export default function AthleteShow({ athlete }: { athlete: Athlete }) {
 
                             <CardContent className="space-y-4 pt-4">
                                 {athlete.dpa_assessments.length === 0 ? (
-                                    <div className="text-center py-10 space-y-2 border border-dashed border-[#b4f031]/30 rounded-lg bg-[#b4f031]/5">
-                                        <Activity className="h-8 w-8 text-[#84cc16] dark:text-[#b4f031] mx-auto" />
+                                    <div className="text-center py-10 space-y-2 border border-dashed border-emerald-500/30 rounded-lg bg-emerald-500/5">
+                                        <Activity className="h-8 w-8 text-emerald-600 dark:text-emerald-400 mx-auto" />
                                         <p className="text-xs text-slate-500">
                                             Belum ada sesi evaluasi PMA yang tercatat untuk atlet ini.
                                         </p>
@@ -237,12 +237,12 @@ export default function AthleteShow({ athlete }: { athlete: Athlete }) {
                                             return (
                                                 <div
                                                     key={session.id}
-                                                    className="p-4 rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/40 hover:border-[#b4f031]/50 dark:hover:border-[#b4f031]/50 transition-all space-y-3 shadow-sm hover:shadow-brand"
+                                                    className="p-4 rounded-lg border border-slate-200 dark:border-zinc-800 bg-white dark:bg-zinc-900/40 hover:border-emerald-500/50 transition-all space-y-3 shadow-sm"
                                                 >
                                                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                                                         <div className="space-y-0.5">
                                                             <div className="flex items-center gap-2">
-                                                                <span className="text-xs font-extrabold text-slate-900 dark:text-[#b4f031]">
+                                                                <span className="text-xs font-extrabold text-slate-900 dark:text-emerald-400">
                                                                     Session #{athlete.dpa_assessments.length - index}
                                                                 </span>
                                                                 <span className="text-xs text-slate-300 dark:text-slate-700">•</span>
@@ -274,11 +274,11 @@ export default function AthleteShow({ athlete }: { athlete: Athlete }) {
                                                     </div>
 
                                                     {/* Detected Compensations Pills */}
-                                                    <div className="pt-2 border-t border-slate-100 dark:border-slate-800/80 flex flex-wrap gap-1.5">
+                                                    <div className="pt-2 border-t border-slate-100 dark:border-zinc-800/80 flex flex-wrap gap-1.5">
                                                         {session.details.map((d) => (
                                                             <span
                                                                 key={d.id}
-                                                                className="inline-flex items-center gap-1 rounded-md bg-[#b4f031]/10 border border-[#b4f031]/20 px-2 py-0.5 text-[11px] text-slate-900 dark:text-[#b4f031] font-semibold"
+                                                                className="inline-flex items-center gap-1 rounded-md bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 text-[11px] text-emerald-800 dark:text-emerald-300 font-semibold"
                                                             >
                                                                 <span>{d.compensation.name}</span>
                                                                 <span className="text-[9px] text-slate-500 dark:text-slate-400">({d.side})</span>
@@ -287,7 +287,7 @@ export default function AthleteShow({ athlete }: { athlete: Athlete }) {
                                                     </div>
 
                                                     {session.notes && (
-                                                        <p className="text-xs text-slate-600 dark:text-slate-400 italic bg-slate-50 dark:bg-slate-950 p-2.5 rounded-lg border border-slate-100 dark:border-slate-800">
+                                                        <p className="text-xs text-slate-600 dark:text-slate-400 italic bg-slate-50 dark:bg-zinc-900 p-2.5 rounded-lg border border-slate-100 dark:border-zinc-800">
                                                             "{session.notes}"
                                                         </p>
                                                     )}
@@ -300,8 +300,8 @@ export default function AthleteShow({ athlete }: { athlete: Athlete }) {
                         </Card>
 
                         {/* Athlete Training Program & Calendar Card */}
-                        <Card className="border-slate-200/90 dark:border-slate-800 bg-white dark:bg-[#0E1526] shadow-sm">
-                            <CardHeader className="flex flex-row items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800/80">
+                        <Card className="border-slate-200/90 dark:border-zinc-800 bg-white dark:bg-zinc-950 shadow-sm">
+                            <CardHeader className="flex flex-row items-center justify-between pb-3 border-b border-slate-100 dark:border-zinc-800/80">
                                 <div>
                                     <CardTitle className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
                                         <span>Program &amp; Kalender Latihan Korektif</span>
@@ -311,7 +311,7 @@ export default function AthleteShow({ athlete }: { athlete: Athlete }) {
                                     </CardDescription>
                                 </div>
                                 <Link href={route('training-programs.create', { athlete_id: athlete.id })}>
-                                    <Button size="sm" className="h-8 text-xs gap-1.5 font-bold bg-[#b4f031] text-slate-950 hover:bg-[#a2dd26] shadow-brand">
+                                    <Button size="sm" className="h-8 text-xs gap-1.5 font-bold bg-emerald-600 hover:bg-emerald-700 dark:bg-emerald-500 dark:hover:bg-emerald-400 text-white dark:text-black shadow-xs">
                                         <PlusCircle className="h-3.5 w-3.5" />
                                         <span>Buat Program Baru</span>
                                     </Button>
@@ -320,7 +320,7 @@ export default function AthleteShow({ athlete }: { athlete: Athlete }) {
 
                             <CardContent className="space-y-4 pt-4">
                                 {(!athlete.training_programs || athlete.training_programs.length === 0) ? (
-                                    <div className="text-center py-8 space-y-2 border border-dashed border-[#b4f031]/30 rounded-lg bg-[#b4f031]/5">
+                                    <div className="text-center py-8 space-y-2 border border-dashed border-emerald-500/30 rounded-lg bg-emerald-500/5">
                                         <p className="text-xs text-slate-500">
                                             Belum ada program latihan aktif untuk atlet ini.
                                         </p>
@@ -339,7 +339,7 @@ export default function AthleteShow({ athlete }: { athlete: Athlete }) {
                                                     <div>
                                                         <Link
                                                             href={route('training-programs.show', tp.slug)}
-                                                            className="text-sm font-bold text-slate-900 dark:text-white hover:text-[#65a30d] dark:hover:text-[#b4f031] hover:underline"
+                                                            className="text-sm font-bold text-slate-900 dark:text-white hover:text-emerald-600 dark:hover:text-emerald-400 hover:underline"
                                                         >
                                                             {tp.name}
                                                         </Link>
@@ -349,7 +349,7 @@ export default function AthleteShow({ athlete }: { athlete: Athlete }) {
                                                     </div>
                                                     <Link
                                                         href={route('training-programs.show', tp.slug)}
-                                                        className="text-xs font-semibold text-[#65a30d] dark:text-[#b4f031] hover:underline"
+                                                        className="text-xs font-semibold text-emerald-600 dark:text-emerald-400 hover:underline"
                                                     >
                                                         Buka Detail Lengkap →
                                                     </Link>

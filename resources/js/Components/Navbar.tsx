@@ -62,18 +62,18 @@ export default function Navbar() {
         route().current('users.*');
 
     return (
-        <nav className="border-b border-slate-200/80 bg-white/85 dark:border-slate-800/80 dark:bg-[#0D1322]/85 backdrop-blur-md sticky top-0 z-40">
+        <nav className="border-b border-slate-200/80 bg-white/85 dark:border-zinc-800/80 dark:bg-black/90 backdrop-blur-md sticky top-0 z-40">
             <div className="w-full px-4 sm:px-6 lg:px-8">
                 <div className="flex h-16 justify-between items-center">
                     {/* Brand & Left Links */}
                     <div className="flex items-center gap-8">
                         <Link href={route('dashboard')} className="flex items-center gap-3 group">
-                            <ApplicationLogo className="h-9 w-9 transition-transform group-hover:scale-105" />
+                            <ApplicationLogo className="w-16 transition-transform group-hover:scale-105" />
                             <div className="flex flex-col">
                                 <span className="text-base font-extrabold tracking-tight text-slate-900 dark:text-white leading-tight">
-                                    Athlete <span className="text-[#84cc16] dark:text-[#b4f031]">PMA</span>
+                                    Athlete <span className="text-emerald-600 dark:text-emerald-400">PMA</span>
                                 </span>
-                                <span className="text-[11px] text-slate-500 dark:text-slate-400 leading-none">
+                                <span className="text-[11px] text-slate-500 dark:text-zinc-400 leading-none">
                                     Postural & Movement Assessment
                                 </span>
                             </div>
@@ -84,8 +84,8 @@ export default function Navbar() {
                                 href={route('dashboard')}
                                 className={`px-3 py-1.5 text-xs font-bold transition-colors rounded-md ${
                                     route().current('dashboard')
-                                        ? 'text-[#84cc16] dark:text-[#b4f031]'
-                                        : 'text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white'
+                                        ? 'text-emerald-700 bg-emerald-50 dark:bg-transparent dark:text-emerald-400'
+                                        : 'text-slate-600 hover:text-slate-900 dark:text-zinc-400 dark:hover:text-white'
                                 }`}
                             >
                                 Dashboard
@@ -95,8 +95,8 @@ export default function Navbar() {
                                 href={route('dpa.index')}
                                 className={`px-3 py-1.5 text-xs font-bold transition-colors rounded-md ${
                                     route().current('dpa.*')
-                                        ? 'text-[#84cc16] dark:text-[#b4f031]'
-                                        : 'text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white'
+                                        ? 'text-emerald-700 bg-emerald-50 dark:bg-transparent dark:text-emerald-400'
+                                        : 'text-slate-600 hover:text-slate-900 dark:text-zinc-400 dark:hover:text-white'
                                 }`}
                             >
                                 Analisis PMA
@@ -106,8 +106,8 @@ export default function Navbar() {
                                 href={route('training-programs.index')}
                                 className={`px-3 py-1.5 text-xs font-bold transition-colors rounded-md ${
                                     route().current('training-programs.*')
-                                        ? 'text-[#84cc16] dark:text-[#b4f031]'
-                                        : 'text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white'
+                                        ? 'text-emerald-700 bg-emerald-50 dark:bg-transparent dark:text-emerald-400'
+                                        : 'text-slate-600 hover:text-slate-900 dark:text-zinc-400 dark:hover:text-white'
                                 }`}
                             >
                                 Program Latihan
@@ -125,20 +125,20 @@ export default function Navbar() {
                                     onClick={() => setIsConfigOpen((prev) => !prev)}
                                     className={`flex items-center gap-1 px-3 py-1.5 text-xs font-bold transition-colors cursor-pointer rounded-md ${
                                         isConfigActive
-                                            ? 'text-[#84cc16] dark:text-[#b4f031]'
-                                            : 'text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white'
+                                            ? 'text-emerald-700 bg-emerald-50 dark:bg-transparent dark:text-emerald-400'
+                                            : 'text-slate-600 hover:text-slate-900 dark:text-zinc-400 dark:hover:text-white'
                                     }`}
                                 >
                                     <span>Konfigurasi</span>
                                     <ChevronDown
                                         size={13}
-                                        className={`transition-transform duration-150 ${isConfigOpen ? 'rotate-180' : ''} ${isConfigActive || isConfigOpen ? 'text-[#84cc16] dark:text-[#b4f031]' : 'opacity-70'}`}
+                                        className={`transition-transform duration-150 ${isConfigOpen ? 'rotate-180' : ''} ${isConfigActive || isConfigOpen ? 'text-emerald-700 dark:text-emerald-400' : 'opacity-70'}`}
                                     />
                                 </button>
 
                                 {isConfigOpen && (
                                     <div className="absolute left-0 top-full pt-1.5 w-56 z-50 animate-in fade-in-50 zoom-in-95 duration-100">
-                                        <div className="rounded-md bg-white dark:bg-[#0E1526] border border-slate-200/90 dark:border-slate-800/90 shadow-xl p-1.5 backdrop-blur-md">
+                                        <div className="rounded-md bg-white dark:bg-zinc-950 border border-slate-200/90 dark:border-zinc-800 shadow-xl p-1.5 backdrop-blur-md">
                                             <div className="px-2 py-1 text-[10px] font-semibold text-slate-400 dark:text-slate-500">
                                                 Master data & konfigurasi
                                             </div>
@@ -148,11 +148,11 @@ export default function Navbar() {
                                                 onClick={() => setIsConfigOpen(false)}
                                                 className={`flex items-center gap-2.5 px-2.5 py-2 text-xs font-medium rounded-md transition-all ${
                                                     route().current('dpa-compensations.*')
-                                                        ? 'bg-slate-100 dark:bg-slate-800/70 text-[#84cc16] dark:text-[#b4f031] font-semibold'
-                                                        : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100/80 dark:hover:bg-slate-800/60 hover:text-slate-950 dark:hover:text-white'
+                                                        ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 font-semibold'
+                                                        : 'text-slate-700 dark:text-zinc-300 hover:bg-slate-100/80 dark:hover:bg-zinc-900 hover:text-slate-950 dark:hover:text-white'
                                                 }`}
                                             >
-                                                <div className={`p-1 rounded-md ${route().current('dpa-compensations.*') ? 'bg-[#b4f031]/20 text-[#84cc16] dark:text-[#b4f031]' : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400'}`}>
+                                                <div className={`p-1 rounded-md ${route().current('dpa-compensations.*') ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-400' : 'bg-slate-100 dark:bg-zinc-900 text-slate-500 dark:text-zinc-400'}`}>
                                                     <Activity size={13} />
                                                 </div>
                                                 <div className="flex flex-col text-left">
@@ -165,11 +165,11 @@ export default function Navbar() {
                                                 onClick={() => setIsConfigOpen(false)}
                                                 className={`flex items-center gap-2.5 px-2.5 py-2 text-xs font-medium rounded-md transition-all ${
                                                     route().current('exercises.*')
-                                                        ? 'bg-slate-100 dark:bg-slate-800/70 text-[#84cc16] dark:text-[#b4f031] font-semibold'
-                                                        : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100/80 dark:hover:bg-slate-800/60 hover:text-slate-950 dark:hover:text-white'
+                                                        ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 font-semibold'
+                                                        : 'text-slate-700 dark:text-zinc-300 hover:bg-slate-100/80 dark:hover:bg-zinc-900 hover:text-slate-950 dark:hover:text-white'
                                                 }`}
                                             >
-                                                <div className={`p-1 rounded-md ${route().current('exercises.*') ? 'bg-[#b4f031]/20 text-[#84cc16] dark:text-[#b4f031]' : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400'}`}>
+                                                <div className={`p-1 rounded-md ${route().current('exercises.*') ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-400' : 'bg-slate-100 dark:bg-zinc-900 text-slate-500 dark:text-zinc-400'}`}>
                                                     <Dumbbell size={13} />
                                                 </div>
                                                 <div className="flex flex-col text-left">
@@ -182,11 +182,11 @@ export default function Navbar() {
                                                 onClick={() => setIsConfigOpen(false)}
                                                 className={`flex items-center gap-2.5 px-2.5 py-2 text-xs font-medium rounded-md transition-all ${
                                                     route().current('muscles.*')
-                                                        ? 'bg-slate-100 dark:bg-slate-800/70 text-[#84cc16] dark:text-[#b4f031] font-semibold'
-                                                        : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100/80 dark:hover:bg-slate-800/60 hover:text-slate-950 dark:hover:text-white'
+                                                        ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 font-semibold'
+                                                        : 'text-slate-700 dark:text-zinc-300 hover:bg-slate-100/80 dark:hover:bg-zinc-900 hover:text-slate-950 dark:hover:text-white'
                                                 }`}
                                             >
-                                                <div className={`p-1 rounded-md ${route().current('muscles.*') ? 'bg-[#b4f031]/20 text-[#84cc16] dark:text-[#b4f031]' : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400'}`}>
+                                                <div className={`p-1 rounded-md ${route().current('muscles.*') ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-400' : 'bg-slate-100 dark:bg-zinc-900 text-slate-500 dark:text-zinc-400'}`}>
                                                     <Layers size={13} />
                                                 </div>
                                                 <div className="flex flex-col text-left">
@@ -199,11 +199,11 @@ export default function Navbar() {
                                                 onClick={() => setIsConfigOpen(false)}
                                                 className={`flex items-center gap-2.5 px-2.5 py-2 text-xs font-medium rounded-md transition-all ${
                                                     route().current('injuries.*')
-                                                        ? 'bg-slate-100 dark:bg-slate-800/70 text-[#84cc16] dark:text-[#b4f031] font-semibold'
-                                                        : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100/80 dark:hover:bg-slate-800/60 hover:text-slate-950 dark:hover:text-white'
+                                                        ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 font-semibold'
+                                                        : 'text-slate-700 dark:text-zinc-300 hover:bg-slate-100/80 dark:hover:bg-zinc-900 hover:text-slate-950 dark:hover:text-white'
                                                 }`}
                                             >
-                                                <div className={`p-1 rounded-md ${route().current('injuries.*') ? 'bg-[#b4f031]/20 text-[#84cc16] dark:text-[#b4f031]' : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400'}`}>
+                                                <div className={`p-1 rounded-md ${route().current('injuries.*') ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-400' : 'bg-slate-100 dark:bg-zinc-900 text-slate-500 dark:text-zinc-400'}`}>
                                                     <ShieldAlert size={13} />
                                                 </div>
                                                 <div className="flex flex-col text-left">
@@ -211,18 +211,18 @@ export default function Navbar() {
                                                 </div>
                                             </Link>
 
-                                            <div className="my-1 border-t border-slate-100 dark:border-slate-800/80" />
+                                            <div className="my-1 border-t border-slate-100 dark:border-zinc-800" />
 
                                             <Link
                                                 href={route('athletes.index')}
                                                 onClick={() => setIsConfigOpen(false)}
                                                 className={`flex items-center gap-2.5 px-2.5 py-2 text-xs font-medium rounded-md transition-all ${
                                                     route().current('athletes.*')
-                                                        ? 'bg-slate-100 dark:bg-slate-800/70 text-[#84cc16] dark:text-[#b4f031] font-semibold'
-                                                        : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100/80 dark:hover:bg-slate-800/60 hover:text-slate-950 dark:hover:text-white'
+                                                        ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 font-semibold'
+                                                        : 'text-slate-700 dark:text-zinc-300 hover:bg-slate-100/80 dark:hover:bg-zinc-900 hover:text-slate-950 dark:hover:text-white'
                                                 }`}
                                             >
-                                                <div className={`p-1 rounded-md ${route().current('athletes.*') ? 'bg-[#b4f031]/20 text-[#84cc16] dark:text-[#b4f031]' : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400'}`}>
+                                                <div className={`p-1 rounded-md ${route().current('athletes.*') ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-400' : 'bg-slate-100 dark:bg-zinc-900 text-slate-500 dark:text-zinc-400'}`}>
                                                     <Users size={13} />
                                                 </div>
                                                 <div className="flex flex-col text-left">
@@ -235,11 +235,11 @@ export default function Navbar() {
                                                 onClick={() => setIsConfigOpen(false)}
                                                 className={`flex items-center gap-2.5 px-2.5 py-2 text-xs font-medium rounded-md transition-all ${
                                                     route().current('users.*')
-                                                        ? 'bg-slate-100 dark:bg-slate-800/70 text-[#84cc16] dark:text-[#b4f031] font-semibold'
-                                                        : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100/80 dark:hover:bg-slate-800/60 hover:text-slate-950 dark:hover:text-white'
+                                                        ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 font-semibold'
+                                                        : 'text-slate-700 dark:text-zinc-300 hover:bg-slate-100/80 dark:hover:bg-zinc-900 hover:text-slate-950 dark:hover:text-white'
                                                 }`}
                                             >
-                                                <div className={`p-1 rounded-md ${route().current('users.*') ? 'bg-[#b4f031]/20 text-[#84cc16] dark:text-[#b4f031]' : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400'}`}>
+                                                <div className={`p-1 rounded-md ${route().current('users.*') ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-400' : 'bg-slate-100 dark:bg-zinc-900 text-slate-500 dark:text-zinc-400'}`}>
                                                     <ShieldCheck size={13} />
                                                 </div>
                                                 <div className="flex flex-col text-left">
@@ -257,22 +257,22 @@ export default function Navbar() {
                     <div className="hidden md:flex items-center gap-3">
                         <ThemeToggle />
 
-                        <div className="h-4 w-px bg-slate-200 dark:bg-slate-800" />
+                        <div className="h-4 w-px bg-slate-200 dark:bg-zinc-800" />
 
                         <div className="flex items-center gap-2 text-xs">
                             <Link
                                 href={route('profile.edit')}
-                                className="flex items-center gap-2 p-1.5 rounded-md hover:bg-[#b4f031]/15 text-slate-700 dark:text-slate-300 transition-colors"
+                                className="flex items-center gap-2 p-1.5 rounded-md hover:bg-emerald-50 dark:hover:bg-zinc-900 text-slate-700 dark:text-zinc-300 transition-colors"
                                 title="Edit Profile"
                             >
                                 {user.avatar_url ? (
                                     <img
                                         src={user.avatar_url}
                                         alt={user.name}
-                                        className="h-7 w-7 rounded-full object-cover aspect-square shadow-2xs border border-[#b4f031]/40"
+                                        className="h-7 w-7 rounded-full object-cover aspect-square shadow-2xs border border-emerald-300 dark:border-emerald-500/50"
                                     />
                                 ) : (
-                                    <div className="h-7 w-7 rounded-full bg-[#b4f031] text-slate-950 flex items-center justify-center font-black text-xs shadow-2xs aspect-square">
+                                    <div className="h-7 w-7 rounded-full bg-emerald-600 text-white dark:bg-emerald-600 dark:text-white flex items-center justify-center font-black text-xs shadow-2xs aspect-square">
                                         {user.name.charAt(0).toUpperCase()}
                                     </div>
                                 )}
@@ -310,70 +310,70 @@ export default function Navbar() {
 
             {/* Mobile Menu Dropdown */}
             {showingNavigationDropdown && (
-                <div className="md:hidden border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-[#0D1322] p-4 space-y-3">
+                <div className="md:hidden border-t border-slate-200 dark:border-zinc-800 bg-white dark:bg-black p-4 space-y-3">
                     <div className="flex flex-col space-y-1">
                         <Link
                             href={route('dashboard')}
-                            className="px-3 py-2 rounded-md text-sm font-semibold hover:bg-slate-100 dark:hover:bg-slate-800"
+                            className="px-3 py-2 rounded-md text-sm font-semibold hover:bg-slate-100 dark:hover:bg-zinc-900"
                         >
                             Dashboard
                         </Link>
                         <Link
                             href={route('dpa.index')}
-                            className="px-3 py-2 rounded-md text-sm font-semibold hover:bg-slate-100 dark:hover:bg-slate-800"
+                            className="px-3 py-2 rounded-md text-sm font-semibold hover:bg-slate-100 dark:hover:bg-zinc-900"
                         >
                             Analisis PMA
                         </Link>
                         <Link
                             href={route('training-programs.index')}
-                            className="px-3 py-2 rounded-md text-sm font-semibold hover:bg-slate-100 dark:hover:bg-slate-800"
+                            className="px-3 py-2 rounded-md text-sm font-semibold hover:bg-slate-100 dark:hover:bg-zinc-900"
                         >
                             Program Latihan
                         </Link>
 
-                        <div className="pt-2 pb-1 px-3 text-[10px] font-semibold text-slate-400">
+                        <div className="pt-2 pb-1 px-3 text-[10px] font-semibold text-slate-400 dark:text-zinc-500">
                             Konfigurasi & Master Data
                         </div>
                         <Link
                             href={route('dpa-compensations.index')}
-                            className="px-3 py-2 rounded-md text-sm font-semibold text-slate-700 dark:text-slate-300 hover:bg-[#b4f031]/10 flex items-center gap-2"
+                            className="px-3 py-2 rounded-md text-sm font-semibold text-slate-700 dark:text-zinc-300 hover:bg-emerald-50 dark:hover:bg-zinc-900 flex items-center gap-2"
                         >
-                            <Activity className="h-4 w-4 text-[#84cc16] dark:text-[#b4f031]" />
+                            <Activity className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
                             <span>Master Kompensasi</span>
                         </Link>
                         <Link
                             href={route('exercises.index')}
-                            className="px-3 py-2 rounded-md text-sm font-semibold text-slate-700 dark:text-slate-300 hover:bg-[#b4f031]/10 flex items-center gap-2"
+                            className="px-3 py-2 rounded-md text-sm font-semibold text-slate-700 dark:text-zinc-300 hover:bg-emerald-50 dark:hover:bg-zinc-900 flex items-center gap-2"
                         >
-                            <Dumbbell className="h-4 w-4 text-[#84cc16] dark:text-[#b4f031]" />
+                            <Dumbbell className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
                             <span>Master Latihan</span>
                         </Link>
                         <Link
                             href={route('muscles.index')}
-                            className="px-3 py-2 rounded-md text-sm font-semibold text-slate-700 dark:text-slate-300 hover:bg-[#b4f031]/10 flex items-center gap-2"
+                            className="px-3 py-2 rounded-md text-sm font-semibold text-slate-700 dark:text-zinc-300 hover:bg-emerald-50 dark:hover:bg-zinc-900 flex items-center gap-2"
                         >
-                            <Layers className="h-4 w-4 text-[#84cc16] dark:text-[#b4f031]" />
+                            <Layers className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
                             <span>Master Anatomi Otot</span>
                         </Link>
                         <Link
                             href={route('injuries.index')}
-                            className="px-3 py-2 rounded-md text-sm font-semibold text-slate-700 dark:text-slate-300 hover:bg-[#b4f031]/10 flex items-center gap-2"
+                            className="px-3 py-2 rounded-md text-sm font-semibold text-slate-700 dark:text-zinc-300 hover:bg-emerald-50 dark:hover:bg-zinc-900 flex items-center gap-2"
                         >
-                            <ShieldAlert className="h-4 w-4 text-[#84cc16] dark:text-[#b4f031]" />
+                            <ShieldAlert className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
                             <span>Master Potensi Cedera</span>
                         </Link>
                         <Link
                             href={route('athletes.index')}
-                            className="px-3 py-2 rounded-md text-sm font-semibold text-slate-700 dark:text-slate-300 hover:bg-[#b4f031]/10 flex items-center gap-2"
+                            className="px-3 py-2 rounded-md text-sm font-semibold text-slate-700 dark:text-zinc-300 hover:bg-emerald-50 dark:hover:bg-zinc-900 flex items-center gap-2"
                         >
-                            <Users className="h-4 w-4 text-[#84cc16] dark:text-[#b4f031]" />
+                            <Users className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
                             <span>Kelola Atlet</span>
                         </Link>
                         <Link
                             href={route('users.index')}
-                            className="px-3 py-2 rounded-md text-sm font-semibold text-slate-700 dark:text-slate-300 hover:bg-[#b4f031]/10 flex items-center gap-2"
+                            className="px-3 py-2 rounded-md text-sm font-semibold text-slate-700 dark:text-zinc-300 hover:bg-emerald-50 dark:hover:bg-zinc-900 flex items-center gap-2"
                         >
-                            <ShieldCheck className="h-4 w-4 text-[#84cc16] dark:text-[#b4f031]" />
+                            <ShieldCheck className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
                             <span>Kelola Admin</span>
                         </Link>
                     </div>

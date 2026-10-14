@@ -141,20 +141,20 @@ export default function AssessmentForm({
                         return (
                             <div
                                 key={category}
-                                className="bg-white dark:bg-[#0D1322] border border-slate-200/90 dark:border-slate-800 rounded-lg shadow-xs overflow-hidden"
+                                className="bg-white dark:bg-zinc-950 border border-slate-200/90 dark:border-zinc-800 rounded-lg shadow-xs overflow-hidden"
                             >
-                                <div className="px-4 py-2.5 bg-slate-50/80 dark:bg-slate-900/60 border-b border-slate-200/80 dark:border-slate-800 flex items-center justify-between">
+                                <div className="px-4 py-2.5 bg-slate-50/80 dark:bg-zinc-900/60 border-b border-slate-200/80 dark:border-zinc-800 flex items-center justify-between">
                                     <div className="flex items-center gap-2">
-                                        <span className="w-2 h-2 rounded-full bg-[#84cc16] dark:bg-[#b4f031]" />
+                                        <span className="w-2 h-2 rounded-full bg-emerald-600 dark:bg-emerald-400" />
                                         <h5 className="font-extrabold text-slate-900 dark:text-white text-xs uppercase tracking-wider">
                                             {category}
                                         </h5>
-                                        <span className="text-[10.5px] font-medium text-slate-400 dark:text-slate-500">
+                                        <span className="text-[10.5px] font-medium text-slate-400 dark:text-zinc-500">
                                             ({categoryItems.length} gerakan)
                                         </span>
                                     </div>
                                     {categorySelectedCount > 0 && (
-                                        <span className="text-[10.5px] font-bold px-2 py-0.5 rounded-full bg-[#b4f031]/20 text-slate-900 dark:text-[#b4f031] border border-[#b4f031]/40">
+                                        <span className="text-[10.5px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-800 dark:text-emerald-300 border border-emerald-500/30">
                                             {categorySelectedCount} Terpilih
                                         </span>
                                     )}
@@ -168,12 +168,12 @@ export default function AssessmentForm({
                                                 key={comp.id}
                                                 className={`flex flex-col border rounded-lg overflow-hidden cursor-pointer transition-all ${
                                                     isChecked
-                                                        ? 'border-[#84cc16] dark:border-[#b4f031] ring-1 ring-[#b4f031]/30 bg-[#b4f031]/10 dark:bg-[#b4f031]/10 shadow-2xs'
-                                                        : 'border-slate-200 dark:border-slate-800/90 bg-white dark:bg-[#0F172A]/50 hover:border-slate-300 dark:hover:border-slate-700'
+                                                        ? 'border-emerald-500 dark:border-emerald-500 ring-1 ring-emerald-500/30 bg-emerald-50/50 dark:bg-emerald-950/20 shadow-2xs'
+                                                        : 'border-slate-200 dark:border-zinc-800/90 bg-white dark:bg-zinc-900/50 hover:border-slate-300 dark:hover:border-zinc-700'
                                                 }`}
                                             >
                                                 {comp.image_path ? (
-                                                    <div className="w-full h-24 bg-slate-50 dark:bg-slate-900/40 border-b border-slate-100 dark:border-slate-800 p-2 flex items-center justify-center">
+                                                    <div className="w-full h-24 bg-slate-50 dark:bg-zinc-900/40 border-b border-slate-100 dark:border-zinc-800 p-2 flex items-center justify-center">
                                                         <img
                                                             src={comp.image_path.startsWith('/') ? comp.image_path : `/storage/${comp.image_path}`}
                                                             alt={comp.name}
@@ -184,7 +184,7 @@ export default function AssessmentForm({
                                                         />
                                                     </div>
                                                 ) : (
-                                                    <div className="w-full h-20 bg-slate-50 dark:bg-slate-900/30 border-b border-slate-100 dark:border-slate-800/80 flex flex-col items-center justify-center text-slate-400 dark:text-slate-600">
+                                                    <div className="w-full h-20 bg-slate-50 dark:bg-zinc-900/30 border-b border-slate-100 dark:border-zinc-800/80 flex flex-col items-center justify-center text-slate-400 dark:text-zinc-600">
                                                         <Eye size={16} className="mb-1 opacity-40" />
                                                         <span className="text-[9px] uppercase font-bold tracking-wider">
                                                             Visual Checklist
@@ -195,7 +195,7 @@ export default function AssessmentForm({
                                                 <div className="p-2.5 flex items-start gap-2 flex-1">
                                                     <input
                                                         type="checkbox"
-                                                        className="mt-0.5 rounded text-[#84cc16] focus:ring-[#84cc16] w-3.5 h-3.5 bg-white dark:bg-slate-800 border-slate-300 dark:border-slate-700 cursor-pointer shrink-0"
+                                                        className="mt-0.5 rounded text-emerald-600 focus:ring-emerald-500 w-3.5 h-3.5 bg-white dark:bg-zinc-800 border-slate-300 dark:border-zinc-700 cursor-pointer shrink-0"
                                                         checked={isChecked}
                                                         onChange={() => handleCheckboxChange(comp.id)}
                                                     />
@@ -204,7 +204,7 @@ export default function AssessmentForm({
                                                             {comp.name}
                                                         </span>
                                                         {comp.checkpoint && (
-                                                            <span className="text-[9.5px] font-semibold text-slate-400 dark:text-slate-500">
+                                                            <span className="text-[9.5px] font-semibold text-slate-400 dark:text-zinc-500">
                                                                 {comp.checkpoint}
                                                             </span>
                                                         )}
@@ -223,13 +223,13 @@ export default function AssessmentForm({
                     KOLOM KANAN (SIDEBAR): Form Input, Ringkasan Pilihan & Submit
                    ═══════════════════════════════════════ */}
                 <div className="order-2 lg:col-span-4 xl:col-span-3 space-y-4 lg:sticky lg:top-20">
-                    <div className="bg-white dark:bg-[#0D1322] border border-slate-200 dark:border-slate-800 rounded-lg shadow-xs overflow-hidden">
-                        <div className="px-4 py-3 bg-slate-50/80 dark:bg-slate-900/60 border-b border-slate-200/80 dark:border-slate-800">
+                    <div className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 rounded-lg shadow-xs overflow-hidden">
+                        <div className="px-4 py-3 bg-slate-50/80 dark:bg-zinc-900/60 border-b border-slate-200/80 dark:border-zinc-800">
                             <h3 className="text-xs sm:text-sm font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
                                 {isEditMode ? (
-                                    <Edit size={14} className="text-[#84cc16] dark:text-[#b4f031]" />
+                                    <Edit size={14} className="text-emerald-600 dark:text-emerald-400" />
                                 ) : (
-                                    <Calendar size={14} className="text-[#84cc16] dark:text-[#b4f031]" />
+                                    <Calendar size={14} className="text-emerald-600 dark:text-emerald-400" />
                                 )}
                                 <span>{isEditMode ? 'Perbarui Evaluasi PMA' : 'Form Evaluasi Baru'}</span>
                             </h3>
@@ -249,7 +249,7 @@ export default function AssessmentForm({
                                     type="date"
                                     value={data.assessment_date}
                                     onChange={(e) => setData('assessment_date', e.target.value)}
-                                    className="w-full rounded-md border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 px-3 py-1.5 text-xs font-semibold text-slate-800 dark:text-slate-100 shadow-2xs focus:ring-2 focus:ring-[#84cc16] outline-none transition-all cursor-pointer"
+                                    className="w-full rounded-md border border-slate-200 dark:border-zinc-800 bg-slate-50 dark:bg-zinc-900 px-3 py-1.5 text-xs font-semibold text-slate-800 dark:text-zinc-100 shadow-2xs focus:ring-2 focus:ring-emerald-500 outline-none transition-all cursor-pointer"
                                     required
                                 />
                             </div>
@@ -267,7 +267,7 @@ export default function AssessmentForm({
                                         placeholder="175"
                                         value={data.current_height_cm || ''}
                                         onChange={(e) => setData('current_height_cm', e.target.value)}
-                                        className="w-full rounded-md border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 px-2 py-1.5 text-xs font-semibold text-slate-800 dark:text-slate-100 shadow-2xs focus:ring-2 focus:ring-[#84cc16] outline-none"
+                                        className="w-full rounded-md border border-slate-200 dark:border-zinc-800 bg-slate-50 dark:bg-zinc-900 px-2 py-1.5 text-xs font-semibold text-slate-800 dark:text-zinc-100 shadow-2xs focus:ring-2 focus:ring-emerald-500 outline-none"
                                     />
                                 </div>
                                 <div className="space-y-1">
@@ -281,7 +281,7 @@ export default function AssessmentForm({
                                         placeholder="68"
                                         value={data.current_weight_kg || ''}
                                         onChange={(e) => setData('current_weight_kg', e.target.value)}
-                                        className="w-full rounded-md border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 px-2 py-1.5 text-xs font-semibold text-slate-800 dark:text-slate-100 shadow-2xs focus:ring-2 focus:ring-[#84cc16] outline-none"
+                                        className="w-full rounded-md border border-slate-200 dark:border-zinc-800 bg-slate-50 dark:bg-zinc-900 px-2 py-1.5 text-xs font-semibold text-slate-800 dark:text-zinc-100 shadow-2xs focus:ring-2 focus:ring-emerald-500 outline-none"
                                     />
                                 </div>
                             </div>
@@ -296,13 +296,13 @@ export default function AssessmentForm({
                                     value={data.notes || ''}
                                     onChange={(e) => setData('notes', e.target.value)}
                                     rows={3}
-                                    className="w-full rounded-md border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 px-3 py-1.5 text-xs font-medium text-slate-800 dark:text-slate-100 shadow-2xs focus:ring-2 focus:ring-[#84cc16] outline-none resize-y"
+                                    className="w-full rounded-md border border-slate-200 dark:border-zinc-800 bg-slate-50 dark:bg-zinc-900 px-3 py-1.5 text-xs font-medium text-slate-800 dark:text-zinc-100 shadow-2xs focus:ring-2 focus:ring-emerald-500 outline-none resize-y"
                                     placeholder="Catatan temuan khusus gerak, rasa nyeri, atau keluhan atlet..."
                                 />
                             </div>
 
                             {/* Live Selection Summary */}
-                            <div className="pt-2 border-t border-slate-100 dark:border-slate-800 space-y-2">
+                            <div className="pt-2 border-t border-slate-100 dark:border-zinc-800 space-y-2">
                                 <div className="flex items-center justify-between">
                                     <div className="flex items-center gap-1.5">
                                         <ListChecks size={13} className="text-slate-500 dark:text-slate-400" />
@@ -310,7 +310,7 @@ export default function AssessmentForm({
                                             Kompensasi Dipilih
                                         </span>
                                     </div>
-                                    <span className="text-[10.5px] font-bold text-[#84cc16] dark:text-[#b4f031]">
+                                    <span className="text-[10.5px] font-bold text-emerald-600 dark:text-emerald-400">
                                         {selectedItems.length} terpilih
                                     </span>
                                 </div>
@@ -321,7 +321,7 @@ export default function AssessmentForm({
                                             {selectedItems.map((item) => (
                                                 <li
                                                     key={item.id}
-                                                    className="flex items-center justify-between py-1 px-2 rounded-md bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200"
+                                                    className="flex items-center justify-between py-1 px-2 rounded-md bg-slate-50 dark:bg-zinc-900/80 border border-slate-200 dark:border-zinc-800 text-slate-700 dark:text-zinc-200"
                                                 >
                                                     <span className="font-medium truncate pr-2 text-[10.5px]">
                                                         {item.name}
@@ -338,7 +338,7 @@ export default function AssessmentForm({
                                             ))}
                                         </ul>
                                     ) : (
-                                        <div className="p-3 text-center rounded-md bg-slate-50 dark:bg-slate-900/50 border border-dashed border-slate-200 dark:border-slate-800 text-slate-400 text-[10.5px]">
+                                        <div className="p-3 text-center rounded-md bg-slate-50 dark:bg-zinc-900/50 border border-dashed border-slate-200 dark:border-zinc-800 text-slate-400 text-[10.5px]">
                                             Centang temuan kompensasi atau gunakan pemindai AI di atas
                                         </div>
                                     )}
@@ -346,11 +346,11 @@ export default function AssessmentForm({
                             </div>
 
                             {/* Action Buttons */}
-                            <div className="pt-2 border-t border-slate-100 dark:border-slate-800 flex flex-col gap-2">
+                            <div className="pt-2 border-t border-slate-100 dark:border-zinc-800 flex flex-col gap-2">
                                 <button
                                     type="submit"
                                     disabled={processing}
-                                    className="w-full inline-flex items-center justify-center rounded-md text-xs font-bold bg-[#84cc16] hover:bg-[#65a30d] dark:bg-[#b4f031] dark:hover:bg-[#a3e635] text-slate-950 shadow-2xs h-9 px-4 gap-1.5 cursor-pointer transition-all disabled:opacity-50"
+                                    className="w-full inline-flex items-center justify-center rounded-md text-xs font-bold bg-emerald-600 hover:bg-emerald-700 dark:bg-emerald-500 dark:hover:bg-emerald-600 text-white shadow-2xs h-9 px-4 gap-1.5 cursor-pointer transition-all disabled:opacity-50"
                                 >
                                     <Save size={14} className="stroke-[2.5]" />
                                     <span>{isEditMode ? 'Perbarui Evaluasi' : 'Simpan Evaluasi PMA'}</span>
@@ -360,7 +360,7 @@ export default function AssessmentForm({
                                     <button
                                         type="button"
                                         onClick={cancelEdit}
-                                        className="w-full inline-flex items-center justify-center rounded-md text-xs font-semibold border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 h-8 px-3.5 gap-1.5 shadow-2xs cursor-pointer transition-colors"
+                                        className="w-full inline-flex items-center justify-center rounded-md text-xs font-semibold border border-slate-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 hover:bg-slate-50 dark:hover:bg-zinc-800 text-slate-700 dark:text-zinc-200 h-8 px-3.5 gap-1.5 shadow-2xs cursor-pointer transition-colors"
                                     >
                                         <X size={13} />
                                         <span>Batal Edit</span>

@@ -41,11 +41,11 @@ export default function PageHeader({
         }
         // When passed as a component identifier (e.g. icon={Layers} or LucideIcon forwardRef)
         const Icon = IconComponent as ComponentType<LucideProps>;
-        return <Icon size={18} className="text-[#84cc16] dark:text-[#b4f031] shrink-0" />;
+        return <Icon size={18} className="text-emerald-600 dark:text-emerald-400 shrink-0" />;
     };
 
     return (
-        <div className={`space-y-2 pb-3 border-b border-slate-200/90 dark:border-slate-800/90 ${className}`}>
+        <div className={`space-y-2 pb-3 border-b border-slate-200/90 dark:border-zinc-800/90 ${className}`}>
             {/* Optional Breadcrumbs or Back Link */}
             {(breadcrumbs || backUrl) && (
                 <div className="flex items-center gap-1.5 text-[11px] text-slate-500 dark:text-slate-400">
@@ -97,7 +97,7 @@ export default function PageHeader({
                         {badge && (
                             <div className="shrink-0">
                                 {typeof badge === 'string' ? (
-                                    <span className="px-1.5 py-0.5 rounded text-[10px] font-semibold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
+                                    <span className="px-1.5 py-0.5 rounded text-[10px] font-semibold bg-slate-100 dark:bg-zinc-900 text-slate-700 dark:text-zinc-300 border border-slate-200 dark:border-zinc-800">
                                         {badge}
                                     </span>
                                 ) : (

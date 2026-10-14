@@ -206,10 +206,10 @@ export default function DpaShow({
                             <img
                                 src={athlete.photo_url}
                                 alt={athlete.full_name}
-                                className="w-10 h-10 rounded-md object-cover border border-slate-200 dark:border-slate-700 shrink-0"
+                                className="w-10 h-10 rounded-md object-cover border border-slate-200 dark:border-zinc-700 shrink-0"
                             />
                         ) : (
-                            <div className="w-10 h-10 rounded-md bg-lime-500/10 dark:bg-lime-500/20 text-[#65a30d] dark:text-[#b4f031] font-bold text-xs flex items-center justify-center border border-lime-500/30 shrink-0">
+                            <div className="w-10 h-10 rounded-md bg-emerald-500/10 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 font-bold text-xs flex items-center justify-center border border-emerald-500/30 shrink-0">
                                 {initials}
                             </div>
                         )
@@ -217,7 +217,7 @@ export default function DpaShow({
                     title={athlete.full_name}
                     description={
                         <div className="flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400 flex-wrap">
-                            <span className="font-bold text-[#65a30d] dark:text-[#b4f031]">
+                            <span className="font-bold text-emerald-600 dark:text-emerald-400">
                                 {athlete.gender === 'L' ? 'Laki-laki' : 'Perempuan'}
                             </span>
                             {athlete.age && <span>• {athlete.age} th</span>}
@@ -247,7 +247,7 @@ export default function DpaShow({
                                     className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-slate-900 hover:bg-slate-800 dark:bg-white dark:hover:bg-slate-100 text-white dark:text-slate-950 font-bold rounded-md text-xs shadow-2xs transition-all cursor-pointer"
                                     title="Generate Program Latihan Korektif Berdasarkan Hasil Asesmen Ini"
                                 >
-                                    <Dumbbell size={14} className="text-[#84cc16] dark:text-[#65a30d]" />
+                                    <Dumbbell size={14} className="text-emerald-600 dark:text-emerald-400" />
                                     <span>Buat Program Latihan</span>
                                 </Link>
                             )}
@@ -260,7 +260,7 @@ export default function DpaShow({
                                         setIsEditMode(false);
                                         reset();
                                     }}
-                                    className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-[#84cc16] hover:bg-[#65a30d] dark:bg-[#b4f031] dark:hover:bg-[#a3e635] text-slate-950 font-bold rounded-md text-xs shadow-2xs transition-all cursor-pointer"
+                                    className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 dark:bg-emerald-500 dark:hover:bg-emerald-600 text-white font-bold rounded-md text-xs shadow-2xs transition-all cursor-pointer"
                                 >
                                     <Plus size={14} className="stroke-[3]" />
                                     <span>Input Asesmen Baru</span>
@@ -269,9 +269,9 @@ export default function DpaShow({
                                 <button
                                     type="button"
                                     onClick={cancelEdit}
-                                    className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 rounded-md text-xs font-semibold shadow-2xs transition-colors cursor-pointer"
+                                    className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white dark:bg-zinc-900 hover:bg-slate-50 dark:hover:bg-zinc-800 text-slate-700 dark:text-zinc-200 border border-slate-200 dark:border-zinc-800 rounded-md text-xs font-semibold shadow-2xs transition-colors cursor-pointer"
                                 >
-                                    <ArrowLeft size={14} className="text-[#65a30d] dark:text-[#b4f031]" />
+                                    <ArrowLeft size={14} className="text-emerald-600 dark:text-emerald-400" />
                                     <span>Kembali ke Analisis</span>
                                 </button>
                             )}
@@ -289,11 +289,11 @@ export default function DpaShow({
                                 }}
                                 className={`pb-3 flex items-center gap-2 cursor-pointer transition-colors relative ${
                                     activeTab === 'analysis'
-                                        ? 'text-slate-900 dark:text-white font-bold after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-[#84cc16] dark:after:bg-[#b4f031]'
+                                        ? 'text-slate-900 dark:text-white font-bold after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-emerald-600 dark:after:bg-emerald-400'
                                         : 'text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white font-medium'
                                 }`}
                             >
-                                <Target size={14} className={activeTab === 'analysis' ? 'text-[#65a30d] dark:text-[#b4f031]' : ''} />
+                                <Target size={14} className={activeTab === 'analysis' ? 'text-emerald-600 dark:text-emerald-400' : ''} />
                                 <span>Hasil Analisis &amp; Protokol</span>
                             </button>
 
@@ -305,20 +305,20 @@ export default function DpaShow({
                                 }}
                                 className={`pb-3 flex items-center gap-2 cursor-pointer transition-colors relative ${
                                     activeTab === 'gallery'
-                                        ? 'text-slate-900 dark:text-white font-bold after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-[#84cc16] dark:after:bg-[#b4f031]'
+                                        ? 'text-slate-900 dark:text-white font-bold after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-emerald-600 dark:after:bg-emerald-400'
                                         : 'text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white font-medium'
                                 }`}
                             >
-                                <Camera size={14} className={activeTab === 'gallery' ? 'text-[#65a30d] dark:text-[#b4f031]' : ''} />
+                                <Camera size={14} className={activeTab === 'gallery' ? 'text-emerald-600 dark:text-emerald-400' : ''} />
                                 <span>Galeri Postur PMA</span>
-                                <span className="text-[10px] px-1.5 py-0.2 rounded-md bg-lime-500/15 text-lime-800 dark:text-[#b4f031] font-bold">
+                                <span className="text-[10px] px-1.5 py-0.2 rounded-md bg-emerald-500/15 text-emerald-800 dark:text-emerald-300 font-bold">
                                     {galleries.length}
                                 </span>
                             </button>
 
                             {activeTab === 'input' && (
-                                <div className="pb-3 flex items-center gap-2 text-slate-900 dark:text-white font-bold relative after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-[#84cc16] dark:after:bg-[#b4f031]">
-                                    <Plus size={14} className="text-[#65a30d] dark:text-[#b4f031]" />
+                                <div className="pb-3 flex items-center gap-2 text-slate-900 dark:text-white font-bold relative after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-emerald-600 dark:after:bg-emerald-400">
+                                    <Plus size={14} className="text-emerald-600 dark:text-emerald-400" />
                                     <span>{isEditMode ? 'Edit Asesmen' : 'Form Asesmen Baru'}</span>
                                 </div>
                             )}
@@ -341,15 +341,15 @@ export default function DpaShow({
                     <div className="space-y-5">
                         {/* Banner CTA Program Latihan Korektif */}
                         {analysis && (
-                            <div className="bg-gradient-to-r from-slate-900 via-slate-850 to-slate-900 dark:from-[#0E1526] dark:via-[#131C31] dark:to-[#0E1526] text-white rounded-lg p-4 sm:p-5 border border-slate-800 dark:border-slate-800/80 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-md">
+                            <div className="bg-slate-900 text-white rounded-lg p-4 sm:p-5 border border-slate-800 dark:border-zinc-800 dark:bg-zinc-950 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-md">
                                 <div className="flex items-start sm:items-center gap-3.5">
-                                    <div className="w-10 h-10 rounded-md bg-[#84cc16]/20 text-[#b4f031] flex items-center justify-center shrink-0 border border-[#84cc16]/30">
+                                    <div className="w-10 h-10 rounded-md bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0 border border-emerald-500/30">
                                         <Dumbbell size={20} />
                                     </div>
                                     <div>
                                         <h4 className="text-xs sm:text-sm font-bold text-white flex items-center gap-2">
                                             <span>Rekomendasi Program Latihan Korektif (4 Fase NASM)</span>
-                                            <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-[#84cc16]/20 text-[#b4f031]">
+                                            <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/20 text-emerald-400">
                                                 Siap Digenerate
                                             </span>
                                         </h4>
@@ -364,7 +364,7 @@ export default function DpaShow({
                                         athlete_id: athlete.id,
                                         assessment_id: latest?.id,
                                     })}
-                                    className="inline-flex items-center justify-center gap-1.5 px-4 py-2 bg-[#84cc16] hover:bg-[#65a30d] dark:bg-[#b4f031] dark:hover:bg-[#a3e635] text-slate-950 font-bold rounded-md text-xs shadow-md transition-all shrink-0 cursor-pointer"
+                                    className="inline-flex items-center justify-center gap-1.5 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 dark:bg-emerald-500 dark:hover:bg-emerald-600 text-white font-bold rounded-md text-xs shadow-md transition-all shrink-0 cursor-pointer"
                                 >
                                     <Sparkles size={14} className="stroke-[2.5]" />
                                     <span>Generate Program Latihan</span>
@@ -381,15 +381,15 @@ export default function DpaShow({
                                     {analysis.compensations.map((comp, idx) => (
                                         <div
                                             key={idx}
-                                            className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-md shadow-2xs overflow-hidden"
+                                            className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 rounded-md shadow-2xs overflow-hidden"
                                         >
                                             {/* Header Kartu Kompensasi */}
-                                            <div className="px-4 py-3 bg-slate-50 dark:bg-slate-800/50 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
+                                            <div className="px-4 py-3 bg-slate-50 dark:bg-zinc-900/60 border-b border-slate-200 dark:border-zinc-800 flex items-center justify-between">
                                                 <div className="flex items-center gap-2 flex-wrap">
-                                                    <span className="text-[11px] font-mono font-bold text-[#65a30d] dark:text-[#b4f031] uppercase">
+                                                    <span className="text-[11px] font-mono font-bold text-emerald-600 dark:text-emerald-400 uppercase">
                                                         {comp.category}
                                                     </span>
-                                                    <span className="text-slate-300 dark:text-slate-700 font-bold">•</span>
+                                                    <span className="text-slate-300 dark:text-zinc-700 font-bold">•</span>
                                                     <h3 className="text-xs sm:text-sm font-bold text-slate-900 dark:text-white">
                                                         {comp.name}
                                                     </h3>
@@ -403,9 +403,9 @@ export default function DpaShow({
 
                                             <div className="p-4 sm:p-5 grid grid-cols-1 lg:grid-cols-12 gap-5">
                                                 {/* Kolom Kiri Dalam: Ilustrasi Visual & Ketidakseimbangan Otot */}
-                                                <div className="lg:col-span-4 space-y-3 lg:border-r border-slate-100 dark:border-slate-800 lg:pr-5">
+                                                <div className="lg:col-span-4 space-y-3 lg:border-r border-slate-100 dark:border-zinc-800 lg:pr-5">
                                                     {comp.image_path && (
-                                                        <div className="bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-md p-2 flex items-center justify-center overflow-hidden">
+                                                        <div className="bg-slate-50 dark:bg-zinc-900/40 border border-slate-200 dark:border-zinc-800 rounded-md p-2 flex items-center justify-center overflow-hidden">
                                                             <img
                                                                 src={
                                                                     comp.image_path.startsWith('/')
@@ -420,34 +420,34 @@ export default function DpaShow({
 
                                                     <div className="space-y-2 text-xs">
                                                         {/* Overactive */}
-                                                        <div className="bg-slate-50 dark:bg-slate-800/40 rounded-md p-3 border border-slate-200/80 dark:border-slate-800 space-y-1">
+                                                        <div className="bg-slate-50 dark:bg-zinc-900/40 rounded-md p-3 border border-slate-200/80 dark:border-zinc-800 space-y-1">
                                                             <div className="flex items-center gap-1.5 text-rose-600 dark:text-rose-400 font-semibold text-[11px]">
                                                                 <Flame size={13} className="shrink-0" />
                                                                 <span>Otot Overactive (Tegang)</span>
                                                             </div>
-                                                            <p className="text-slate-700 dark:text-slate-300 font-medium leading-relaxed">
+                                                            <p className="text-slate-700 dark:text-zinc-300 font-medium leading-relaxed">
                                                                 {splitItems(comp.overactive_muscles).join(', ') || '-'}
                                                             </p>
                                                         </div>
 
                                                         {/* Underactive */}
-                                                        <div className="bg-slate-50 dark:bg-slate-800/40 rounded-md p-3 border border-slate-200/80 dark:border-slate-800 space-y-1">
+                                                        <div className="bg-slate-50 dark:bg-zinc-900/40 rounded-md p-3 border border-slate-200/80 dark:border-zinc-800 space-y-1">
                                                             <div className="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400 font-semibold text-[11px]">
                                                                 <Dumbbell size={13} className="shrink-0" />
                                                                 <span>Otot Underactive (Lemah)</span>
                                                             </div>
-                                                            <p className="text-slate-700 dark:text-slate-300 font-medium leading-relaxed">
+                                                            <p className="text-slate-700 dark:text-zinc-300 font-medium leading-relaxed">
                                                                 {splitItems(comp.underactive_muscles).join(', ') || '-'}
                                                             </p>
                                                         </div>
 
                                                         {/* Potensi Cedera */}
-                                                        <div className="bg-slate-50 dark:bg-slate-800/40 rounded-md p-3 border border-slate-200/80 dark:border-slate-800 space-y-1">
+                                                        <div className="bg-slate-50 dark:bg-zinc-900/40 rounded-md p-3 border border-slate-200/80 dark:border-zinc-800 space-y-1">
                                                             <div className="flex items-center gap-1.5 text-amber-600 dark:text-amber-400 font-semibold text-[11px]">
                                                                 <ShieldAlert size={13} className="shrink-0" />
                                                                 <span>Potensi Cedera</span>
                                                             </div>
-                                                            <p className="text-slate-700 dark:text-slate-300 font-medium leading-relaxed">
+                                                            <p className="text-slate-700 dark:text-zinc-300 font-medium leading-relaxed">
                                                                 {splitItems(comp.possible_injuries).join(', ') || '-'}
                                                             </p>
                                                         </div>
@@ -456,14 +456,14 @@ export default function DpaShow({
                                                         <button
                                                             type="button"
                                                             onClick={() => setExpandedCompVisualId(expandedCompVisualId === comp.id ? null : comp.id)}
-                                                            className="w-full py-1.5 px-2.5 rounded-md text-[11px] font-semibold flex items-center justify-center gap-1.5 border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/80 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 transition-colors cursor-pointer"
+                                                            className="w-full py-1.5 px-2.5 rounded-md text-[11px] font-semibold flex items-center justify-center gap-1.5 border border-slate-200 dark:border-zinc-700 bg-slate-50 dark:bg-zinc-900/80 hover:bg-slate-100 dark:hover:bg-zinc-800 text-slate-700 dark:text-zinc-200 transition-colors cursor-pointer"
                                                         >
-                                                            <Activity size={12} className="text-[#65a30d] dark:text-[#b4f031]" />
+                                                            <Activity size={12} className="text-emerald-600 dark:text-emerald-400" />
                                                             <span>{expandedCompVisualId === comp.id ? 'Sembunyikan Peta Visual' : 'Lihat Peta Visual Temuan Ini'}</span>
                                                         </button>
 
                                                         {expandedCompVisualId === comp.id && (
-                                                            <div className="p-3 bg-white dark:bg-slate-900 rounded-md border border-slate-200 dark:border-slate-800 animate-in fade-in">
+                                                            <div className="p-3 bg-white dark:bg-zinc-950 rounded-md border border-slate-200 dark:border-zinc-800 animate-in fade-in">
                                                                 <BodyMuscleVisualizer
                                                                     overactiveMuscles={comp.overactive_muscles}
                                                                     underactiveMuscles={comp.underactive_muscles}
@@ -481,8 +481,8 @@ export default function DpaShow({
 
                                                 {/* Kolom Kanan Dalam: 4-Fase Protokol Latihan Korektif */}
                                                 <div className="lg:col-span-8 space-y-3">
-                                                    <div className="flex items-center gap-2 pb-1 border-b border-slate-100 dark:border-slate-800">
-                                                        <Zap size={14} className="text-[#65a30d] dark:text-[#b4f031]" />
+                                                    <div className="flex items-center gap-2 pb-1 border-b border-slate-100 dark:border-zinc-800">
+                                                        <Zap size={14} className="text-emerald-600 dark:text-emerald-400" />
                                                         <h4 className="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-tight">
                                                             Protokol Korektif (4 Fase NASM)
                                                         </h4>
@@ -490,10 +490,10 @@ export default function DpaShow({
 
                                                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                                         {/* Phase 1: Inhibit */}
-                                                        <div className="bg-slate-50/50 dark:bg-slate-800/30 border border-slate-200/80 dark:border-slate-800 rounded-md p-3 flex flex-col justify-between">
+                                                        <div className="bg-slate-50/50 dark:bg-zinc-900/30 border border-slate-200/80 dark:border-zinc-800 rounded-md p-3 flex flex-col justify-between">
                                                             <div>
-                                                                <div className="flex items-center gap-2 pb-2 border-b border-slate-200/60 dark:border-slate-800">
-                                                                    <span className="w-5 h-5 rounded-md bg-lime-500/15 text-lime-900 dark:text-[#b4f031] border border-lime-500/30 text-[11px] font-bold flex items-center justify-center shrink-0">
+                                                                <div className="flex items-center gap-2 pb-2 border-b border-slate-200/60 dark:border-zinc-800">
+                                                                    <span className="w-5 h-5 rounded-md bg-emerald-500/15 text-emerald-900 dark:text-emerald-300 border border-emerald-500/30 text-[11px] font-bold flex items-center justify-center shrink-0">
                                                                         1
                                                                     </span>
                                                                     <div>
@@ -505,10 +505,10 @@ export default function DpaShow({
                                                                         </span>
                                                                     </div>
                                                                 </div>
-                                                                <ul className="space-y-1 text-xs text-slate-700 dark:text-slate-300 mt-2.5">
+                                                                <ul className="space-y-1 text-xs text-slate-700 dark:text-zinc-300 mt-2.5">
                                                                     {splitItems(comp.exercises_smr).map((m, i) => (
                                                                         <li key={i} className="flex items-start gap-1.5 leading-snug">
-                                                                            <span className="text-[#84cc16] mt-0.5">•</span>
+                                                                            <span className="text-emerald-500 mt-0.5">•</span>
                                                                             <span>{m}</span>
                                                                         </li>
                                                                     ))}
@@ -518,16 +518,16 @@ export default function DpaShow({
                                                                 <img
                                                                     src={comp.image_smr.startsWith('/') ? comp.image_smr : `/storage/${comp.image_smr}`}
                                                                     alt="SMR"
-                                                                    className="mt-3 w-full max-h-24 object-contain rounded border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950"
+                                                                    className="mt-3 w-full max-h-24 object-contain rounded border border-slate-200 dark:border-zinc-800 bg-white dark:bg-zinc-950"
                                                                 />
                                                             )}
                                                         </div>
 
                                                         {/* Phase 2: Lengthen */}
-                                                        <div className="bg-slate-50/50 dark:bg-slate-800/30 border border-slate-200/80 dark:border-slate-800 rounded-md p-3 flex flex-col justify-between">
+                                                        <div className="bg-slate-50/50 dark:bg-zinc-900/30 border border-slate-200/80 dark:border-zinc-800 rounded-md p-3 flex flex-col justify-between">
                                                             <div>
-                                                                <div className="flex items-center gap-2 pb-2 border-b border-slate-200/60 dark:border-slate-800">
-                                                                    <span className="w-5 h-5 rounded-md bg-lime-500/15 text-lime-900 dark:text-[#b4f031] border border-lime-500/30 text-[11px] font-bold flex items-center justify-center shrink-0">
+                                                                <div className="flex items-center gap-2 pb-2 border-b border-slate-200/60 dark:border-zinc-800">
+                                                                    <span className="w-5 h-5 rounded-md bg-emerald-500/15 text-emerald-900 dark:text-emerald-300 border border-emerald-500/30 text-[11px] font-bold flex items-center justify-center shrink-0">
                                                                         2
                                                                     </span>
                                                                     <div>
@@ -539,10 +539,10 @@ export default function DpaShow({
                                                                         </span>
                                                                     </div>
                                                                 </div>
-                                                                <ul className="space-y-1 text-xs text-slate-700 dark:text-slate-300 mt-2.5">
+                                                                <ul className="space-y-1 text-xs text-slate-700 dark:text-zinc-300 mt-2.5">
                                                                     {splitItems(comp.exercises_stretching).map((m, i) => (
                                                                         <li key={i} className="flex items-start gap-1.5 leading-snug">
-                                                                            <span className="text-[#84cc16] mt-0.5">•</span>
+                                                                            <span className="text-emerald-500 mt-0.5">•</span>
                                                                             <span>{m}</span>
                                                                         </li>
                                                                     ))}
@@ -552,16 +552,16 @@ export default function DpaShow({
                                                                 <img
                                                                     src={comp.image_stretching.startsWith('/') ? comp.image_stretching : `/storage/${comp.image_stretching}`}
                                                                     alt="Stretching"
-                                                                    className="mt-3 w-full max-h-24 object-contain rounded border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950"
+                                                                    className="mt-3 w-full max-h-24 object-contain rounded border border-slate-200 dark:border-zinc-800 bg-white dark:bg-zinc-950"
                                                                 />
                                                             )}
                                                         </div>
 
                                                         {/* Phase 3: Activate */}
-                                                        <div className="bg-slate-50/50 dark:bg-slate-800/30 border border-slate-200/80 dark:border-slate-800 rounded-md p-3 flex flex-col justify-between">
+                                                        <div className="bg-slate-50/50 dark:bg-zinc-900/30 border border-slate-200/80 dark:border-zinc-800 rounded-md p-3 flex flex-col justify-between">
                                                             <div>
-                                                                <div className="flex items-center gap-2 pb-2 border-b border-slate-200/60 dark:border-slate-800">
-                                                                    <span className="w-5 h-5 rounded-md bg-lime-500/15 text-lime-900 dark:text-[#b4f031] border border-lime-500/30 text-[11px] font-bold flex items-center justify-center shrink-0">
+                                                                <div className="flex items-center gap-2 pb-2 border-b border-slate-200/60 dark:border-zinc-800">
+                                                                    <span className="w-5 h-5 rounded-md bg-emerald-500/15 text-emerald-900 dark:text-emerald-300 border border-emerald-500/30 text-[11px] font-bold flex items-center justify-center shrink-0">
                                                                         3
                                                                     </span>
                                                                     <div>
@@ -573,10 +573,10 @@ export default function DpaShow({
                                                                         </span>
                                                                     </div>
                                                                 </div>
-                                                                <ul className="space-y-1 text-xs text-slate-700 dark:text-slate-300 mt-2.5">
+                                                                <ul className="space-y-1 text-xs text-slate-700 dark:text-zinc-300 mt-2.5">
                                                                     {splitItems(comp.exercises_isometrics).map((m, i) => (
                                                                         <li key={i} className="flex items-start gap-1.5 leading-snug">
-                                                                            <span className="text-[#84cc16] mt-0.5">•</span>
+                                                                            <span className="text-emerald-500 mt-0.5">•</span>
                                                                             <span>{m}</span>
                                                                         </li>
                                                                     ))}
@@ -586,16 +586,16 @@ export default function DpaShow({
                                                                 <img
                                                                     src={comp.image_isometrics.startsWith('/') ? comp.image_isometrics : `/storage/${comp.image_isometrics}`}
                                                                     alt="Isometrics"
-                                                                    className="mt-3 w-full max-h-24 object-contain rounded border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950"
+                                                                    className="mt-3 w-full max-h-24 object-contain rounded border border-slate-200 dark:border-zinc-800 bg-white dark:bg-zinc-950"
                                                                 />
                                                             )}
                                                         </div>
 
                                                         {/* Phase 4: Integrate */}
-                                                        <div className="bg-slate-50/50 dark:bg-slate-800/30 border border-slate-200/80 dark:border-slate-800 rounded-md p-3 flex flex-col justify-between">
+                                                        <div className="bg-slate-50/50 dark:bg-zinc-900/30 border border-slate-200/80 dark:border-zinc-800 rounded-md p-3 flex flex-col justify-between">
                                                             <div>
-                                                                <div className="flex items-center gap-2 pb-2 border-b border-slate-200/60 dark:border-slate-800">
-                                                                    <span className="w-5 h-5 rounded-md bg-lime-500/15 text-lime-900 dark:text-[#b4f031] border border-lime-500/30 text-[11px] font-bold flex items-center justify-center shrink-0">
+                                                                <div className="flex items-center gap-2 pb-2 border-b border-slate-200/60 dark:border-zinc-800">
+                                                                    <span className="w-5 h-5 rounded-md bg-emerald-500/15 text-emerald-900 dark:text-emerald-300 border border-emerald-500/30 text-[11px] font-bold flex items-center justify-center shrink-0">
                                                                         4
                                                                     </span>
                                                                     <div>
@@ -607,10 +607,10 @@ export default function DpaShow({
                                                                         </span>
                                                                     </div>
                                                                 </div>
-                                                                <ul className="space-y-1 text-xs text-slate-700 dark:text-slate-300 mt-2.5">
+                                                                <ul className="space-y-1 text-xs text-slate-700 dark:text-zinc-300 mt-2.5">
                                                                     {splitItems(comp.exercises_integrated).map((m, i) => (
                                                                         <li key={i} className="flex items-start gap-1.5 leading-snug">
-                                                                            <span className="text-[#84cc16] mt-0.5">•</span>
+                                                                            <span className="text-emerald-500 mt-0.5">•</span>
                                                                             <span>{m}</span>
                                                                         </li>
                                                                     ))}
@@ -620,7 +620,7 @@ export default function DpaShow({
                                                                 <img
                                                                     src={comp.image_integrated.startsWith('/') ? comp.image_integrated : `/storage/${comp.image_integrated}`}
                                                                     alt="Integrated"
-                                                                    className="mt-3 w-full max-h-24 object-contain rounded border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950"
+                                                                    className="mt-3 w-full max-h-24 object-contain rounded border border-slate-200 dark:border-zinc-800 bg-white dark:bg-zinc-950"
                                                                 />
                                                             )}
                                                         </div>
@@ -631,7 +631,7 @@ export default function DpaShow({
                                     ))}
 
                                     {analysis.compensations.length === 0 && (
-                                        <div className="p-8 text-center bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-md shadow-2xs space-y-2">
+                                        <div className="p-8 text-center bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 rounded-md shadow-2xs space-y-2">
                                             <CheckCircle2 size={28} className="text-emerald-500 mx-auto" />
                                             <p className="text-sm font-bold text-slate-900 dark:text-white">
                                                 Tidak Ada Kompensasi Gerakan Terdeteksi
@@ -659,10 +659,10 @@ export default function DpaShow({
                                    ═══════════════════════════════════════ */}
                                 <div className="order-2 lg:col-span-4 space-y-4">
                                     {/* 1. Overall Muscle Imbalance Profile */}
-                                    <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-md shadow-2xs">
-                                        <div className="px-4 py-3 bg-slate-50 dark:bg-slate-800/50 border-b border-slate-200 dark:border-slate-800 rounded-t-md">
+                                    <div className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 rounded-md shadow-2xs">
+                                        <div className="px-4 py-3 bg-slate-50 dark:bg-zinc-900/50 border-b border-slate-200 dark:border-zinc-800 rounded-t-md">
                                             <h3 className="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
-                                                <Activity size={14} className="text-[#65a30d] dark:text-[#b4f031]" />
+                                                <Activity size={14} className="text-emerald-600 dark:text-emerald-400" />
                                                 <span>Profil Ketidakseimbangan Otot</span>
                                             </h3>
                                             <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
@@ -812,28 +812,28 @@ export default function DpaShow({
                                     )}
 
                                     {/* 3. Evaluation History Timeline */}
-                                    <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-md shadow-2xs overflow-hidden">
-                                        <div className="px-4 py-3 bg-slate-50 dark:bg-slate-800/50 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
+                                    <div className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 rounded-md shadow-2xs overflow-hidden">
+                                        <div className="px-4 py-3 bg-slate-50 dark:bg-zinc-900/60 border-b border-slate-200 dark:border-zinc-800 flex items-center justify-between">
                                             <div className="flex items-center gap-1.5">
                                                 <History size={14} className="text-slate-400" />
                                                 <h3 className="text-xs font-bold text-slate-900 dark:text-white">
                                                     Riwayat Sesi Evaluasi
                                                 </h3>
                                             </div>
-                                            <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-lime-500/15 text-lime-800 dark:text-[#b4f031] border border-lime-500/30">
+                                            <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-emerald-500/15 text-emerald-800 dark:text-emerald-300 border border-emerald-500/30">
                                                 {assessments.length} Sesi
                                             </span>
                                         </div>
 
-                                        <div className="divide-y divide-slate-100 dark:divide-slate-800 max-h-64 overflow-y-auto">
+                                        <div className="divide-y divide-slate-100 dark:divide-zinc-800 max-h-64 overflow-y-auto">
                                             {assessments.length > 0 ? (
                                                 assessments.map((item, idx) => (
                                                     <div
                                                         key={idx}
-                                                        className="p-3 flex items-center justify-between hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors"
+                                                        className="p-3 flex items-center justify-between hover:bg-slate-50 dark:hover:bg-zinc-900/40 transition-colors"
                                                     >
                                                         <div>
-                                                            <p className="font-semibold text-xs text-slate-900 dark:text-slate-100">
+                                                            <p className="font-semibold text-xs text-slate-900 dark:text-zinc-100">
                                                                 {new Date(item.assessment_date).toLocaleDateString('id-ID', {
                                                                     day: 'numeric',
                                                                     month: 'short',
@@ -849,7 +849,7 @@ export default function DpaShow({
                                                             <button
                                                                 type="button"
                                                                 onClick={() => handleEdit(item)}
-                                                                className="p-1.5 rounded-md bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 transition-colors cursor-pointer"
+                                                                className="p-1.5 rounded-md bg-slate-100 dark:bg-zinc-900 hover:bg-slate-200 dark:hover:bg-zinc-800 text-slate-600 dark:text-zinc-300 transition-colors cursor-pointer"
                                                                 title="Edit Sesi"
                                                             >
                                                                 <Edit size={12} />
@@ -877,7 +877,7 @@ export default function DpaShow({
                         ) : (
                             /* ─── CLEAN UNBOXED EMPTY STATE ─── */
                             <div className="text-center max-w-md mx-auto py-12 sm:py-16 space-y-4">
-                                <div className="w-12 h-12 rounded-md bg-lime-500/10 dark:bg-lime-500/20 text-[#65a30d] dark:text-[#b4f031] flex items-center justify-center mx-auto border border-lime-500/30">
+                                <div className="w-12 h-12 rounded-md bg-emerald-500/10 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mx-auto border border-emerald-500/30">
                                     <Activity size={24} />
                                 </div>
                                 <div className="space-y-1.5">
@@ -891,7 +891,7 @@ export default function DpaShow({
                                 <button
                                     type="button"
                                     onClick={() => setActiveTab('input')}
-                                    className="inline-flex items-center gap-2 px-4 py-2 bg-[#84cc16] hover:bg-[#65a30d] dark:bg-[#b4f031] dark:hover:bg-[#a3e635] text-slate-950 font-bold rounded-md text-xs shadow-2xs transition-all cursor-pointer"
+                                    className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 dark:bg-emerald-500 dark:hover:bg-emerald-600 text-white font-bold rounded-md text-xs shadow-2xs transition-all cursor-pointer"
                                 >
                                     <Plus size={14} className="stroke-[3]" />
                                     <span>Mulai Input Asesmen</span>

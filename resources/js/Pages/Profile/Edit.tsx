@@ -20,14 +20,14 @@ export default function Edit({
                     icon={User}
                     title={
                         <>
-                            Profil <span className="text-[#84cc16] dark:text-[#b4f031]">Pengguna</span>
+                            Profil <span className="text-emerald-600 dark:text-emerald-400">Pengguna</span>
                         </>
                     }
                     description="Perbarui informasi profil akun administrator, email, dan kata sandi keamanan."
                 />
 
                 <div className="max-w-4xl space-y-6">
-                    <div className="bg-white dark:bg-[#0E1526] border border-slate-200/90 dark:border-slate-800 p-5 sm:p-6 rounded-lg shadow-xs">
+                    <div className="bg-white dark:bg-zinc-950 border border-slate-200/90 dark:border-zinc-800 p-5 sm:p-6 rounded-lg shadow-xs">
                         <UpdateProfileInformationForm
                             mustVerifyEmail={mustVerifyEmail}
                             status={status}
@@ -35,11 +35,11 @@ export default function Edit({
                         />
                     </div>
 
-                    <div className="bg-white dark:bg-[#0E1526] border border-slate-200/90 dark:border-slate-800 p-5 sm:p-6 rounded-lg shadow-xs">
+                    <div className="bg-white dark:bg-zinc-950 border border-slate-200/90 dark:border-zinc-800 p-5 sm:p-6 rounded-lg shadow-xs">
                         <UpdatePasswordForm className="max-w-xl" />
                     </div>
 
-                    <div className="bg-white dark:bg-[#0E1526] border border-slate-200/90 dark:border-slate-800 p-5 sm:p-6 rounded-lg shadow-xs">
+                    <div className="bg-white dark:bg-zinc-950 border border-slate-200/90 dark:border-zinc-800 p-5 sm:p-6 rounded-lg shadow-xs">
                         <DeleteUserForm className="max-w-xl" />
                     </div>
                 </div>

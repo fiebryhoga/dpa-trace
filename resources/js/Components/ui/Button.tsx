@@ -4,25 +4,25 @@ import { Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const buttonVariants = cva(
-    'inline-flex items-center justify-center whitespace-nowrap rounded-md text-xs font-semibold transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#b4f031] focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 select-none active:scale-[0.98]',
+    'inline-flex items-center justify-center whitespace-nowrap rounded-md text-xs font-semibold transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 select-none active:scale-[0.98]',
     {
         variants: {
             variant: {
                 default:
-                    'bg-[#b4f031] text-slate-950 font-bold hover:bg-[#a2dd26] dark:bg-[#b4f031] dark:text-slate-950 dark:hover:bg-[#a2dd26]',
+                    'bg-emerald-600 text-white font-bold hover:bg-emerald-700 dark:bg-emerald-600 dark:text-white dark:hover:bg-emerald-500 shadow-xs',
                 brand:
-                    'bg-[#b4f031] text-slate-950 font-bold hover:bg-[#a2dd26] dark:bg-[#b4f031] dark:text-slate-950',
+                    'bg-emerald-600 text-white font-bold hover:bg-emerald-700 dark:bg-emerald-600 dark:text-white dark:hover:bg-emerald-500',
                 emerald:
-                    'bg-emerald-600 text-white hover:bg-emerald-500 dark:bg-emerald-500 dark:hover:bg-emerald-400',
+                    'bg-emerald-600 text-white hover:bg-emerald-700 dark:bg-emerald-600 dark:text-white dark:hover:bg-emerald-500',
                 destructive:
                     'bg-red-600 text-white hover:bg-red-700 dark:bg-red-900/80 dark:text-red-100 dark:hover:bg-red-900',
                 outline:
-                    'border border-slate-200 bg-white text-slate-800 hover:border-[#b4f031] hover:bg-[#b4f031]/10 hover:text-slate-950 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-200 dark:hover:border-[#b4f031]/60 dark:hover:bg-[#b4f031]/10 dark:hover:text-[#b4f031]',
+                    'border border-slate-200 bg-white text-slate-800 hover:border-emerald-500 hover:bg-emerald-50/60 hover:text-emerald-800 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-200 dark:hover:border-emerald-500/60 dark:hover:bg-emerald-950/30 dark:hover:text-emerald-400',
                 secondary:
-                    'bg-[#b4f031]/15 text-slate-900 border border-[#b4f031]/30 hover:bg-[#b4f031]/25 dark:bg-[#b4f031]/15 dark:text-[#b4f031] dark:border-[#b4f031]/30 dark:hover:bg-[#b4f031]/25',
+                    'bg-emerald-50 text-emerald-800 border border-emerald-200/80 hover:bg-emerald-100 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-800/60 dark:hover:bg-emerald-950/60',
                 ghost:
-                    'text-slate-700 hover:bg-[#b4f031]/15 hover:text-slate-950 dark:text-slate-300 dark:hover:bg-[#b4f031]/15 dark:hover:text-[#b4f031]',
-                link: 'text-slate-900 underline-offset-4 hover:underline dark:text-[#b4f031]',
+                    'text-slate-700 hover:bg-emerald-50 hover:text-emerald-800 dark:text-zinc-300 dark:hover:bg-zinc-900 dark:hover:text-white',
+                link: 'text-emerald-700 underline-offset-4 hover:underline dark:text-emerald-400',
             },
             size: {
                 default: 'h-8 px-3 py-1.5 text-xs',

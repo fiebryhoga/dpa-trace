@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
+import { useTheme } from '@/lib/useTheme';
 import { Head, Link } from '@inertiajs/react';
 import PageHeader from '@/Components/PageHeader';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/Components/ui/Card';
@@ -149,6 +150,7 @@ export default function Dashboard({
     genderDistribution = [],
     recentAssessments = [],
 }: DashboardProps) {
+    const { isDark } = useTheme();
     const [distributionTab, setDistributionTab] = useState<'risk' | 'screening'>('risk');
 
     // Custom Glassmorphism Tooltip for Recharts that adapts to Dark/Light Mode
@@ -178,10 +180,10 @@ export default function Dashboard({
             const data = payload[0]?.payload as AssessmentTimelineItem;
             if (data && data.sessionNumber) {
                 return (
-                    <div className="bg-slate-900/95 dark:bg-slate-900/95 text-white p-2.5 rounded-md shadow-xl border border-slate-700/80 text-[10px] space-y-1 backdrop-blur-xs min-w-[150px]">
-                        <div className="flex items-center justify-between border-b border-slate-700 pb-0.5">
-                            <span className="font-bold text-[#b4f031] text-[10px]">{data.sessionNumber}</span>
-                            <span className="text-[9px] text-slate-400">{data.fullDate}</span>
+                    <div className="bg-slate-900/95 dark:bg-zinc-950/95 text-white p-2.5 rounded-md shadow-xl border border-slate-700/80 dark:border-zinc-800 text-[10px] space-y-1 backdrop-blur-xs min-w-[150px]">
+                        <div className="flex items-center justify-between border-b border-slate-700 dark:border-zinc-800 pb-0.5">
+                            <span className="font-bold text-emerald-400 text-[10px]">{data.sessionNumber}</span>
+                            <span className="text-[9px] text-slate-400 dark:text-zinc-400">{data.fullDate}</span>
                         </div>
                         <div className="pt-0.5">
                             <p className="font-bold text-slate-100 text-[11px] truncate max-w-[140px]">{data.athleteName}</p>
@@ -253,7 +255,7 @@ export default function Dashboard({
         {
             name: 'Sudah Ter-skrining',
             count: Math.round((stats.totalAthletes * stats.screeningCoverageRate) / 100),
-            color: '#84cc16',
+            color: isDark ? '#10b981' : '#059669',
         },
         {
             name: 'Belum Ter-skrining',
@@ -271,7 +273,7 @@ export default function Dashboard({
                 <PageHeader
                     title={
                         <>
-                            Postural & Movement <span className="text-[#84cc16] dark:text-[#b4f031]">Assessment Analytics (PMA)</span>
+                            Postural & Movement <span className="text-emerald-700 dark:text-emerald-400">Assessment Analytics (PMA)</span>
                         </>
                     }
                     description="Pusat pemantauan biomekanik atlet, evaluasi rantai kinetik & program latihan korektif • PKO Unesa x Olympus Training Surabaya"
@@ -284,7 +286,7 @@ export default function Dashboard({
                                 </Button>
                             </Link>
                             <Link href={route('dpa.index')}>
-                                <Button size="sm" className="h-7 gap-1 text-[11px] font-bold bg-[#b4f031] text-slate-950 hover:bg-[#a2dd26] rounded-md px-2.5 shadow-xs">
+                                <Button size="sm" className="h-7 gap-1 text-[11px] font-bold bg-emerald-600 hover:bg-emerald-700 text-white dark:bg-emerald-600 dark:hover:bg-emerald-500 dark:text-white rounded-md px-2.5 shadow-xs transition-colors">
                                     <PlusCircle className="h-3 w-3" />
                                     <span>Analisis PMA Baru</span>
                                 </Button>
@@ -296,12 +298,12 @@ export default function Dashboard({
                 {/* ─── 1. TOP STATS OVERVIEW CARDS (4 METRICS) ─── */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
                     {/* Total Athletes */}
-                    <Card className="border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-2xs hover:border-[#84cc16]/60 dark:hover:border-[#b4f031]/60 transition-all rounded-md">
+                    <Card className="border-slate-200/90 dark:border-zinc-800 bg-white dark:bg-zinc-950 shadow-2xs hover:border-emerald-500/50 dark:hover:border-emerald-500/50 transition-all rounded-md">
                         <CardHeader className="flex flex-row items-center justify-between pb-1 space-y-0 px-4 pt-3">
-                            <span className="text-[11px] font-medium text-slate-500 dark:text-slate-400">
+                            <span className="text-[11px] font-medium text-slate-500 dark:text-zinc-400">
                                 Total Atlet Terdaftar
                             </span>
-                            <div className="p-1 rounded-md bg-[#84cc16]/10 text-lime-700 dark:text-[#b4f031] border border-[#84cc16]/20">
+                            <div className="p-1 rounded-md bg-emerald-50 text-emerald-700 border border-emerald-200/80 dark:bg-emerald-950/40 dark:text-emerald-400 dark:border-emerald-800/60">
                                 <Users className="h-3.5 w-3.5" />
                             </div>
                         </CardHeader>
@@ -309,12 +311,12 @@ export default function Dashboard({
                             <div className="text-xl font-bold text-slate-900 dark:text-white">
                                 {stats.totalAthletes}
                             </div>
-                            <div className="flex items-center justify-between mt-1 pt-1 border-t border-slate-100 dark:border-slate-800/80 text-[10px] text-slate-500 dark:text-slate-400">
+                            <div className="flex items-center justify-between mt-1 pt-1 border-t border-slate-100 dark:border-zinc-800/80 text-[10px] text-slate-500 dark:text-zinc-400">
                                 <span className="flex items-center gap-1">
-                                    <span className="h-1.5 w-1.5 rounded-full bg-[#84cc16]" />
+                                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-600 dark:bg-emerald-500" />
                                     {stats.activeAthletes} Aktif di Roster
                                 </span>
-                                <span className="font-semibold text-slate-700 dark:text-slate-300">
+                                <span className="font-semibold text-slate-700 dark:text-zinc-300">
                                     {stats.screeningCoverageRate}% Ter-skrining
                                 </span>
                             </div>
@@ -322,9 +324,9 @@ export default function Dashboard({
                     </Card>
 
                     {/* Total PMA Sessions */}
-                    <Card className="border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-2xs hover:border-[#84cc16]/60 dark:hover:border-[#b4f031]/60 transition-all rounded-md">
+                    <Card className="border-slate-200/90 dark:border-zinc-800 bg-white dark:bg-zinc-950 shadow-2xs hover:border-emerald-500/50 dark:hover:border-emerald-500/50 transition-all rounded-md">
                         <CardHeader className="flex flex-row items-center justify-between pb-1 space-y-0 px-4 pt-3">
-                            <span className="text-[11px] font-medium text-slate-500 dark:text-slate-400">
+                            <span className="text-[11px] font-medium text-slate-500 dark:text-zinc-400">
                                 Total Sesi Evaluasi PMA
                             </span>
                             <div className="p-1 rounded-md bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
@@ -335,12 +337,12 @@ export default function Dashboard({
                             <div className="text-xl font-bold text-slate-900 dark:text-white">
                                 {stats.totalAssessments}
                             </div>
-                            <div className="flex items-center justify-between mt-1 pt-1 border-t border-slate-100 dark:border-slate-800/80 text-[10px] text-slate-500 dark:text-slate-400">
+                            <div className="flex items-center justify-between mt-1 pt-1 border-t border-slate-100 dark:border-zinc-800/80 text-[10px] text-slate-500 dark:text-zinc-400">
                                 <span className="flex items-center gap-1 text-emerald-600 dark:text-emerald-400 font-semibold">
                                     <CheckCircle2 className="h-3 w-3" />
                                     Sesi Selesai
                                 </span>
-                                <span className="font-medium text-slate-500">
+                                <span className="font-medium text-slate-500 dark:text-zinc-500">
                                     Rata-rata {stats.avgDeviations} deviasi/sesi
                                 </span>
                             </div>
@@ -348,9 +350,9 @@ export default function Dashboard({
                     </Card>
 
                     {/* Total Deviations Detected */}
-                    <Card className="border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-2xs hover:border-[#84cc16]/60 dark:hover:border-[#b4f031]/60 transition-all rounded-md">
+                    <Card className="border-slate-200/90 dark:border-zinc-800 bg-white dark:bg-zinc-950 shadow-2xs hover:border-amber-500/50 dark:hover:border-amber-400/60 transition-all rounded-md">
                         <CardHeader className="flex flex-row items-center justify-between pb-1 space-y-0 px-4 pt-3">
-                            <span className="text-[11px] font-medium text-slate-500 dark:text-slate-400">
+                            <span className="text-[11px] font-medium text-slate-500 dark:text-zinc-400">
                                 Temuan Deviasi Gerak
                             </span>
                             <div className="p-1 rounded-md bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20">
@@ -361,7 +363,7 @@ export default function Dashboard({
                             <div className="text-xl font-bold text-slate-900 dark:text-white">
                                 {stats.totalDeviationsDetected}
                             </div>
-                            <div className="flex items-center justify-between mt-1 pt-1 border-t border-slate-100 dark:border-slate-800/80 text-[10px] text-slate-500 dark:text-slate-400">
+                            <div className="flex items-center justify-between mt-1 pt-1 border-t border-slate-100 dark:border-zinc-800/80 text-[10px] text-slate-500 dark:text-zinc-400">
                                 <span>Dari {stats.totalCompensations} Master Pola</span>
                                 <span className="font-semibold text-amber-600 dark:text-amber-400">
                                     Rantai Kinetik
@@ -371,9 +373,9 @@ export default function Dashboard({
                     </Card>
 
                     {/* Corrective Exercise Library */}
-                    <Card className="border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-2xs hover:border-[#84cc16]/60 dark:hover:border-[#b4f031]/60 transition-all rounded-md">
+                    <Card className="border-slate-200/90 dark:border-zinc-800 bg-white dark:bg-zinc-950 shadow-2xs hover:border-blue-500/50 dark:hover:border-blue-400/60 transition-all rounded-md">
                         <CardHeader className="flex flex-row items-center justify-between pb-1 space-y-0 px-4 pt-3">
-                            <span className="text-[11px] font-medium text-slate-500 dark:text-slate-400">
+                            <span className="text-[11px] font-medium text-slate-500 dark:text-zinc-400">
                                 Bank Latihan Korektif
                             </span>
                             <div className="p-1 rounded-md bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20">
@@ -397,18 +399,18 @@ export default function Dashboard({
                 {/* ─── 2. CHARTS ANALYTICS GRID (3-COLUMN RESPONSIVE GRID) ─── */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
                     {/* Card 1: Tren Aktivitas Evaluasi (Area Chart) */}
-                    <Card className="border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-2xs rounded-md flex flex-col justify-between">
-                        <CardHeader className="flex flex-row items-center justify-between pb-2 pt-3 px-4 border-b border-slate-100 dark:border-slate-800/80">
+                    <Card className="border-slate-200/90 dark:border-zinc-800 bg-white dark:bg-zinc-950 shadow-2xs rounded-md flex flex-col justify-between">
+                        <CardHeader className="flex flex-row items-center justify-between pb-2 pt-3 px-4 border-b border-slate-100 dark:border-zinc-800/80">
                             <div>
                                 <CardTitle className="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
-                                    <TrendingUp className="h-3.5 w-3.5 text-[#84cc16]" />
+                                    <TrendingUp className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
                                     <span>Tren Aktivitas Evaluasi</span>
                                 </CardTitle>
-                                <CardDescription className="text-[10px] mt-0.5 text-slate-500">
+                                <CardDescription className="text-[10px] mt-0.5 text-slate-500 dark:text-zinc-400">
                                     Volume sesi &amp; deviasi 6 bln terakhir
                                 </CardDescription>
                             </div>
-                            <Badge variant="outline" className="text-[9.5px] font-semibold py-0 px-1.5 border-[#84cc16]/40 text-[#84cc16]">
+                            <Badge variant="outline" className="text-[9.5px] font-semibold py-0 px-1.5 border-emerald-200 bg-emerald-50/50 text-emerald-700 dark:border-emerald-800/80 dark:bg-emerald-950/40 dark:text-emerald-400">
                                 6 Bulan
                             </Badge>
                         </CardHeader>
@@ -418,15 +420,15 @@ export default function Dashboard({
                                     <AreaChart data={monthlyTrends} margin={{ top: 10, right: 10, left: -25, bottom: 0 }}>
                                         <defs>
                                             <linearGradient id="colorAssessmentsMonthly" x1="0" y1="0" x2="0" y2="1">
-                                                <stop offset="5%" stopColor="#84cc16" stopOpacity={0.25} />
-                                                <stop offset="95%" stopColor="#84cc16" stopOpacity={0.0} />
+                                                <stop offset="5%" stopColor={isDark ? '#10b981' : '#059669'} stopOpacity={0.25} />
+                                                <stop offset="95%" stopColor={isDark ? '#10b981' : '#059669'} stopOpacity={0.0} />
                                             </linearGradient>
                                             <linearGradient id="colorDeviationsMonthly" x1="0" y1="0" x2="0" y2="1">
                                                 <stop offset="5%" stopColor="#f59e0b" stopOpacity={0.25} />
                                                 <stop offset="95%" stopColor="#f59e0b" stopOpacity={0.0} />
                                             </linearGradient>
                                         </defs>
-                                        <CartesianGrid strokeDasharray="3 3" stroke="currentColor" className="stroke-slate-200/50 dark:stroke-slate-800/35" />
+                                        <CartesianGrid strokeDasharray="3 3" stroke="currentColor" className="stroke-slate-200/50 dark:stroke-zinc-800/50" />
                                         <XAxis
                                             dataKey="month"
                                             tick={{ fontSize: 9, fill: '#64748b' }}
@@ -444,7 +446,7 @@ export default function Dashboard({
                                             type="monotone"
                                             dataKey="assessments"
                                             name="Sesi Asesmen"
-                                            stroke="#84cc16"
+                                            stroke={isDark ? '#10b981' : '#059669'}
                                             strokeWidth={2}
                                             fillOpacity={1}
                                             fill="url(#colorAssessmentsMonthly)"
@@ -465,8 +467,8 @@ export default function Dashboard({
                     </Card>
 
                     {/* Card 2: Timeline Skor Sesi Atlet (Line Chart) */}
-                    <Card className="border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-2xs rounded-md flex flex-col justify-between">
-                        <CardHeader className="flex flex-row items-center justify-between pb-2 pt-3 px-4 border-b border-slate-100 dark:border-slate-800/80">
+                    <Card className="border-slate-200/90 dark:border-zinc-800 bg-white dark:bg-zinc-950 shadow-2xs rounded-md flex flex-col justify-between">
+                        <CardHeader className="flex flex-row items-center justify-between pb-2 pt-3 px-4 border-b border-slate-100 dark:border-zinc-800/80">
                             <div>
                                 <CardTitle className="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
                                     <Activity className="h-3.5 w-3.5 text-emerald-500" />
@@ -648,7 +650,7 @@ export default function Dashboard({
                                             <span className="text-slate-600 dark:text-slate-300 font-medium">
                                                 Cakupan Skrining
                                             </span>
-                                            <span className="font-bold text-[#84cc16] dark:text-[#b4f031]">
+                                            <span className="font-bold text-emerald-700 dark:text-emerald-400">
                                                 {stats.screeningCoverageRate}% Selesai
                                             </span>
                                         </div>
@@ -671,14 +673,14 @@ export default function Dashboard({
                     </Card>
 
                     {/* Card 4: Top Compensations Ranking Bar Chart */}
-                    <Card className="border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-2xs rounded-md flex flex-col justify-between">
-                        <CardHeader className="pb-2 pt-3 px-4 border-b border-slate-100 dark:border-slate-800/80 flex flex-row items-center justify-between">
+                    <Card className="border-slate-200/90 dark:border-zinc-800 bg-white dark:bg-zinc-950 shadow-2xs rounded-md flex flex-col justify-between">
+                        <CardHeader className="pb-2 pt-3 px-4 border-b border-slate-100 dark:border-zinc-800/80 flex flex-row items-center justify-between">
                             <div>
                                 <CardTitle className="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
-                                    <Target className="h-3.5 w-3.5 text-[#84cc16]" />
+                                    <Target className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
                                     <span>Pola Kompensasi Terbanyak</span>
                                 </CardTitle>
-                                <CardDescription className="text-[10px] mt-0.5 text-slate-500">
+                                <CardDescription className="text-[10px] mt-0.5 text-slate-500 dark:text-zinc-400">
                                     Prevalensi deviasi postur atlet teratas
                                 </CardDescription>
                             </div>
@@ -696,7 +698,7 @@ export default function Dashboard({
                                             layout="vertical"
                                             margin={{ top: 5, right: 15, left: -10, bottom: 5 }}
                                         >
-                                            <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="currentColor" className="stroke-slate-200/50 dark:stroke-slate-800/35" />
+                                            <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="currentColor" className="stroke-slate-200/50 dark:stroke-zinc-800/50" />
                                             <XAxis type="number" tick={{ fontSize: 9, fill: '#64748b' }} allowDecimals={false} />
                                             <YAxis
                                                 dataKey="name"
@@ -705,20 +707,30 @@ export default function Dashboard({
                                                 width={90}
                                             />
                                             <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(148, 163, 184, 0.08)' }} />
-                                            <Bar dataKey="kasus" name="Jumlah Kasus" fill="#84cc16" radius={[0, 3, 3, 0]}>
+                                            <Bar dataKey="kasus" name="Jumlah Kasus" fill={isDark ? '#10b981' : '#059669'} radius={[0, 3, 3, 0]}>
                                                 {topCompChartData.map((_, index) => (
                                                     <Cell
                                                         key={`cell-top-${index}`}
                                                         fill={
-                                                            index === 0
-                                                                ? '#84cc16'
+                                                            isDark
+                                                                ? index === 0
+                                                                    ? '#10b981'
+                                                                    : index === 1
+                                                                    ? '#34d399'
+                                                                    : index === 2
+                                                                    ? '#6ee7b7'
+                                                                    : index === 3
+                                                                    ? '#f59e0b'
+                                                                    : '#fbbf24'
+                                                                : index === 0
+                                                                ? '#059669'
                                                                 : index === 1
-                                                                ? '#a3e635'
+                                                                ? '#10b981'
                                                                 : index === 2
-                                                                ? '#bef264'
+                                                                ? '#34d399'
                                                                 : index === 3
-                                                                ? '#f59e0b'
-                                                                : '#fbbf24'
+                                                                ? '#d97706'
+                                                                : '#f59e0b'
                                                         }
                                                     />
                                                 ))}
@@ -731,8 +743,8 @@ export default function Dashboard({
                     </Card>
 
                     {/* Card 5: Dual Comparative Bar Chart: Overactive vs Underactive */}
-                    <Card className="border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-2xs rounded-md flex flex-col justify-between">
-                        <CardHeader className="pb-2 pt-3 px-4 border-b border-slate-100 dark:border-slate-800/80 flex flex-row items-center justify-between">
+                    <Card className="border-slate-200/90 dark:border-zinc-800 bg-white dark:bg-zinc-950 shadow-2xs rounded-md flex flex-col justify-between">
+                        <CardHeader className="pb-2 pt-3 px-4 border-b border-slate-100 dark:border-zinc-800/80 flex flex-row items-center justify-between">
                             <div>
                                 <CardTitle className="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
                                     <Flame className="h-3.5 w-3.5 text-rose-500" />
@@ -781,14 +793,14 @@ export default function Dashboard({
                     </Card>
 
                     {/* Card 6: Checkpoints Breakdown Bar Chart */}
-                    <Card className="border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-2xs rounded-md flex flex-col justify-between">
-                        <CardHeader className="pb-2 pt-3 px-4 border-b border-slate-100 dark:border-slate-800/80 flex flex-row items-center justify-between">
+                    <Card className="border-slate-200/90 dark:border-zinc-800 bg-white dark:bg-zinc-950 shadow-2xs rounded-md flex flex-col justify-between">
+                        <CardHeader className="pb-2 pt-3 px-4 border-b border-slate-100 dark:border-zinc-800/80 flex flex-row items-center justify-between">
                             <div>
                                 <CardTitle className="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
-                                    <Layers className="h-3.5 w-3.5 text-[#84cc16]" />
+                                    <Layers className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
                                     <span>Sebaran Checkpoint Kinetik</span>
                                 </CardTitle>
-                                <CardDescription className="text-[10px] mt-0.5 text-slate-500">
+                                <CardDescription className="text-[10px] mt-0.5 text-slate-500 dark:text-zinc-400">
                                     5 area rantai kinetik utama (NASM)
                                 </CardDescription>
                             </div>
@@ -801,7 +813,7 @@ export default function Dashboard({
                                         layout="vertical"
                                         margin={{ top: 5, right: 15, left: -10, bottom: 5 }}
                                     >
-                                        <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="currentColor" className="stroke-slate-200/50 dark:stroke-slate-800/35" />
+                                        <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="currentColor" className="stroke-slate-200/50 dark:stroke-zinc-800/50" />
                                         <XAxis type="number" tick={{ fontSize: 9, fill: '#64748b' }} allowDecimals={false} />
                                         <YAxis
                                             dataKey="checkpoint"
@@ -813,22 +825,32 @@ export default function Dashboard({
                                         <Bar
                                             dataKey="count"
                                             name="Kasus Deviasi"
-                                            fill="#84cc16"
+                                            fill={isDark ? '#10b981' : '#059669'}
                                             radius={[0, 3, 3, 0]}
                                         >
                                             {checkpointDistribution.map((entry, index) => (
                                                 <Cell
                                                     key={`cell-cp-${index}`}
                                                     fill={
-                                                        index === 0
-                                                            ? '#84cc16'
+                                                        isDark
+                                                            ? index === 0
+                                                                ? '#10b981'
+                                                                : index === 1
+                                                                ? '#34d399'
+                                                                : index === 2
+                                                                ? '#059669'
+                                                                : index === 3
+                                                                ? '#047857'
+                                                                : '#065f46'
+                                                            : index === 0
+                                                            ? '#059669'
                                                             : index === 1
-                                                            ? '#a3e635'
+                                                            ? '#10b981'
                                                             : index === 2
-                                                            ? '#bef264'
+                                                            ? '#047857'
                                                             : index === 3
-                                                            ? '#d9f99d'
-                                                            : '#65a30d'
+                                                            ? '#0f766e'
+                                                            : '#15803d'
                                                     }
                                                 />
                                             ))}

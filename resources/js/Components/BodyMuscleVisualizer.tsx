@@ -314,7 +314,7 @@ export default function BodyMuscleVisualizer({
             {/* Top Bar Controls */}
             <div className="flex items-center justify-between gap-2 border-b border-slate-100 dark:border-slate-800/80 pb-2">
                 <div className="flex items-center gap-2">
-                    <Activity size={14} className="text-[#84cc16] dark:text-[#b4f031]" />
+                    <Activity size={14} className="text-emerald-600 dark:text-emerald-400" />
                     <span className="text-xs font-bold text-slate-900 dark:text-white">
                         {title}
                     </span>
@@ -552,12 +552,12 @@ export default function BodyMuscleVisualizer({
                             const isLeftSide = hoveredInfo.x < 150;
                             return (
                                 <div
-                                    className={`absolute z-50 p-2.5 bg-white/95 dark:bg-slate-900/95 text-slate-900 dark:text-white rounded-md shadow-2xl border border-slate-200 dark:border-slate-700/80 max-w-[210px] text-left pointer-events-none transition-all duration-150 animate-in fade-in zoom-in-95 backdrop-blur-xs top-1 max-h-[220px] overflow-y-auto ${
+                                    className={`absolute z-50 p-2.5 bg-white/95 dark:bg-zinc-950/95 text-slate-900 dark:text-white rounded-md shadow-2xl border border-slate-200 dark:border-zinc-800 max-w-[210px] text-left pointer-events-none transition-all duration-150 animate-in fade-in zoom-in-95 backdrop-blur-xs top-1 max-h-[220px] overflow-y-auto ${
                                         isLeftSide ? 'right-1' : 'left-1'
                                     }`}
                                 >
-                                    <div className="pb-1 mb-1 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between gap-1.5">
-                                        <span className="font-bold text-[11px] text-[#65a30d] dark:text-[#b4f031]">
+                                    <div className="pb-1 mb-1 border-b border-slate-200 dark:border-zinc-800 flex items-center justify-between gap-1.5">
+                                        <span className="font-bold text-[11px] text-emerald-600 dark:text-emerald-400">
                                             {findings.label.id}
                                         </span>
                                         <span className="text-[9px] text-slate-500 dark:text-slate-400 truncate">

@@ -72,7 +72,7 @@ export default function TrainingProgramsIndex({
                     title="Program Latihan Atlet"
                     description="Pilih profil atlet untuk melihat kalender jadwal harian, status kepatuhan latihan, dan detail peresepan korektif 4 Fase NASM."
                     icon={
-                        <div className="w-10 h-10 rounded-md bg-[#84cc16]/15 dark:bg-[#b4f031]/15 text-[#65a30d] dark:text-[#b4f031] flex items-center justify-center border border-[#84cc16]/30 shrink-0">
+                        <div className="w-10 h-10 rounded-md bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center border border-emerald-500/20 shrink-0">
                             <Dumbbell size={20} />
                         </div>
                     }
@@ -80,7 +80,7 @@ export default function TrainingProgramsIndex({
                         <div className="flex items-center gap-2">
                             <Link
                                 href={route('training-programs.create')}
-                                className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-[#84cc16] hover:bg-[#65a30d] dark:bg-[#b4f031] dark:hover:bg-[#a3e635] text-slate-950 font-bold rounded-md text-xs shadow-2xs transition-all cursor-pointer"
+                                className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 dark:bg-emerald-500 dark:hover:bg-emerald-400 text-white dark:text-zinc-950 font-bold rounded-md text-xs shadow-2xs transition-all cursor-pointer"
                             >
                                 <Plus size={14} className="stroke-[3]" />
                                 <span>Buat Program Baru</span>
@@ -90,7 +90,7 @@ export default function TrainingProgramsIndex({
                 />
 
                 {/* Filter & Search Bar */}
-                <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-md p-3 sm:p-4 space-y-3 shadow-2xs">
+                <div className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 rounded-md p-3 sm:p-4 space-y-3 shadow-2xs">
                     <div className="flex flex-col sm:flex-row items-center gap-3">
                         <div className="relative flex-1 w-full">
                             <Search
@@ -103,7 +103,7 @@ export default function TrainingProgramsIndex({
                                 onChange={(e) => setSearch(e.target.value)}
                                 onKeyDown={(e) => e.key === 'Enter' && handleFilterChange(search, gender)}
                                 placeholder="Cari nama atau kode atlet..."
-                                className="w-full pl-9 pr-3 py-2 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-md text-xs text-slate-900 dark:text-white placeholder-slate-400 focus:ring-1 focus:ring-[#84cc16] dark:focus:ring-[#b4f031]"
+                                className="w-full pl-9 pr-3 py-2 bg-slate-50 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 rounded-md text-xs text-slate-900 dark:text-white placeholder-slate-400 focus:ring-1 focus:ring-emerald-500 dark:focus:ring-emerald-400"
                             />
                         </div>
 
@@ -117,8 +117,8 @@ export default function TrainingProgramsIndex({
                                 }}
                                 className={`px-3 py-1.5 rounded-md font-semibold transition-colors cursor-pointer ${
                                     gender === 'all'
-                                        ? 'bg-[#84cc16] dark:bg-[#b4f031] text-slate-950'
-                                        : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200'
+                                        ? 'bg-emerald-600 dark:bg-emerald-500 text-white dark:text-zinc-950 font-bold'
+                                        : 'bg-slate-100 dark:bg-zinc-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-zinc-700'
                                 }`}
                             >
                                 Semua Atlet
@@ -131,8 +131,8 @@ export default function TrainingProgramsIndex({
                                 }}
                                 className={`px-3 py-1.5 rounded-md font-semibold transition-colors cursor-pointer ${
                                     gender === 'L'
-                                        ? 'bg-[#84cc16] dark:bg-[#b4f031] text-slate-950'
-                                        : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200'
+                                        ? 'bg-emerald-600 dark:bg-emerald-500 text-white dark:text-zinc-950 font-bold'
+                                        : 'bg-slate-100 dark:bg-zinc-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-zinc-700'
                                 }`}
                             >
                                 Laki-laki
@@ -145,8 +145,8 @@ export default function TrainingProgramsIndex({
                                 }}
                                 className={`px-3 py-1.5 rounded-md font-semibold transition-colors cursor-pointer ${
                                     gender === 'P'
-                                        ? 'bg-[#84cc16] dark:bg-[#b4f031] text-slate-950'
-                                        : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200'
+                                        ? 'bg-emerald-600 dark:bg-emerald-500 text-white dark:text-zinc-950 font-bold'
+                                        : 'bg-slate-100 dark:bg-zinc-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-zinc-700'
                                 }`}
                             >
                                 Perempuan
@@ -167,7 +167,7 @@ export default function TrainingProgramsIndex({
                                 <Link
                                     key={athlete.id}
                                     href={route('training-programs.athletes.calendar', athlete.id)}
-                                    className="group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-orange-500/50 dark:hover:border-orange-500/50 rounded-md p-4 sm:p-5 shadow-2xs hover:shadow-md transition-all flex flex-col justify-between space-y-4 cursor-pointer"
+                                    className="group bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 hover:border-emerald-500/50 dark:hover:border-emerald-500/50 rounded-md p-4 sm:p-5 shadow-2xs hover:shadow-md transition-all flex flex-col justify-between space-y-4 cursor-pointer"
                                 >
                                     {/* Top Profile */}
                                     <div className="flex items-start gap-3.5">
@@ -175,17 +175,17 @@ export default function TrainingProgramsIndex({
                                             <img
                                                 src={athlete.photo_url}
                                                 alt={athlete.full_name}
-                                                className="w-12 h-12 rounded-md object-cover border border-orange-500/30 shrink-0"
+                                                className="w-12 h-12 rounded-md object-cover border border-emerald-500/30 shrink-0"
                                             />
                                         ) : (
-                                            <div className="w-12 h-12 rounded-md border border-orange-500/40 bg-orange-500/10 text-orange-600 dark:text-orange-400 font-black text-lg flex items-center justify-center shrink-0">
+                                            <div className="w-12 h-12 rounded-md border border-emerald-500/40 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-black text-lg flex items-center justify-center shrink-0">
                                                 {athlete.full_name ? athlete.full_name.charAt(0).toUpperCase() : 'A'}
                                             </div>
                                         )}
 
                                         <div className="min-w-0 space-y-0.5">
                                             <div className="flex items-center gap-1.5 flex-wrap">
-                                                <h3 className="text-xs font-bold text-slate-900 dark:text-white group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors truncate">
+                                                <h3 className="text-xs font-bold text-slate-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors truncate">
                                                     {athlete.full_name}
                                                 </h3>
                                             </div>
@@ -201,8 +201,8 @@ export default function TrainingProgramsIndex({
                                     </div>
 
                                     {/* Middle Program / Calendar Stats */}
-                                    <div className="grid grid-cols-2 gap-2 pt-3 border-t border-slate-100 dark:border-slate-800 text-xs">
-                                        <div className="bg-slate-50 dark:bg-slate-950 p-2.5 rounded-md border border-slate-100 dark:border-slate-800">
+                                    <div className="grid grid-cols-2 gap-2 pt-3 border-t border-slate-100 dark:border-zinc-800 text-xs">
+                                        <div className="bg-slate-50 dark:bg-zinc-900 p-2.5 rounded-md border border-slate-100 dark:border-zinc-800">
                                             <span className="text-[10px] font-bold text-slate-400 block uppercase mb-0.5">
                                                 Total Sesi
                                             </span>
@@ -211,7 +211,7 @@ export default function TrainingProgramsIndex({
                                             </span>
                                         </div>
 
-                                        <div className="bg-slate-50 dark:bg-slate-950 p-2.5 rounded-md border border-slate-100 dark:border-slate-800">
+                                        <div className="bg-slate-50 dark:bg-zinc-900 p-2.5 rounded-md border border-slate-100 dark:border-zinc-800">
                                             <span className="text-[10px] font-bold text-slate-400 block uppercase mb-0.5">
                                                 Selesai
                                             </span>
@@ -224,13 +224,13 @@ export default function TrainingProgramsIndex({
                                     {/* Latest Scheduled Date if any */}
                                     {latestSession && latestSession.start_date && (
                                         <div className="text-[11px] text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
-                                            <Calendar size={13} className="text-orange-500 shrink-0" />
+                                            <Calendar size={13} className="text-emerald-500 shrink-0" />
                                             <span>Sesi Terdekat: <strong className="text-slate-800 dark:text-slate-200">{new Date(latestSession.start_date).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}</strong></span>
                                         </div>
                                     )}
 
                                     {/* Bottom Button Action */}
-                                    <div className="pt-2 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs font-bold text-orange-600 dark:text-orange-400 group-hover:translate-x-0.5 transition-transform">
+                                    <div className="pt-2 border-t border-slate-100 dark:border-zinc-800 flex items-center justify-between text-xs font-bold text-emerald-600 dark:text-emerald-400 group-hover:translate-x-0.5 transition-transform">
                                         <span className="flex items-center gap-1.5">
                                             <Calendar size={14} />
                                             <span>Buka Kalender Latihan</span>
@@ -242,8 +242,8 @@ export default function TrainingProgramsIndex({
                         })}
                     </div>
                 ) : (
-                    <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-md p-12 text-center space-y-3 shadow-2xs">
-                        <div className="w-12 h-12 rounded-full bg-orange-500/10 text-orange-600 dark:text-orange-400 flex items-center justify-center mx-auto">
+                    <div className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 rounded-md p-12 text-center space-y-3 shadow-2xs">
+                        <div className="w-12 h-12 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mx-auto">
                             <User size={24} />
                         </div>
                         <h4 className="text-sm font-bold text-slate-900 dark:text-white">
@@ -257,7 +257,7 @@ export default function TrainingProgramsIndex({
 
                 {/* Pagination */}
                 {athletes.links && athletes.links.length > 3 && (
-                    <div className="flex items-center justify-between pt-4 border-t border-slate-200 dark:border-slate-800">
+                    <div className="flex items-center justify-between pt-4 border-t border-slate-200 dark:border-zinc-800">
                         <div className="text-xs text-slate-500 dark:text-slate-400">
                             Menampilkan <span className="font-bold text-slate-800 dark:text-slate-200">{athletes.from || 0}</span> -{' '}
                             <span className="font-bold text-slate-800 dark:text-slate-200">{athletes.to || 0}</span> dari{' '}
@@ -271,9 +271,9 @@ export default function TrainingProgramsIndex({
                                     dangerouslySetInnerHTML={{ __html: link.label }}
                                     className={`px-3 py-1.5 rounded text-xs font-semibold transition-colors ${
                                         link.active
-                                            ? 'bg-[#84cc16] dark:bg-[#b4f031] text-slate-950 font-bold'
+                                            ? 'bg-emerald-600 dark:bg-emerald-500 text-white dark:text-zinc-950 font-bold'
                                             : link.url
-                                            ? 'bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-800 hover:bg-slate-50'
+                                            ? 'bg-white dark:bg-zinc-900 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-zinc-800 hover:bg-slate-50 dark:hover:bg-zinc-800'
                                             : 'text-slate-400 cursor-not-allowed'
                                     }`}
                                 />

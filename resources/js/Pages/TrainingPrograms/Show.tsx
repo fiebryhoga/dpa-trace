@@ -196,20 +196,20 @@ export default function TrainingProgramShow({ auth, program }: TrainingProgramSh
                 <div className="flex items-center justify-between">
                     <Link
                         href={athlete ? route('dpa.athletes.show', athlete.id) : route('training-programs.index')}
-                        className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 dark:text-slate-400 hover:text-[#65a30d] dark:hover:text-[#b4f031] transition-colors"
+                        className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 dark:text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
                     >
                         <ChevronLeft size={15} />
                         <span>Kembali ke Kalender Latihan</span>
                     </Link>
 
                     {/* View Switcher Tabs (Routine vs Calendar View) */}
-                    <div className="flex items-center gap-1.5 bg-slate-100 dark:bg-slate-900 p-1 rounded-md border border-slate-200 dark:border-slate-800">
+                    <div className="flex items-center gap-1.5 bg-slate-100 dark:bg-zinc-900 p-1 rounded-md border border-slate-200 dark:border-zinc-800">
                         <button
                             type="button"
                             onClick={() => setActiveTab('routine')}
                             className={`px-3 py-1.5 rounded-md text-xs font-bold transition-all cursor-pointer ${
                                 activeTab === 'routine'
-                                    ? 'bg-[#84cc16] dark:bg-[#b4f031] text-slate-950 shadow-xs'
+                                    ? 'bg-emerald-600 dark:bg-emerald-500 text-white dark:text-zinc-950 shadow-xs'
                                     : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                             }`}
                         >
@@ -220,7 +220,7 @@ export default function TrainingProgramShow({ auth, program }: TrainingProgramSh
                             onClick={() => setActiveTab('calendar')}
                             className={`px-3 py-1.5 rounded-md text-xs font-bold transition-all cursor-pointer ${
                                 activeTab === 'calendar'
-                                    ? 'bg-[#84cc16] dark:bg-[#b4f031] text-slate-950 shadow-xs'
+                                    ? 'bg-emerald-600 dark:bg-emerald-500 text-white dark:text-zinc-950 shadow-xs'
                                     : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                             }`}
                         >
@@ -230,13 +230,13 @@ export default function TrainingProgramShow({ auth, program }: TrainingProgramSh
                 </div>
 
                 {/* Top Title & Header Actions Bar */}
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 dark:border-slate-800 pb-3">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 dark:border-zinc-800 pb-3">
                     <div className="space-y-1">
                         <div className="flex items-center gap-2.5 flex-wrap">
                             <h1 className="text-xl font-bold text-slate-900 dark:text-white">
                                 {program.name}
                             </h1>
-                            <span className="px-2 py-0.5 rounded-md text-[11px] font-bold bg-[#84cc16]/10 text-[#65a30d] dark:text-[#b4f031] border border-[#84cc16]/20">
+                            <span className="px-2 py-0.5 rounded-md text-[11px] font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
                                 {isCompleted ? 'Selesai' : 'Terjadwal'}
                             </span>
                         </div>
@@ -250,20 +250,20 @@ export default function TrainingProgramShow({ auth, program }: TrainingProgramSh
                             type="button"
                             onClick={handleDownloadPdf}
                             disabled={isDownloadingPdf}
-                            className="inline-flex items-center gap-1.5 px-3 py-2 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 rounded-md text-xs font-bold shadow-2xs transition-colors cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
+                            className="inline-flex items-center gap-1.5 px-3 py-2 bg-white dark:bg-zinc-900 hover:bg-slate-50 dark:hover:bg-zinc-800 text-slate-700 dark:text-zinc-200 border border-slate-200 dark:border-zinc-700 rounded-md text-xs font-bold shadow-2xs transition-colors cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
                             title="Unduh Lembar Latihan (PDF)"
                         >
                             {isDownloadingPdf ? (
-                                <Loader2 size={14} className="text-[#84cc16] animate-spin" />
+                                <Loader2 size={14} className="text-emerald-500 animate-spin" />
                             ) : (
-                                <FileDown size={14} className="text-slate-400" />
+                                <FileDown size={14} className="text-slate-400 dark:text-zinc-500" />
                             )}
                             <span>{isDownloadingPdf ? 'Mengunduh PDF...' : 'Download PDF'}</span>
                         </button>
 
                         <Link
                             href={route('training-programs.edit', program.slug)}
-                            className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-[#84cc16] hover:bg-[#65a30d] text-slate-950 rounded-md text-xs font-bold shadow-xs transition-colors"
+                            className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-emerald-600 hover:bg-emerald-700 dark:bg-emerald-500 dark:hover:bg-emerald-400 text-white dark:text-zinc-950 rounded-md text-xs font-bold shadow-xs transition-colors"
                         >
                             <Edit size={14} />
                             <span>Edit Sesi</span>
@@ -289,14 +289,14 @@ export default function TrainingProgramShow({ auth, program }: TrainingProgramSh
                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
                         {/* LEFT SIDEBAR: Session Information (Matched 1:1 with Form structure) */}
                         <div className="lg:col-span-4 space-y-4">
-                            <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-md p-4 space-y-4 shadow-2xs">
+                            <div className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 rounded-md p-4 space-y-4 shadow-2xs">
                                 {/* Header with Icon & Total Gerakan Badge */}
-                                <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+                                <div className="flex items-center justify-between border-b border-slate-100 dark:border-zinc-800 pb-3">
                                     <div className="flex items-center gap-2 text-slate-900 dark:text-white font-bold text-xs">
-                                        <Target size={15} className="text-[#84cc16] dark:text-[#b4f031]" />
+                                        <Target size={15} className="text-emerald-600 dark:text-emerald-400" />
                                         <span className="uppercase tracking-wider text-[11px]">Informasi Sesi Latihan</span>
                                     </div>
-                                    <span className="px-2.5 py-0.5 rounded-md text-[10.5px] font-bold bg-[#84cc16]/10 text-[#65a30d] dark:text-[#b4f031] border border-[#84cc16]/20">
+                                    <span className="px-2.5 py-0.5 rounded-md text-[10.5px] font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
                                         {(program.items || []).length} Gerakan
                                     </span>
                                 </div>
@@ -307,7 +307,7 @@ export default function TrainingProgramShow({ auth, program }: TrainingProgramSh
                                         <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1">
                                             Nama Sesi / Program
                                         </span>
-                                        <div className="p-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-md">
+                                        <div className="p-2.5 bg-slate-50 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 rounded-md">
                                             <p className="font-bold text-slate-900 dark:text-white text-xs">
                                                 {program.name}
                                             </p>
@@ -319,16 +319,16 @@ export default function TrainingProgramShow({ auth, program }: TrainingProgramSh
                                         <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1">
                                             Member Atlet
                                         </span>
-                                        <div className="p-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-md flex items-center justify-between gap-2">
+                                        <div className="p-2.5 bg-slate-50 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 rounded-md flex items-center justify-between gap-2">
                                             <div className="flex items-center gap-2.5 min-w-0">
                                                 {athlete?.photo_url ? (
                                                     <img
                                                         src={athlete.photo_url}
                                                         alt={athlete.full_name}
-                                                        className="w-8 h-8 rounded-md object-cover border border-slate-200 dark:border-slate-800 shrink-0"
+                                                        className="w-8 h-8 rounded-md object-cover border border-slate-200 dark:border-zinc-800 shrink-0"
                                                     />
                                                 ) : (
-                                                    <div className="w-8 h-8 rounded-md border border-slate-200 dark:border-slate-800 bg-[#84cc16]/10 text-[#65a30d] dark:text-[#b4f031] font-bold text-xs flex items-center justify-center shrink-0">
+                                                    <div className="w-8 h-8 rounded-md border border-slate-200 dark:border-zinc-800 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-bold text-xs flex items-center justify-center shrink-0">
                                                         {athlete?.full_name ? athlete.full_name.charAt(0).toUpperCase() : 'A'}
                                                     </div>
                                                 )}
@@ -343,7 +343,7 @@ export default function TrainingProgramShow({ auth, program }: TrainingProgramSh
                                                     )}
                                                 </div>
                                             </div>
-                                            <span className="px-2 py-0.5 rounded-md text-[10px] font-bold bg-[#84cc16]/10 text-[#65a30d] dark:text-[#b4f031] border border-[#84cc16]/20 shrink-0">
+                                            <span className="px-2 py-0.5 rounded-md text-[10px] font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 shrink-0">
                                                 Atlet Terpilih
                                             </span>
                                         </div>
@@ -354,7 +354,7 @@ export default function TrainingProgramShow({ auth, program }: TrainingProgramSh
                                         <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1">
                                             Tanggal Latihan
                                         </span>
-                                        <div className="p-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-md flex items-center justify-between">
+                                        <div className="p-2.5 bg-slate-50 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 rounded-md flex items-center justify-between">
                                             <span className="font-bold text-slate-900 dark:text-white text-xs">
                                                 {formattedDate}
                                             </span>
@@ -371,8 +371,8 @@ export default function TrainingProgramShow({ auth, program }: TrainingProgramSh
                                             <div
                                                 className={`py-1.5 px-2.5 rounded-md text-xs font-bold text-center border ${
                                                     !isCompleted
-                                                        ? 'bg-[#84cc16]/15 border-[#84cc16] text-[#65a30d] dark:text-[#b4f031]'
-                                                        : 'border-slate-200 dark:border-slate-800 text-slate-400 opacity-60'
+                                                        ? 'bg-emerald-500/15 border-emerald-500 text-emerald-700 dark:text-emerald-300'
+                                                        : 'border-slate-200 dark:border-zinc-800 text-slate-400 opacity-60'
                                                 }`}
                                             >
                                                 Terjadwal
@@ -381,7 +381,7 @@ export default function TrainingProgramShow({ auth, program }: TrainingProgramSh
                                                 className={`py-1.5 px-2.5 rounded-md text-xs font-bold text-center border ${
                                                     isCompleted
                                                         ? 'bg-blue-500/15 border-blue-500 text-blue-600 dark:text-blue-400'
-                                                        : 'border-slate-200 dark:border-slate-800 text-slate-400 opacity-60'
+                                                        : 'border-slate-200 dark:border-zinc-800 text-slate-400 opacity-60'
                                                 }`}
                                             >
                                                 Selesai
@@ -391,14 +391,14 @@ export default function TrainingProgramShow({ auth, program }: TrainingProgramSh
 
                                     {/* Target Kompensasi DPA (Clean List) */}
                                     {program.target_compensations && program.target_compensations.length > 0 && (
-                                        <div className="pt-2 border-t border-slate-100 dark:border-slate-800 space-y-1.5">
+                                        <div className="pt-2 border-t border-slate-100 dark:border-zinc-800 space-y-1.5">
                                             <span className="text-[11px] font-bold text-slate-600 dark:text-slate-400 block">
                                                 Target Kompensasi DPA:
                                             </span>
                                             <ul className="space-y-1.5 pl-1">
                                                 {program.target_compensations.map((comp, idx) => (
                                                     <li key={idx} className="text-xs font-semibold text-slate-800 dark:text-slate-200 flex items-center gap-2">
-                                                        <span className="w-1.5 h-1.5 rounded-full bg-[#84cc16] dark:bg-[#b4f031] shrink-0" />
+                                                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 dark:bg-emerald-500 shrink-0" />
                                                         <span>{comp}</span>
                                                     </li>
                                                 ))}
@@ -562,10 +562,10 @@ export default function TrainingProgramShow({ auth, program }: TrainingProgramSh
                                                                                     setSelectedVideoUrl(videoUrl);
                                                                                     setSelectedVideoTitle(item.exercise_name);
                                                                                 }}
-                                                                                className="w-24 h-16 sm:w-28 sm:h-18 bg-white dark:bg-slate-950 rounded-md shrink-0 flex items-center justify-center border border-slate-200 dark:border-slate-800 hover:border-[#84cc16] dark:hover:border-[#b4f031] transition-all group relative cursor-pointer shadow-2xs"
+                                                                                className="w-24 h-16 sm:w-28 sm:h-18 bg-white dark:bg-zinc-950 rounded-md shrink-0 flex items-center justify-center border border-slate-200 dark:border-zinc-800 hover:border-emerald-500 dark:hover:border-emerald-500 transition-all group relative cursor-pointer shadow-2xs"
                                                                                 title="Putar Video Latihan"
                                                                             >
-                                                                                <div className="w-7 h-7 rounded-full border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-900 group-hover:border-[#84cc16] group-hover:bg-[#84cc16] group-hover:scale-105 flex items-center justify-center text-slate-800 dark:text-slate-200 group-hover:text-slate-950 transition-all">
+                                                                                <div className="w-7 h-7 rounded-full border border-slate-200 dark:border-zinc-700 bg-slate-100 dark:bg-zinc-900 group-hover:border-emerald-500 group-hover:bg-emerald-600 group-hover:scale-105 flex items-center justify-center text-slate-800 dark:text-slate-200 group-hover:text-white transition-all">
                                                                                     <Play size={11} className="ml-0.5 fill-current" />
                                                                                 </div>
                                                                             </button>
@@ -593,16 +593,16 @@ export default function TrainingProgramShow({ auth, program }: TrainingProgramSh
             {/* Video Modal Preview */}
             {selectedVideoUrl && (
                 <div
-                    className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/60 backdrop-blur-xs p-4 animate-in fade-in cursor-pointer"
+                    className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-xs p-4 animate-in fade-in cursor-pointer"
                     onClick={() => setSelectedVideoUrl(null)}
                 >
                     <div
-                        className="relative w-full max-w-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-md overflow-hidden shadow-2xl space-y-3 p-4 cursor-default"
+                        className="relative w-full max-w-2xl bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 rounded-md overflow-hidden shadow-2xl space-y-3 p-4 cursor-default"
                         onClick={(e) => e.stopPropagation()}
                     >
-                        <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2.5">
+                        <div className="flex items-center justify-between border-b border-slate-100 dark:border-zinc-800 pb-2.5">
                             <div className="flex items-center gap-2 min-w-0 pr-2">
-                                <Play size={13} className="text-[#84cc16] dark:text-[#b4f031] fill-current shrink-0" />
+                                <Play size={13} className="text-emerald-600 dark:text-emerald-400 fill-current shrink-0" />
                                 <h4 className="text-xs font-bold text-slate-900 dark:text-white truncate">
                                     {selectedVideoTitle || 'Video Panduan Gerakan'}
                                 </h4>

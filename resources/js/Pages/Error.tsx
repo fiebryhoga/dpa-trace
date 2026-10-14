@@ -153,20 +153,20 @@ export default function Error({ status = 404, message, description }: ErrorPageP
     const customDesc = description || message || config.description;
 
     return (
-        <div className="min-h-screen flex flex-col justify-between bg-slate-50 text-slate-900 dark:bg-zinc-950 dark:text-zinc-100 transition-colors duration-200 relative selection:bg-[#84cc16] selection:text-black font-sans">
+        <div className="min-h-screen flex flex-col justify-between bg-slate-50 text-slate-900 dark:bg-black dark:text-zinc-100 transition-colors duration-200 relative selection:bg-emerald-500 selection:text-white font-sans">
             <Head title={`${status} - ${config.title}`} />
 
             {/* Subtle Ambient Glow and Grid Lines */}
             <div className="absolute inset-0 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:28px_28px] pointer-events-none" />
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-2xl h-64 bg-gradient-to-b from-[#84cc16]/10 via-transparent to-transparent blur-3xl pointer-events-none" />
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-2xl h-64 bg-gradient-to-b from-emerald-500/10 via-transparent to-transparent blur-3xl pointer-events-none" />
 
             {/* Header Navigation */}
-            <header className="w-full px-5 sm:px-8 py-5 flex items-center justify-between relative z-20 border-b border-slate-200/60 dark:border-zinc-800/60 bg-white/60 dark:bg-zinc-950/60 backdrop-blur-md">
+            <header className="w-full px-5 sm:px-8 py-5 flex items-center justify-between relative z-20 border-b border-slate-200/60 dark:border-zinc-800/60 bg-white/60 dark:bg-black/60 backdrop-blur-md">
                 <Link href="/" className="flex items-center gap-2.5 group">
                     <ApplicationLogo className="h-8 w-8 transition-transform group-hover:scale-105" />
                     <div className="flex flex-col">
                         <span className="text-sm font-bold tracking-tight text-slate-900 dark:text-white leading-tight">
-                            Sistem PMA <span className="text-[#65a30d] dark:text-[#b4f031]">Olympus</span>
+                            Sistem PMA <span className="text-emerald-600 dark:text-emerald-400">Olympus</span>
                         </span>
                         <span className="text-[10px] text-slate-400 dark:text-zinc-500 font-medium">
                             PKO Unesa x Olympus Training
@@ -182,11 +182,11 @@ export default function Error({ status = 404, message, description }: ErrorPageP
             {/* Main Error Body */}
             <main className="flex-1 flex items-center justify-center px-4 py-12 sm:py-16 relative z-10">
                 <div className="w-full max-w-lg mx-auto">
-                    <div className="bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 rounded-md p-6 sm:p-8 shadow-xs text-center space-y-6">
+                    <div className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 rounded-md p-6 sm:p-8 shadow-xs text-center space-y-6">
                         {/* Status Badge & Icon */}
                         <div className="inline-flex flex-col items-center gap-3.5">
-                            <div className="w-16 h-16 rounded-md bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700/80 flex items-center justify-center shadow-2xs">
-                                <IconComponent className="h-8 w-8 text-[#65a30d] dark:text-[#b4f031]" />
+                            <div className="w-16 h-16 rounded-md bg-slate-50 dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 flex items-center justify-center shadow-2xs">
+                                <IconComponent className="h-8 w-8 text-emerald-600 dark:text-emerald-400" />
                             </div>
 
                             <span className={`px-3 py-1 rounded-md text-[11px] font-mono font-semibold border ${config.badgeStyle}`}>
@@ -208,8 +208,8 @@ export default function Error({ status = 404, message, description }: ErrorPageP
                         </div>
 
                         {/* Diagnostic Box for Technical Clarity */}
-                        <div className="p-3 bg-slate-50 dark:bg-zinc-950/60 rounded-md border border-slate-200/80 dark:border-zinc-800 text-left flex items-start gap-2.5 text-xs text-slate-500 dark:text-zinc-400">
-                            <div className="w-1.5 h-1.5 rounded-full bg-[#84cc16] mt-1.5 shrink-0" />
+                        <div className="p-3 bg-slate-50 dark:bg-zinc-900/60 rounded-md border border-slate-200/80 dark:border-zinc-800 text-left flex items-start gap-2.5 text-xs text-slate-500 dark:text-zinc-400">
+                            <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 mt-1.5 shrink-0" />
                             <div className="space-y-0.5 min-w-0 flex-1">
                                 <p className="font-semibold text-slate-700 dark:text-zinc-300">
                                     Petunjuk Pemecahan Masalah
@@ -253,7 +253,7 @@ export default function Error({ status = 404, message, description }: ErrorPageP
                             <Link href="/" className="w-full sm:w-auto">
                                 <Button
                                     size="sm"
-                                    className="w-full h-9 text-xs font-bold gap-1.5 bg-[#84cc16] hover:bg-[#65a30d] dark:bg-[#b4f031] dark:hover:bg-[#84cc16] text-slate-950 shadow-xs cursor-pointer"
+                                    className="w-full h-9 text-xs font-bold gap-1.5 bg-emerald-600 hover:bg-emerald-700 dark:bg-emerald-500 dark:hover:bg-emerald-400 text-white dark:text-black shadow-xs cursor-pointer"
                                 >
                                     <Home className="h-3.5 w-3.5" />
                                     <span>Dasbor Utama</span>

@@ -299,26 +299,26 @@ export default function AthleteTrainingCalendar({
                     </div>
                 </div>
 
-                <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg p-3 flex items-center justify-between">
+                <div className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 rounded-lg p-3 flex items-center justify-between">
                     <div>
                         <span className="text-[10.5px] font-bold text-slate-400 uppercase tracking-wide block">Sisa Sesi Terjadwal</span>
                         <div className="text-lg font-black text-slate-700 dark:text-slate-300 mt-0.5">
                             {Math.max(0, totalScheduled - totalCompleted)} <span className="text-xs font-semibold text-slate-400">Sesi</span>
                         </div>
                     </div>
-                    <div className="w-8 h-8 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-500 flex items-center justify-center">
+                    <div className="w-8 h-8 rounded-md bg-slate-100 dark:bg-zinc-900 text-slate-500 flex items-center justify-center">
                         <Clock size={16} />
                     </div>
                 </div>
 
-                <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg p-3 flex flex-col justify-between">
+                <div className="bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 rounded-lg p-3 flex flex-col justify-between">
                     <div className="flex items-center justify-between">
-                        <span className="text-[10.5px] font-bold text-[#65a30d] dark:text-[#b4f031] uppercase tracking-wide">Kepatuhan Latihan</span>
+                        <span className="text-[10.5px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wide">Kepatuhan Latihan</span>
                         <span className="text-xs font-bold text-slate-900 dark:text-white">{completionPct}%</span>
                     </div>
-                    <div className="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-2 mt-2 overflow-hidden">
+                    <div className="w-full bg-slate-100 dark:bg-zinc-900 rounded-full h-2 mt-2 overflow-hidden">
                         <div
-                            className="bg-[#84cc16] dark:bg-[#b4f031] h-full rounded-full transition-all duration-500"
+                            className="bg-emerald-600 dark:bg-emerald-500 h-full rounded-full transition-all duration-500"
                             style={{ width: `${completionPct}%` }}
                         />
                     </div>
@@ -328,9 +328,9 @@ export default function AthleteTrainingCalendar({
             {/* Calendar & Selected Date Detail Layout */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
                 {/* Left: Monthly Calendar View */}
-                <div className="lg:col-span-7 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg p-4 space-y-3 shadow-2xs">
+                <div className="lg:col-span-7 bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 rounded-lg p-4 space-y-3 shadow-2xs">
                     {/* Month Navigator Header */}
-                    <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+                    <div className="flex items-center justify-between border-b border-slate-100 dark:border-zinc-800 pb-3">
                         <div className="flex items-center gap-2">
                             <h3 className="text-sm font-extrabold text-slate-900 dark:text-white">
                                 {monthNames[currentMonth]} {currentYear}
@@ -338,7 +338,7 @@ export default function AthleteTrainingCalendar({
                             <button
                                 type="button"
                                 onClick={handleGoToday}
-                                className="px-2 py-0.5 rounded text-[10px] font-bold bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 transition-colors cursor-pointer"
+                                className="px-2 py-0.5 rounded text-[10px] font-bold bg-slate-100 dark:bg-zinc-900 hover:bg-slate-200 dark:hover:bg-zinc-800 text-slate-700 dark:text-zinc-300 transition-colors cursor-pointer"
                             >
                                 Hari Ini
                             </button>
@@ -348,7 +348,7 @@ export default function AthleteTrainingCalendar({
                             <button
                                 type="button"
                                 onClick={handlePrevMonth}
-                                className="p-1.5 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 transition-colors cursor-pointer"
+                                className="p-1.5 rounded-md hover:bg-slate-100 dark:hover:bg-zinc-900 text-slate-600 dark:text-slate-300 transition-colors cursor-pointer"
                                 title="Bulan Sebelumnya"
                             >
                                 <ChevronLeft size={16} />
@@ -356,7 +356,7 @@ export default function AthleteTrainingCalendar({
                             <button
                                 type="button"
                                 onClick={handleNextMonth}
-                                className="p-1.5 rounded-md hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 transition-colors cursor-pointer"
+                                className="p-1.5 rounded-md hover:bg-slate-100 dark:hover:bg-zinc-900 text-slate-600 dark:text-slate-300 transition-colors cursor-pointer"
                                 title="Bulan Berikutnya"
                             >
                                 <ChevronRight size={16} />
@@ -393,19 +393,19 @@ export default function AthleteTrainingCalendar({
                                     }}
                                     className={`relative min-h-[58px] p-1 rounded-lg border text-left flex flex-col justify-between transition-all cursor-pointer ${
                                         !day.isCurrentMonth
-                                            ? 'opacity-30 border-transparent hover:opacity-70 bg-slate-50/40 dark:bg-slate-950/40'
+                                            ? 'opacity-30 border-transparent hover:opacity-70 bg-slate-50/40 dark:bg-zinc-900/40'
                                             : isSelected
-                                            ? 'border-[#84cc16] dark:border-[#b4f031] bg-[#84cc16]/10 dark:bg-[#b4f031]/10 ring-2 ring-[#84cc16]/20 shadow-xs'
+                                            ? 'border-emerald-600 dark:border-emerald-500 bg-emerald-500/10 ring-2 ring-emerald-500/20 shadow-xs'
                                             : day.isScheduled
-                                            ? 'border-slate-200 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-950/60 hover:border-[#84cc16]/40'
-                                            : 'border-transparent hover:bg-slate-50 dark:hover:bg-slate-800/50'
+                                            ? 'border-slate-200 dark:border-zinc-800 bg-slate-50/60 dark:bg-zinc-900/60 hover:border-emerald-500/40'
+                                            : 'border-transparent hover:bg-slate-50 dark:hover:bg-zinc-900/50'
                                     }`}
                                 >
                                     <div className="flex items-center justify-between">
                                         <span
                                             className={`text-xs font-bold ${
                                                 day.isToday
-                                                    ? 'w-5 h-5 rounded-full bg-[#84cc16] text-slate-950 flex items-center justify-center font-extrabold'
+                                                    ? 'w-5 h-5 rounded-full bg-emerald-600 text-white dark:bg-emerald-500 dark:text-black flex items-center justify-center font-extrabold'
                                                     : day.isCurrentMonth
                                                     ? 'text-slate-800 dark:text-slate-200'
                                                     : 'text-slate-400'
@@ -428,7 +428,7 @@ export default function AthleteTrainingCalendar({
                                                 className={`block text-[9px] font-bold px-1 py-0.5 rounded truncate ${
                                                     day.isCompleted
                                                         ? 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border border-emerald-500/20'
-                                                        : 'bg-[#84cc16]/20 text-[#65a30d] dark:text-[#b4f031] border border-[#84cc16]/30'
+                                                        : 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30'
                                                 }`}
                                             >
                                                 {day.isCompleted ? '✓ Selesai' : 'Latihan'}
@@ -441,10 +441,10 @@ export default function AthleteTrainingCalendar({
                     </div>
 
                     {/* Legend Footer */}
-                    <div className="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-[11px] text-slate-500 dark:text-slate-400 flex-wrap gap-2">
+                    <div className="pt-3 border-t border-slate-100 dark:border-zinc-800 flex items-center justify-between text-[11px] text-slate-500 dark:text-slate-400 flex-wrap gap-2">
                         <div className="flex items-center gap-3">
                             <div className="flex items-center gap-1">
-                                <span className="w-2.5 h-2.5 rounded-full bg-[#84cc16]" />
+                                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
                                 <span>Sesi Latihan</span>
                             </div>
                             <div className="flex items-center gap-1">
@@ -458,10 +458,10 @@ export default function AthleteTrainingCalendar({
                 </div>
 
                 {/* Right: Selected Date Routine & Check-In Details */}
-                <div className="lg:col-span-5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg p-4 space-y-4 shadow-2xs flex flex-col justify-between">
+                <div className="lg:col-span-5 bg-white dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 rounded-lg p-4 space-y-4 shadow-2xs flex flex-col justify-between">
                     <div className="space-y-3.5">
                         {/* Selected Date Header */}
-                        <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+                        <div className="flex items-center justify-between border-b border-slate-100 dark:border-zinc-800 pb-3">
                             <div className="space-y-0.5">
                                 <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wide">
                                     Jadwal Harian Atlet
@@ -476,14 +476,14 @@ export default function AthleteTrainingCalendar({
                                     className={`px-2.5 py-1 rounded-md text-[11px] font-bold border flex items-center gap-1 ${
                                         isSelectedCompleted
                                             ? 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border-emerald-500/30'
-                                            : 'bg-[#84cc16]/15 text-[#65a30d] dark:text-[#b4f031] border-[#84cc16]/30'
+                                            : 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border-emerald-500/30'
                                     }`}
                                 >
                                     {isSelectedCompleted ? <CheckCircle2 size={12} /> : <Dumbbell size={12} />}
                                     <span>{isSelectedCompleted ? 'Sesi Selesai' : 'Sesi Terjadwal'}</span>
                                 </span>
                             ) : (
-                                <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-slate-100 dark:bg-slate-800 text-slate-500">
+                                <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-slate-100 dark:bg-zinc-900 text-slate-500">
                                     Hari Istirahat
                                 </span>
                             )}
@@ -493,15 +493,15 @@ export default function AthleteTrainingCalendar({
                             <>
                                 {/* Routine Checklist for this day */}
                                 <div className="space-y-2">
-                                    <div className="flex items-center justify-between text-xs pb-1 border-b border-slate-100 dark:border-slate-800">
+                                    <div className="flex items-center justify-between text-xs pb-1 border-b border-slate-100 dark:border-zinc-800">
                                         {activeProgramForDate.slug ? (
                                             <Link
                                                 href={route('training-programs.show', activeProgramForDate.slug)}
-                                                className="font-bold text-slate-900 dark:text-white hover:text-[#65a30d] dark:hover:text-[#b4f031] uppercase tracking-wider text-[11px] flex items-center gap-1.5 transition-colors group"
+                                                className="font-bold text-slate-900 dark:text-white hover:text-emerald-600 dark:hover:text-emerald-400 uppercase tracking-wider text-[11px] flex items-center gap-1.5 transition-colors group"
                                                 title="Klik untuk membuka detail latihan lengkap"
                                             >
                                                 <span className="truncate">{activeProgramForDate.name}</span>
-                                                <ExternalLink size={12} className="text-slate-400 group-hover:text-[#65a30d] dark:group-hover:text-[#b4f031] shrink-0" />
+                                                <ExternalLink size={12} className="text-slate-400 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 shrink-0" />
                                             </Link>
                                         ) : (
                                             <span className="font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider text-[10.5px]">
@@ -512,7 +512,7 @@ export default function AthleteTrainingCalendar({
                                         {activeProgramForDate.slug ? (
                                             <Link
                                                 href={route('training-programs.show', activeProgramForDate.slug)}
-                                                className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10.5px] font-bold bg-[#84cc16]/10 text-[#65a30d] dark:text-[#b4f031] hover:bg-[#84cc16]/20 transition-colors shrink-0"
+                                                className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10.5px] font-bold bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 hover:bg-emerald-500/20 transition-colors shrink-0"
                                             >
                                                 <span>Buka Sesi</span>
                                                 <ChevronRight size={12} />
@@ -530,10 +530,10 @@ export default function AthleteTrainingCalendar({
                                                 <Link
                                                     key={item.id || idx}
                                                     href={route('training-programs.show', activeProgramForDate.slug)}
-                                                    className="block p-2.5 rounded-md bg-slate-50/80 dark:bg-slate-950/70 hover:bg-[#84cc16]/5 dark:hover:bg-[#84cc16]/10 border border-slate-200/80 dark:border-slate-800/80 hover:border-[#84cc16]/40 text-xs space-y-1 transition-all group cursor-pointer"
+                                                    className="block p-2.5 rounded-md bg-slate-50/80 dark:bg-zinc-900/50 hover:bg-emerald-500/5 dark:hover:bg-emerald-500/10 border border-slate-200/80 dark:border-zinc-800 hover:border-emerald-500/40 text-xs space-y-1 transition-all group cursor-pointer"
                                                 >
                                                     <div className="flex items-center justify-between">
-                                                        <div className="flex items-center gap-1.5 font-bold text-slate-900 dark:text-white group-hover:text-[#65a30d] dark:group-hover:text-[#b4f031] transition-colors">
+                                                        <div className="flex items-center gap-1.5 font-bold text-slate-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
                                                             <span
                                                                 className={`w-2 h-2 rounded-full ${
                                                                     item.phase === 'inhibit'
@@ -548,7 +548,7 @@ export default function AthleteTrainingCalendar({
                                                             <span className="capitalize text-[10px] text-slate-400">[{item.phase}]</span>
                                                             <span>{item.exercise_name}</span>
                                                         </div>
-                                                        <ChevronRight size={13} className="text-slate-400 group-hover:text-[#65a30d] dark:group-hover:text-[#b4f031] opacity-0 group-hover:opacity-100 transition-all shrink-0" />
+                                                        <ChevronRight size={13} className="text-slate-400 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 opacity-0 group-hover:opacity-100 transition-all shrink-0" />
                                                     </div>
 
                                                     <div className="flex items-center gap-2 text-[11px] text-slate-500 dark:text-slate-400 pl-3.5">
@@ -558,7 +558,7 @@ export default function AthleteTrainingCalendar({
                                                         {item.target_muscle && (
                                                             <>
                                                                 <span>•</span>
-                                                                <span className="text-[#65a30d] dark:text-[#b4f031] font-semibold truncate">
+                                                                <span className="text-emerald-600 dark:text-emerald-400 font-semibold truncate">
                                                                     {item.target_muscle}
                                                                 </span>
                                                             </>
@@ -568,7 +568,7 @@ export default function AthleteTrainingCalendar({
                                             ) : (
                                                 <div
                                                     key={item.id || idx}
-                                                    className="p-2.5 rounded-md bg-slate-50/80 dark:bg-slate-950/70 border border-slate-200/80 dark:border-slate-800/80 text-xs space-y-1"
+                                                    className="p-2.5 rounded-md bg-slate-50/80 dark:bg-zinc-900/50 border border-slate-200/80 dark:border-zinc-800 text-xs space-y-1"
                                                 >
                                                     <div className="flex items-center justify-between">
                                                         <div className="flex items-center gap-1.5 font-bold text-slate-900 dark:text-white">
@@ -595,7 +595,7 @@ export default function AthleteTrainingCalendar({
                                                         {item.target_muscle && (
                                                             <>
                                                                 <span>•</span>
-                                                                <span className="text-[#65a30d] dark:text-[#b4f031] font-semibold truncate">
+                                                                <span className="text-emerald-600 dark:text-emerald-400 font-semibold truncate">
                                                                     {item.target_muscle}
                                                                 </span>
                                                             </>
@@ -608,9 +608,9 @@ export default function AthleteTrainingCalendar({
                                 </div>
 
                                 {/* Session Coach Note for this date */}
-                                <div className="space-y-1.5 pt-2 border-t border-slate-100 dark:border-slate-800">
+                                <div className="space-y-1.5 pt-2 border-t border-slate-100 dark:border-zinc-800">
                                     <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1">
-                                        <MessageSquare size={12} className="text-[#65a30d] dark:text-[#b4f031]" />
+                                        <MessageSquare size={12} className="text-emerald-600 dark:text-emerald-400" />
                                         <span>Catatan Pelatih pada Tanggal Ini</span>
                                     </label>
                                     <div className="flex items-center gap-1.5">
@@ -619,14 +619,14 @@ export default function AthleteTrainingCalendar({
                                             value={sessionNote}
                                             onChange={(e) => setSessionNote(e.target.value)}
                                             placeholder="Contoh: Atlet menyelesaikan semua set, lutut stabil..."
-                                            className="flex-1 py-1.5 px-2.5 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-md text-xs text-slate-900 dark:text-white focus:ring-1 focus:ring-[#84cc16] dark:focus:ring-[#b4f031]"
+                                            className="flex-1 py-1.5 px-2.5 bg-slate-50 dark:bg-zinc-950 border border-slate-200 dark:border-zinc-800 rounded-md text-xs text-slate-900 dark:text-white focus:ring-1 focus:ring-emerald-500 dark:focus:ring-emerald-400"
                                         />
                                         {interactive && (
                                             <button
                                                 type="button"
                                                 onClick={handleSaveNote}
                                                 disabled={isSavingNote}
-                                                className="px-2.5 py-1.5 rounded-md bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-semibold flex items-center gap-1 cursor-pointer transition-colors"
+                                                className="px-2.5 py-1.5 rounded-md bg-slate-100 dark:bg-zinc-900 hover:bg-slate-200 dark:hover:bg-zinc-800 text-slate-700 dark:text-slate-200 text-xs font-semibold flex items-center gap-1 cursor-pointer transition-colors"
                                             >
                                                 <Save size={12} />
                                                 <span>{isSavingNote ? '...' : 'Simpan'}</span>
@@ -637,7 +637,7 @@ export default function AthleteTrainingCalendar({
                             </>
                         ) : (
                             /* Empty state for non-scheduled date */
-                            <div className="py-8 text-center space-y-3 bg-slate-50/50 dark:bg-slate-950/40 border border-dashed border-slate-200 dark:border-slate-800 rounded-lg p-4">
+                            <div className="py-8 text-center space-y-3 bg-slate-50/50 dark:bg-zinc-900/30 border border-dashed border-slate-200 dark:border-zinc-800 rounded-lg p-4">
                                 <p className="text-xs text-slate-400">
                                     Belum ada jadwal sesi latihan pada tanggal ini.
                                 </p>
@@ -647,7 +647,7 @@ export default function AthleteTrainingCalendar({
                                             athlete_id: program.athlete_id,
                                             date: selectedDate,
                                         })}
-                                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-[#84cc16] hover:bg-[#65a30d] dark:bg-[#b4f031] dark:hover:bg-[#a3e635] text-slate-950 text-xs font-bold transition-all shadow-2xs"
+                                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-emerald-600 hover:bg-emerald-700 dark:bg-emerald-500 dark:hover:bg-emerald-400 text-white dark:text-black text-xs font-bold transition-all shadow-2xs"
                                     >
                                         <Dumbbell size={13} />
                                         <span>+ Buat Sesi Latihan di Tanggal Ini</span>
@@ -659,14 +659,14 @@ export default function AthleteTrainingCalendar({
 
                     {/* Completion Action Button */}
                     {interactive && activeProgramForDate && (
-                        <div className="pt-3 border-t border-slate-100 dark:border-slate-800">
+                        <div className="pt-3 border-t border-slate-100 dark:border-zinc-800">
                             <button
                                 type="button"
                                 onClick={() => handleToggleComplete(selectedDate)}
                                 className={`w-full py-2.5 px-3 rounded-md text-xs font-bold flex items-center justify-center gap-2 cursor-pointer transition-all shadow-2xs ${
                                     isSelectedCompleted
-                                        ? 'bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700'
-                                        : 'bg-[#84cc16] hover:bg-[#65a30d] dark:bg-[#b4f031] dark:hover:bg-[#a3e635] text-slate-950'
+                                        ? 'bg-slate-100 hover:bg-slate-200 dark:bg-zinc-900 dark:hover:bg-zinc-800 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-zinc-800'
+                                        : 'bg-emerald-600 hover:bg-emerald-700 dark:bg-emerald-500 dark:hover:bg-emerald-400 text-white dark:text-black'
                                 }`}
                             >
                                 {isSelectedCompleted ? (
